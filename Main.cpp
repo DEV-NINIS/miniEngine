@@ -4,6 +4,15 @@
 #include "stbi_image.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+//												_____
+//               /\         |\		|	 |	   |
+//				/  \		| \		|	 |	   |
+//			   /	\		|  \	|	 |	   |_____
+//			  /------\		|	\	|	 |			 |
+//			 /		  \		|	 \	|	 |			 |
+//			/		   \	|	  \	|	 |		_____|
+//
+
 
 void processInput(GLFWwindow* window) {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
