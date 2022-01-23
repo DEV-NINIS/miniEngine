@@ -15,6 +15,7 @@ public:
 	void setBuffer();
 	void setShader();
 	void setTexture();
+	void useShaderCube();
 	void drawElements();
 	GLuint getshaderCube();
 protected:

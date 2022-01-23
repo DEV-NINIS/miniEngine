@@ -7,10 +7,11 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "cube.h"
 #include <glm/gtc/type_ptr.hpp>
 
 // the fonction of this class is animate de 3d objects and set the matrix projection of the engine
-class glmAnimation3D
+class glmAnimation3D : public cube
 {
 public:
 	glmAnimation3D();

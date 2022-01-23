@@ -6,47 +6,46 @@
 #include "stbi_image.h"
 
 float cube::vertecies[] = {
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+			 0.5f, -0.5f, -0.5f,  0.5f, 0.6f, 0.9f, 1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  0.9f, 0.5f, 0.3f, 1.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  0.1f, 0.8f, 0.9f, 1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,  0.9f, 0.2f, 0.1f, 0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.1f, 0.9f, 0.9f, 0.0f, 0.0f,
 
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f,  0.6f, 0.4f, 0.7f, 0.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,  0.2f, 0.4f, 0.8f, 1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  0.3, 0.5, 0.7, 1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  0.6, 0.1, 0.2, 1.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,  0.9, 0.4, 0.1, 0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.8, 0.4, 0.9, 0.0f, 0.0f,
 
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  0.1, 0.2, 0.8, 1.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  0.8, 0.8, 0.1, 1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.9, 0.2, 0.3, 0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.2, 0.1, 0.7, 0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.2, 0.1, 0.4, 0.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  0.3, 0.5, 0.4, 1.0f, 0.0f,
 
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  0.3, 0.1, 0.8, 1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  0.9, 0.7, 0.3, 1.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.4, 0.8, 0.2, 0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.6, 0.1, 0.2, 0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  0.9, 0.1, 0.4 ,0.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  0.9, 0.7, 0.9, 1.0f, 0.0f,
 
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.1, 0.3, 0.6, 0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.2, 0.3, 0.5, 1.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  0.1, 0.8, 0.4, 1.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,  0.2, 0.1, 0.3, 1.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f,  0.6, 0.5, 0.9, 0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,  0.1, 0.4, 0.2, 0.0f, 1.0f,
 
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+		-0.5f,  0.5f, -0.5f,  0.2, 0.3, 0.6, 0.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  0.1, 0.6, 0.2, 1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  0.4, 0.6, 0.8, 1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  0.1, 0.3, 0.6, 1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  0.2, 0.6, 0.3, 0.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  0.5, 0.8, 0.7, 0.0f, 1.0f
 };
 unsigned int cube::index[] = {
 	0, 1, 2
@@ -65,9 +64,10 @@ cube::cube() {
 		"uniform mat4 view;\n"
 		"uniform mat4 model;\n"
 		"uniform mat4 projection;\n"
+		"uniform mat4 transform;\n"
 
 		"void main() {\n"
-			"gl_Position = projection * view * model * vec4(aPos, 1.0f);\n"
+			"gl_Position = projection * view * model * transform * vec4(aPos, 1.0f);\n"
 			"colorForFragmentShader = aColor;\n"
 			"texCoordsForFrag = texCoords;\n"
 		"}\n\0";
@@ -140,7 +140,6 @@ void cube::setShader() {
 	// deleted pointer of GL_COMPILE_STATUS
 }
 void cube::drawElements() {
-	glUseProgram(programShader);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, tex);
 	glBindVertexArray(VAOcube);
@@ -159,9 +158,12 @@ void cube::setTexture() {
 	unsigned char* data = stbi_load("img/containerBois.jpg", &width, &height, &nrChanels, 0);
 	if (data) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
 		stbi_image_free(data);
 	}
+	else { std::cout << " failed to load texture " << std::endl; }
 	glUseProgram(programShader);
 	glUniform1i(glGetUniformLocation(programShader, "Texture"), 0);
 }
+void cube::useShaderCube() { glUseProgram(programShader); }
 GLuint cube::getshaderCube() { return programShader; }
