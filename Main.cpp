@@ -60,27 +60,15 @@ int main() {
 	{
 		processInput(window);
 		glClearColor(0.9f, 0.33f, 0.25f, 0.9f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		Cube->useShaderCube();
-		glm::mat4 model = glm::mat4(1.0f);
-		glm::mat4 view = glm::mat4(1.0f);
-		glm::mat4 projection = glm::mat4(1.0f);
-		glm::mat4 transform = glm::mat4(1.0f);
-		model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		view = glm::translate(view, glm::vec3(1.0f, 0.0f, -3.0f));
-		projection = glm::perspective(glm::radians(45.0f), (float)resX2 / (float)resY2, 0.1f, 100.0f);
-		transform = glm::mat4(1.0f);
-		transform = glm::translate(transform, glm::vec3(-0.0f, 0.0f, 0.0f));
-		transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(1.0f, 1.0, 1.0f));
-		glUniformMatrix4fv(glGetAttribLocation(Cube->getshaderCube(), "view"), 1, GL_FALSE, glm::value_ptr(view));
-		glUniformMatrix4fv(glGetAttribLocation(Cube->getshaderCube(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-		glUniformMatrix4fv(glGetAttribLocation(Cube->getshaderCube(), "model"), 1, GL_FALSE, glm::value_ptr(model));
-		glUniformMatrix4fv(glGetAttribLocation(Cube->getshaderCube(), "transform"), 1, GL_FALSE, glm::value_ptr(transform));
 		matrixAnimation->initialiseMatrix();
 		matrixAnimation->setModelProjection();
 		matrixAnimation->setViewProjection();
 		matrixAnimation->setMatrixPerspectiveProjection(FOV, resX2, resY2);
+		matrixAnimation->frameMatrix(Cube->getshaderCube());
 		Cube->drawElements();
+		glEnable(GL_DEPTH_TEST);
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}

@@ -18,13 +18,13 @@ void glmAnimation3D::setModelProjection() {
 	model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 }
 void glmAnimation3D::setViewProjection() {
-	view = glm::translate(view, glm::vec3(1.0f, 0.0f, -3.0f));
+	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 }
 void glmAnimation3D::frameMatrix(GLuint shader) {
-	glUniformMatrix4fv(glGetUniformLocation(shader, "view"), 1, GL_FALSE, glm::value_ptr(this->getviewVARIABLE())); // frame view matrix variable
-	glUniformMatrix4fv(glGetUniformLocation(shader, "model"), 1, GL_FALSE, glm::value_ptr(this->getmodelVARIABLE())); // frame model matrix variable
-	glUniformMatrix4fv(glGetUniformLocation(shader, "projection"), 1, GL_FALSE, glm::value_ptr(this->getprojectionPerspectiveVARIABLE())); // frame projectionPerspective matrix variable
-	glUniformMatrix4fv(glGetUniformLocation(shader, "transform"), 1, GL_FALSE, glm::value_ptr(this->gettransformVARIABLE())); // frame transform matrix variable
+	glUniformMatrix4fv(glGetUniformLocation(shader, "view"), 1, GL_FALSE, glm::value_ptr(view)); // frame view matrix variable
+	glUniformMatrix4fv(glGetUniformLocation(shader, "model"), 1, GL_FALSE, glm::value_ptr(model)); // frame model matrix variable
+	glUniformMatrix4fv(glGetUniformLocation(shader, "projection"), 1, GL_FALSE, glm::value_ptr(projectionPerspective)); // frame projectionPerspective matrix variable
+	glUniformMatrix4fv(glGetUniformLocation(shader, "transform"), 1, GL_FALSE, glm::value_ptr(transform)); // frame transform matrix variable
 }
 void glmAnimation3D::initialiseMatrix() {
 	model = glm::mat4(1.0f);
