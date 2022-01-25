@@ -2,6 +2,9 @@
 #include <string>
 #include "cube.h"
 #include "stbi_image.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
 #include "glmAnimation3D.h"
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -53,11 +56,21 @@ int main() {
 	delete resX; delete resY;
 	cube* Cube; Cube = new cube;
 	glmAnimation3D* matrixAnimation; matrixAnimation = new glmAnimation3D;
+	// initialise imgui
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGui::StyleColorsDark();
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init("#version 460");
+	//
 	Cube->setShader();
 	Cube->setBuffer();
 	Cube->setTexture();
 	while (!glfwWindowShouldClose(window)) // render
 	{
+		ImGui::Text("Hello, world %d", 123);
+		if (ImGui::Button("Save")) {}
 		processInput(window);
 		glClearColor(0.9f, 0.33f, 0.25f, 0.9f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -66,6 +79,7 @@ int main() {
 		matrixAnimation->setModelProjection();
 		matrixAnimation->setViewProjection();
 		matrixAnimation->setMatrixPerspectiveProjection(FOV, resX2, resY2);
+		matrixAnimation->setTransformValue();
 		matrixAnimation->frameMatrix(Cube->getshaderCube());
 		Cube->drawElements();
 		glEnable(GL_DEPTH_TEST);
