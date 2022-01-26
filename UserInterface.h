@@ -9,7 +9,10 @@
 class UserInterface
 {
 public:
-	UserInterface();
+	UserInterface(GLFWwindow* window);
+	void BasicFonction();
+	void setSettingFrame();
+	void endFrame();
 	virtual ~UserInterface();
 protected:
 

@@ -4,6 +4,7 @@
 #include "stbi_image.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
+#include "UserInterface.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "glmAnimation3D.h"
 #include <glad/glad.h>
@@ -57,23 +58,19 @@ int main() {
 	cube* Cube; Cube = new cube;
 	glmAnimation3D* matrixAnimation; matrixAnimation = new glmAnimation3D;
 	// initialise imgui
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	ImGui::StyleColorsDark();
-	ImGui_ImplGlfw_InitForOpenGL(window, true);
-	ImGui_ImplOpenGL3_Init("#version 460");
+	UserInterface* Interface = nullptr; Interface = new UserInterface(window); // in the builder of this class they create a imgui context is because in argument they have GLFWwindow* ...
 	//
 	Cube->setShader();
 	Cube->setBuffer();
 	Cube->setTexture();
 	while (!glfwWindowShouldClose(window)) // render
 	{
-		ImGui::Text("Hello, world %d", 123);
-		if (ImGui::Button("Save")) {}
 		processInput(window);
 		glClearColor(0.9f, 0.33f, 0.25f, 0.9f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		Interface->setSettingFrame();
+		Interface->BasicFonction();
+		Interface->BasicFonction();
 		Cube->useShaderCube();
 		matrixAnimation->initialiseMatrix();
 		matrixAnimation->setModelProjection();
@@ -83,9 +80,11 @@ int main() {
 		matrixAnimation->frameMatrix(Cube->getshaderCube());
 		Cube->drawElements();
 		glEnable(GL_DEPTH_TEST);
+		Interface->endFrame();
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+	Interface->~UserInterface();
 	Cube->~cube();
 	delete Cube;
 
