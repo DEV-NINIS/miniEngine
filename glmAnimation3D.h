@@ -25,6 +25,9 @@ public:
 	void setRotateRight(float Radius);
 	void setRotateLeft(float Radius);
 	glm::mat4 setScaleValue(GLuint shader, float Value);
+	glm::mat4 setScaleValueX(GLuint shader, float Value);
+	glm::mat4 setScaleValueY(GLuint shader, float Value);
+	glm::mat4 setScaleValueZ(GLuint shader, float Value);
 	glm::mat4 getprojectionPerspectiveVARIABLE();
 	glm::mat4 getviewVARIABLE();
 	glm::mat4 getmodelVARIABLE();
@@ -34,6 +37,7 @@ protected:
 	glm::mat4 view;
 	glm::mat4 model;
 	glm::mat4 transform;
+	glm::mat4 size;
 };
 
 #endif // !1

@@ -67,7 +67,7 @@ cube::cube() {
 		"uniform mat4 model;\n"
 		"uniform mat4 projection;\n"
 		"uniform mat4 transform;\n"
-		"uniform mat4 Scale;"
+		"uniform mat4 Scale;\n"
 
 		"void main() {\n"
 			"gl_Position = projection * view * model * transform * Scale * vec4(aPos, 1.0f);\n"

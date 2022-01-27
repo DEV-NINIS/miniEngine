@@ -55,7 +55,11 @@ int main() {
 	glViewport(0, 0, *resX, *resY);
 	float FOV = 65.0f;
 	delete resX; delete resY;
+	bool drawingCube = true;
 	int* IndicatorScaleDemanding = nullptr; IndicatorScaleDemanding = new int; *IndicatorScaleDemanding = 0;
+	int* IndicatorScaleDemandingX = nullptr; IndicatorScaleDemandingX = new int; *IndicatorScaleDemandingX = 0;
+	int* IndicatorScaleDemandingY = nullptr; IndicatorScaleDemandingY = new int; *IndicatorScaleDemandingY = 0;
+	int* IndicatorScaleDemandingZ = nullptr; IndicatorScaleDemandingZ = new int; *IndicatorScaleDemandingZ = 0;
 	cube* Cube; Cube = new cube;
 	glmAnimation3D* matrixAnimation; matrixAnimation = new glmAnimation3D;
 	// initialise imgui
@@ -74,8 +78,13 @@ int main() {
 			*IndicatorScaleDemanding = *IndicatorScaleDemanding +1;
 		}
 		if (*IndicatorScaleDemanding == 1) {
-			Interface->setScaleCube(Cube->getshaderCube());
-			matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
+			if (*IndicatorScaleDemandingX == 0 && *IndicatorScaleDemandingY == 0 && *IndicatorScaleDemandingZ == 0) {
+				Interface->setScaleCube(Cube->getshaderCube());
+				matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
+			}
+			else if (*IndicatorScaleDemandingX == 1) {
+				Interface->setScaleCubeX(Cube->getshaderCube());
+			}
 		}
 		else if (*IndicatorScaleDemanding == 2) {
 			*IndicatorScaleDemanding = 0;
@@ -92,7 +101,10 @@ int main() {
 		matrixAnimation->setTransformValue();
 		matrixAnimation->setRotateLeft(-45.0f);
 		matrixAnimation->frameMatrix(Cube->getshaderCube());
-		Cube->drawElements();
+		ImGui::Checkbox(" draw ", &drawingCube);
+		if (drawingCube == true) {
+			Cube->drawElements();
+		}
 		glEnable(GL_DEPTH_TEST);
 		Interface->endFrame();
 		glfwSwapBuffers(window);
@@ -100,6 +112,8 @@ int main() {
 	}
 	Interface->~UserInterface();
 	Cube->~cube();
-	delete Cube; delete IndicatorScaleDemanding;
+	delete Cube; 
+	delete IndicatorScaleDemanding; delete IndicatorScaleDemandingX; 
+	delete IndicatorScaleDemandingY; delete IndicatorScaleDemandingZ;
 
 }

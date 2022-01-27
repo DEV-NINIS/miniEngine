@@ -8,7 +8,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 glmAnimation3D::glmAnimation3D() : cube() {
-	projectionPerspective; view; model; transform; 
+	projectionPerspective; view; model; transform; size;
 }
 glmAnimation3D::~glmAnimation3D() {}
 void glmAnimation3D::setMatrixPerspectiveProjection(float FOV, float& width, float& height) {
@@ -42,8 +42,14 @@ void glmAnimation3D::initialiseMatrix() {
 	projectionPerspective = glm::mat4(1.0f);
 }
 glm::mat4 glmAnimation3D::setScaleValue(GLuint shader, float Value) {
-	glm::mat4 size = glm::mat4(1.0f);
+	size = glm::mat4(1.0f);
 	size = glm::scale(size, glm::vec3(Value, Value, Value));
+	glUniformMatrix4fv(glGetUniformLocation(shader, "Scale"), 1, GL_FALSE, glm::value_ptr(size));
+	return size;
+}
+glm::mat4 glmAnimation3D::setScaleValueX(GLuint shader, float Value) {
+	size = glm::mat4(1.0f);
+	size = glm::scale(size, glm::vec3(Value, 1.0f, 1.0f));
 	glUniformMatrix4fv(glGetUniformLocation(shader, "Scale"), 1, GL_FALSE, glm::value_ptr(size));
 	return size;
 }
