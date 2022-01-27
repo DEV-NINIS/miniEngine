@@ -53,8 +53,9 @@ int main() {
 	}
 	// 
 	glViewport(0, 0, *resX, *resY);
-	float FOV = 45.0f;
+	float FOV = 65.0f;
 	delete resX; delete resY;
+	int* IndicatorScaleDemanding = nullptr; IndicatorScaleDemanding = new int; *IndicatorScaleDemanding = 0;
 	cube* Cube; Cube = new cube;
 	glmAnimation3D* matrixAnimation; matrixAnimation = new glmAnimation3D;
 	// initialise imgui
@@ -69,14 +70,27 @@ int main() {
 		glClearColor(0.9f, 0.33f, 0.25f, 0.9f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		Interface->setSettingFrame();
-		Interface->BasicFonction();
-		Interface->BasicFonction();
+		if (Interface->inputDemandingScaleCube() == true) {
+			*IndicatorScaleDemanding = *IndicatorScaleDemanding +1;
+		}
+		if (*IndicatorScaleDemanding == 1) {
+			Interface->setScaleCube(Cube->getshaderCube());
+			matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
+		}
+		else if (*IndicatorScaleDemanding == 2) {
+			*IndicatorScaleDemanding = 0;
+			matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
+		}
+		else if (*IndicatorScaleDemanding > 2 && *IndicatorScaleDemanding < 0) {
+			matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
+		}
 		Cube->useShaderCube();
 		matrixAnimation->initialiseMatrix();
 		matrixAnimation->setModelProjection();
 		matrixAnimation->setViewProjection();
 		matrixAnimation->setMatrixPerspectiveProjection(FOV, resX2, resY2);
 		matrixAnimation->setTransformValue();
+		matrixAnimation->setRotateLeft(-45.0f);
 		matrixAnimation->frameMatrix(Cube->getshaderCube());
 		Cube->drawElements();
 		glEnable(GL_DEPTH_TEST);
@@ -86,6 +100,6 @@ int main() {
 	}
 	Interface->~UserInterface();
 	Cube->~cube();
-	delete Cube;
+	delete Cube; delete IndicatorScaleDemanding;
 
 }

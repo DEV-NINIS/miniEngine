@@ -3,17 +3,21 @@
 
 #include <iostream>
 #include <vector>
+#include "glmAnimation3D.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-class UserInterface
+class UserInterface : public glmAnimation3D
 {
 public:
 	UserInterface(GLFWwindow* window);
-	void BasicFonction();
+	bool inputDemandingScaleCube();
+	char inputFileTexture();
+	float setScaleCube(GLuint shader);
 	void setSettingFrame();
 	void endFrame();
 	virtual ~UserInterface();
+	float LastedFloatFrame;
 protected:
 
 };

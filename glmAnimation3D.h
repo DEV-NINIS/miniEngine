@@ -21,6 +21,10 @@ public:
 	void setViewProjection();
 	void setMatrixPerspectiveProjection(float FOV, float& width, float& height);
 	void frameMatrix(GLuint shader);
+	void setTransformValue();
+	void setRotateRight(float Radius);
+	void setRotateLeft(float Radius);
+	glm::mat4 setScaleValue(GLuint shader, float Value);
 	glm::mat4 getprojectionPerspectiveVARIABLE();
 	glm::mat4 getviewVARIABLE();
 	glm::mat4 getmodelVARIABLE();
