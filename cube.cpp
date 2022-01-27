@@ -6,7 +6,8 @@
 #include "stbi_image.h"
 
 float cube::vertecies[] = {
-		  -0.5f, -0.5f, -0.5f,   0.2f, 0.6f, 0.9f, 0.0f, 0.0f,
+		 
+		-0.5f, -0.5f, -0.5f,   0.2f, 0.6f, 0.9f, 0.0f, 0.0f,
 		 0.5f, -0.5f, -0.5f,  0.9f, 0.6f, 0.2f, 1.0f, 0.0f,
 		 0.5f,  0.5f, -0.5f,  0.5f, 0.6f, 0.9f,1.0f, 1.0f,
 		 0.5f,  0.5f, -0.5f,  0.7f, 0.6f, 0.8f,1.0f, 1.0f,
@@ -66,9 +67,10 @@ cube::cube() {
 		"uniform mat4 model;\n"
 		"uniform mat4 projection;\n"
 		"uniform mat4 transform;\n"
+		"uniform mat4 Scale;"
 
 		"void main() {\n"
-			"gl_Position = projection * view * model * transform * vec4(aPos, 1.0f);\n"
+			"gl_Position = projection * view * model * transform * Scale * vec4(aPos, 1.0f);\n"
 			"colorForFragmentShader = aColor;\n"
 			"texCoordsForFrag = texCoords;\n"
 		"}\n\0";
