@@ -8,14 +8,14 @@
 #include <iostream>
 #include <vector>
 
-UserInterface::UserInterface(GLFWwindow* window) : glmAnimation3D() {
+UserInterface::UserInterface(GLFWwindow* window)  {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	ImGui::StyleColorsDark();
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 460");
-	LastedFloatFrame;
+	LastedFloatFrame; LastedFloatFrameX; LastedFloatFrameY; LastedFloatFrameZ;
 	// theme 
 	auto& style = ImGui::GetStyle();
 	ImVec4* color = ImGui::GetStyle().Colors;
@@ -38,16 +38,76 @@ bool UserInterface::inputDemandingScaleCube() {
 		return true;
 	}
 	else { return false; }
-	ImGui::End();
+}
+bool UserInterface::inputDemandingScaleCubeX() {
+	if (ImGui::Button("size X")) {
+		return true;
+	}
+	else { return false; }
+}
+bool UserInterface::inputDemandingScaleCubeY() {
+	if (ImGui::Button("size Y")) {
+		return true;
+	}
+	else { return false; }
+}
+bool UserInterface::inputDemandingScaleCubeZ() {
+	if (ImGui::Button("size Z")) {
+		return true;
+	}
+	else { return false; }
 }
 float UserInterface::setScaleCube(GLuint shader) {
-	float* size; size = new float;
-	ImGui::SliderFloat("size", &*size, -2, 2);
-	glmAnimation3D::setScaleValue(shader, *size);
-	LastedFloatFrame = *size;
-	std::cout << *size << std::endl;
-	return *size;
-	delete size;
+	float* size1 = nullptr; size1 = new float;
+	ImGui::SliderFloat("size", &*size1, -2, 3);
+	LastedFloatFrame = *size1;
+	return *size1;
+	delete size1;
+}
+float UserInterface::setScaleCubeX(GLuint shader) {
+	float* size2 = nullptr; size2 = new float;
+	ImGui::SliderFloat("sizeX", &*size2, -2, 3);
+	if (*size2 > -401602080) {
+		LastedFloatFrameX = *size2;
+		return *size2;
+	}
+	else { 
+		if (LastedFloatFrameX > -401602080) {
+			return LastedFloatFrameX;
+		}
+		else { return 1.0f; }
+	}
+	delete size2;
+}
+float UserInterface::setScaleCubeY(GLuint shader) {
+	float* size3 = nullptr; size3 = new float;
+	ImGui::SliderFloat("sizeY", &*size3, -5, 5);
+	if (*size3 > -401602080) {
+		LastedFloatFrameY = *size3;
+		return *size3;
+	}
+	else {
+		if (LastedFloatFrameY > -401602080) {
+			return LastedFloatFrameY;
+		}
+		else { return 1.0f; }
+	}
+	delete size3;
+}
+float UserInterface::setScaleCubeZ(GLuint shader) {
+	float* size4 = nullptr; size4 = new float;
+	ImGui::SliderFloat("sizeZ", &*size4, -5, 5);
+	if (*size4 > -401602080) {
+		LastedFloatFrameZ = *size4;
+		return *size4;
+	}
+	else { 
+		if (LastedFloatFrameZ > -401602080) {
+			return LastedFloatFrameZ;
+		}
+		else { return 1.0f; }
+	}
+	delete size4;
 }
 char UserInterface::inputFileTexture() {
 	char* FilePath = 0;

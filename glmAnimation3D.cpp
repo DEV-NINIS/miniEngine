@@ -7,8 +7,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-glmAnimation3D::glmAnimation3D() : cube() {
-	projectionPerspective; view; model; transform; size;
+glmAnimation3D::glmAnimation3D(GLFWwindow* window)  {
+	cube();
+	projectionPerspective; view; model; transform; size; size2; Scale2;
 }
 glmAnimation3D::~glmAnimation3D() {}
 void glmAnimation3D::setMatrixPerspectiveProjection(float FOV, float& width, float& height) {
@@ -41,17 +42,44 @@ void glmAnimation3D::initialiseMatrix() {
 	transform = glm::mat4(1.0f);
 	projectionPerspective = glm::mat4(1.0f);
 }
-glm::mat4 glmAnimation3D::setScaleValue(GLuint shader, float Value) {
-	size = glm::mat4(1.0f);
-	size = glm::scale(size, glm::vec3(Value, Value, Value));
-	glUniformMatrix4fv(glGetUniformLocation(shader, "Scale"), 1, GL_FALSE, glm::value_ptr(size));
+glm::mat4 glmAnimation3D::setScaleValue(GLuint shader, float Value, float ValueX, float ValueY, float ValueZ) {
+	size2 = glm::mat4(1.0f);
+	if (Value > -401602080) {
+		size2 = glm::scale(size2, glm::vec3(Value * ValueX, Value * ValueY, Value * ValueZ));
+		glUniformMatrix4fv(glGetUniformLocation(shader, "Scale"), 1, GL_FALSE, glm::value_ptr(size2));
+		glUniform1f(glGetUniformLocation(shader, "LastedFrame"), Value);
+	}
 	return size;
 }
-glm::mat4 glmAnimation3D::setScaleValueX(GLuint shader, float Value) {
-	size = glm::mat4(1.0f);
-	size = glm::scale(size, glm::vec3(Value, 1.0f, 1.0f));
-	glUniformMatrix4fv(glGetUniformLocation(shader, "Scale"), 1, GL_FALSE, glm::value_ptr(size));
-	return size;
+float glmAnimation3D::setScaleValueX(GLuint shader, float Value) {
+	if (Value > -401602080) {
+		glUniform1f(glGetUniformLocation(shader, "LastedFrame"), Value);
+		glUniform1f(glGetUniformLocation(shader, "scaleX"), Value);
+		return Value;
+	}
+	else { return 1.0f; }
+}
+float glmAnimation3D::setScaleValueY(GLuint shader, float Value) {
+	if (Value > -401602080) {
+		glUniform1f(glGetUniformLocation(shader, "LastedFrame"), Value);
+		glUniform1f(glGetUniformLocation(shader, "scaleY"), Value);
+		return Value;
+	}
+	else { return 1.0f; }
+
+}
+float glmAnimation3D::setScaleValueZ(GLuint shader, float Value) {
+	if (Value > -401602080) {
+		glUniform1f(glGetUniformLocation(shader, "LastedFrame"), Value);
+		glUniform1f(glGetUniformLocation(shader, "scaleZ"), Value);
+		return Value;
+	}
+	else { return 1.0f; }
+}
+void glmAnimation3D::linkMatrix(GLuint shader, float ValueX, float ValueY, float ValueZ) {
+	Scale2 = glm::mat4(1.0f);
+	Scale2 = glm::translate(Scale2, glm::vec3(ValueX, ValueY, ValueZ));
+	glUniformMatrix4fv(glGetUniformLocation(shader, "Scale2"), 1, GL_FALSE, glm::value_ptr(Scale2));
 }
 glm::mat4 glmAnimation3D::getmodelVARIABLE() { return model; }
 glm::mat4 glmAnimation3D::getviewVARIABLE() { return view; }

@@ -61,38 +61,20 @@ int main() {
 	int* IndicatorScaleDemandingY = nullptr; IndicatorScaleDemandingY = new int; *IndicatorScaleDemandingY = 0;
 	int* IndicatorScaleDemandingZ = nullptr; IndicatorScaleDemandingZ = new int; *IndicatorScaleDemandingZ = 0;
 	cube* Cube; Cube = new cube;
-	glmAnimation3D* matrixAnimation; matrixAnimation = new glmAnimation3D;
+	glmAnimation3D* matrixAnimation; matrixAnimation = new glmAnimation3D(window);
 	// initialise imgui
 	UserInterface* Interface = nullptr; Interface = new UserInterface(window); // in the builder of this class they create a imgui context is because in argument they have GLFWwindow* ...
 	//
 	Cube->setShader();
 	Cube->setBuffer();
 	Cube->setTexture();
+	Interface->LastedFloatFrame = 1;
 	while (!glfwWindowShouldClose(window)) // render
 	{
 		processInput(window);
 		glClearColor(0.9f, 0.33f, 0.25f, 0.9f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		Interface->setSettingFrame();
-		if (Interface->inputDemandingScaleCube() == true) {
-			*IndicatorScaleDemanding = *IndicatorScaleDemanding +1;
-		}
-		if (*IndicatorScaleDemanding == 1) {
-			if (*IndicatorScaleDemandingX == 0 && *IndicatorScaleDemandingY == 0 && *IndicatorScaleDemandingZ == 0) {
-				Interface->setScaleCube(Cube->getshaderCube());
-				matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
-			}
-			else if (*IndicatorScaleDemandingX == 1) {
-				Interface->setScaleCubeX(Cube->getshaderCube());
-			}
-		}
-		else if (*IndicatorScaleDemanding == 2) {
-			*IndicatorScaleDemanding = 0;
-			matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
-		}
-		else if (*IndicatorScaleDemanding > 2 && *IndicatorScaleDemanding < 0) {
-			matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
-		}
 		Cube->useShaderCube();
 		matrixAnimation->initialiseMatrix();
 		matrixAnimation->setModelProjection();
@@ -100,6 +82,69 @@ int main() {
 		matrixAnimation->setMatrixPerspectiveProjection(FOV, resX2, resY2);
 		matrixAnimation->setTransformValue();
 		matrixAnimation->setRotateLeft(-45.0f);
+		matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame, Interface->LastedFloatFrameX, Interface->LastedFloatFrameY, Interface->LastedFloatFrameZ);
+		if (Interface->inputDemandingScaleCube() == true) {
+			*IndicatorScaleDemanding = *IndicatorScaleDemanding + 1;
+		}
+		if (*IndicatorScaleDemanding == 1) {
+			if (*IndicatorScaleDemandingX == 0 && *IndicatorScaleDemandingY == 0 && *IndicatorScaleDemandingZ == 0) {
+				Interface->LastedFloatFrameX = 1.0f;
+				Interface->LastedFloatFrameY = 1.0f;
+				Interface->LastedFloatFrameZ = 1.0f;
+				Interface->setScaleCube(Cube->getshaderCube());
+				matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame, Interface->LastedFloatFrameX, Interface->LastedFloatFrameY, Interface->LastedFloatFrameZ);
+				if (Interface->inputDemandingScaleCubeX() == true) {
+					*IndicatorScaleDemandingX = *IndicatorScaleDemandingX + 1;
+				}
+				else if (Interface->inputDemandingScaleCubeY() == true) {
+					*IndicatorScaleDemandingY = *IndicatorScaleDemandingY + 1;
+				}
+				else if (Interface->inputDemandingScaleCubeZ() == true) {
+					*IndicatorScaleDemandingZ = *IndicatorScaleDemandingZ + 1;
+				}
+			}
+			// demand x
+			if (*IndicatorScaleDemandingX == 1) {
+				if (Interface->inputDemandingScaleCubeX() == true) {
+					*IndicatorScaleDemandingX = *IndicatorScaleDemandingX + 1;
+				}
+					Interface->setScaleCubeX(Cube->getshaderCube());
+					matrixAnimation->setScaleValueX(Cube->getshaderCube(), Interface->LastedFloatFrameX);
+			}
+			else if (*IndicatorScaleDemandingX > 1) {
+				*IndicatorScaleDemandingX = 0;
+			}
+			// demand y
+			if (*IndicatorScaleDemandingY == 1) {
+				if (Interface->inputDemandingScaleCubeY() == true) {
+					*IndicatorScaleDemandingY = *IndicatorScaleDemandingY + 1;
+				}
+				Interface->setScaleCubeY(Cube->getshaderCube());
+				matrixAnimation->setScaleValueY(Cube->getshaderCube(), Interface->LastedFloatFrameY);
+			}
+			else if (*IndicatorScaleDemandingY > 1) {
+				*IndicatorScaleDemandingY = 0;
+			}
+			// demand z
+			if (*IndicatorScaleDemandingZ == 1) {
+				if (Interface->inputDemandingScaleCubeZ() == true) {
+					*IndicatorScaleDemandingZ = *IndicatorScaleDemandingZ + 1;
+				}
+				Interface->setScaleCubeZ(Cube->getshaderCube());
+				matrixAnimation->setScaleValueZ(Cube->getshaderCube(), Interface->LastedFloatFrameZ);
+			}
+			else if (*IndicatorScaleDemandingZ > 1) {
+				*IndicatorScaleDemandingZ = 0;
+			}
+		}
+		else if (*IndicatorScaleDemanding == 2) {
+			*IndicatorScaleDemanding = 0;
+			matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame, Interface->LastedFloatFrameX, Interface->LastedFloatFrameY, Interface->LastedFloatFrameZ);
+		}
+		else if (*IndicatorScaleDemanding > 2 && *IndicatorScaleDemanding < 0) {
+			matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame, Interface->LastedFloatFrameX, Interface->LastedFloatFrameY, Interface->LastedFloatFrameZ);
+		}
+		matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame, Interface->LastedFloatFrameX, Interface->LastedFloatFrameY, Interface->LastedFloatFrameZ);
 		matrixAnimation->frameMatrix(Cube->getshaderCube());
 		ImGui::Checkbox(" draw ", &drawingCube);
 		if (drawingCube == true) {

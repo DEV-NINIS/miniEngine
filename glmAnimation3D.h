@@ -9,13 +9,14 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "cube.h"
 #include <glm/gtc/type_ptr.hpp>
+#include "UserInterface.h"
 
 // the fonction of this class is animate de 3d objects and set the matrix projection of the engine
 class glmAnimation3D : public cube
 {
 public:
-	glmAnimation3D();
-	~glmAnimation3D();
+	glmAnimation3D(GLFWwindow* window);
+	virtual ~glmAnimation3D();
 	void initialiseMatrix();
 	void setModelProjection();
 	void setViewProjection();
@@ -24,10 +25,11 @@ public:
 	void setTransformValue();
 	void setRotateRight(float Radius);
 	void setRotateLeft(float Radius);
-	glm::mat4 setScaleValue(GLuint shader, float Value);
-	glm::mat4 setScaleValueX(GLuint shader, float Value);
-	glm::mat4 setScaleValueY(GLuint shader, float Value);
-	glm::mat4 setScaleValueZ(GLuint shader, float Value);
+	void linkMatrix(GLuint shader, float ValueX, float ValueY, float ValueZ);
+	glm::mat4 setScaleValue(GLuint shader, float Value, float ValueX, float ValueY, float ValueZ);
+	float setScaleValueX(GLuint shader, float Value);
+	float setScaleValueY(GLuint shader, float Value);
+	float setScaleValueZ(GLuint shader, float Value);
 	glm::mat4 getprojectionPerspectiveVARIABLE();
 	glm::mat4 getviewVARIABLE();
 	glm::mat4 getmodelVARIABLE();
@@ -38,6 +40,8 @@ protected:
 	glm::mat4 model;
 	glm::mat4 transform;
 	glm::mat4 size;
+	glm::mat4 size2;
+	glm::mat4 Scale2;
 };
 
 #endif // !1
