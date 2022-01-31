@@ -56,7 +56,6 @@ int main() {
 	float FOV = 45.0f;
 	delete resX; delete resY;
 	bool drawingCube = true;
-	float lastedLoadFrameX = 1.0f; float lastedLoadFrameY = 1.0f; float lastedLoadFrameZ = 1.0f;
 	int* IndicatorScaleDemanding = nullptr; IndicatorScaleDemanding = new int; *IndicatorScaleDemanding = 0;
 	int* IndicatorScaleDemandingX = nullptr; IndicatorScaleDemandingX = new int; *IndicatorScaleDemandingX = 0;
 	int* IndicatorScaleDemandingY = nullptr; IndicatorScaleDemandingY = new int; *IndicatorScaleDemandingY = 0;
@@ -108,6 +107,7 @@ int main() {
 				if (Interface->inputDemandingScaleCubeX() == true) {
 					*IndicatorScaleDemandingX = *IndicatorScaleDemandingX + 1;
 				}
+				Interface->setLastedmatrix();
 				matrixAnimation->setScaleValueX(Cube->getshaderCube());
 				matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
 				matrixAnimation->frameMatrix(Cube->getshaderCube());
@@ -120,7 +120,8 @@ int main() {
 				if (Interface->inputDemandingScaleCubeY() == true) {
 					*IndicatorScaleDemandingY = *IndicatorScaleDemandingY + 1;
 				}
-				lastedLoadFrameX = matrixAnimation->setScaleValueY(Cube->getshaderCube());
+				Interface->setLastedmatrix();
+				matrixAnimation->setScaleValueY(Cube->getshaderCube());
 				matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
 				matrixAnimation->frameMatrix(Cube->getshaderCube());
 			}
@@ -132,6 +133,7 @@ int main() {
 				if (Interface->inputDemandingScaleCubeZ() == true) {
 					*IndicatorScaleDemandingZ = *IndicatorScaleDemandingZ + 1;
 				}
+				Interface->setLastedmatrix();
 				matrixAnimation->setScaleValueZ(Cube->getshaderCube());
 				matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
 				matrixAnimation->frameMatrix(Cube->getshaderCube());
@@ -139,10 +141,6 @@ int main() {
 			else if (*IndicatorScaleDemandingZ > 1) {
 				*IndicatorScaleDemandingZ = 0;
 			}
-			std::cout << Interface->LastedFloatFrame << std::endl;
-			std::cout << Interface->LastedFloatFrameX << std::endl;
-			std::cout << Interface->LastedFloatFrameY << std::endl;
-			std::cout << Interface->LastedFloatFrameZ << std::endl;
 			matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
 		}
 		else if (*IndicatorScaleDemanding == 2) {

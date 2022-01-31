@@ -15,11 +15,12 @@ UserInterface::UserInterface(GLFWwindow* window)  {
 	ImGui::StyleColorsDark();
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 460");
-	LastedFloatFrame; LastedFloatFrameX; LastedFloatFrameY; LastedFloatFrameZ;
+	LastedFloatFrame = 1.0f; LastedFloatFrameX = 1.0f; LastedFloatFrameY = 1.0f; LastedFloatFrameZ = 1.0f;
 	// theme 
 	auto& style = ImGui::GetStyle();
 	ImVec4* color = ImGui::GetStyle().Colors;
-	color[ImGuiCol_WindowBg] = ImVec4(0.4, 0.6, 0.5, 0.3); 
+	color[ImGuiCol_WindowBg] = ImVec4(0.1, 0.3, 0.5, 0.9); 
+	size1 = new float;
 }
 UserInterface::~UserInterface() {
 	ImGui_ImplOpenGL3_Shutdown();
@@ -57,14 +58,13 @@ bool UserInterface::inputDemandingScaleCubeZ() {
 	}
 	else { return false; }
 }
-float UserInterface::setScaleCube(GLuint shader) {
-	float* size1 = nullptr; size1 = new float;
+float UserInterface::setScaleCube() {
 	ImGui::SliderFloat("size", &*size1, -2, 3);
 	LastedFloatFrame = *size1;
 	return *size1;
 	delete size1;
 }
-float UserInterface::setScaleCubeX(GLuint shader) {
+float UserInterface::setScaleCubeX() {
 	float* size2 = nullptr; size2 = new float;
 	ImGui::SliderFloat("sizeX", &*size2, -2, 3);
 	if (*size2 > -401602080) {
@@ -72,14 +72,11 @@ float UserInterface::setScaleCubeX(GLuint shader) {
 		return *size2;
 	}
 	else { 
-		if (LastedFloatFrameX > -401602080) {
-			return LastedFloatFrameX;
-		}
-		else { return 1.0f; }
+		return LastedFloatFrameX;
 	}
 	delete size2;
 }
-float UserInterface::setScaleCubeY(GLuint shader) {
+float UserInterface::setScaleCubeY() {
 	float* size3 = nullptr; size3 = new float;
 	ImGui::SliderFloat("sizeY", &*size3, -5, 5);
 	if (*size3 > -401602080) {
@@ -87,14 +84,11 @@ float UserInterface::setScaleCubeY(GLuint shader) {
 		return *size3;
 	}
 	else {
-		if (LastedFloatFrameY > -401602080) {
-			return LastedFloatFrameY;
-		}
-		else { return 1.0f; }
+		return LastedFloatFrameY;
 	}
 	delete size3;
 }
-float UserInterface::setScaleCubeZ(GLuint shader) {
+float UserInterface::setScaleCubeZ() {
 	float* size4 = nullptr; size4 = new float;
 	ImGui::SliderFloat("sizeZ", &*size4, -5, 5);
 	if (*size4 > -401602080) {
@@ -102,10 +96,7 @@ float UserInterface::setScaleCubeZ(GLuint shader) {
 		return *size4;
 	}
 	else { 
-		if (LastedFloatFrameZ > -401602080) {
-			return LastedFloatFrameZ;
-		}
-		else { return 1.0f; }
+		return LastedFloatFrameZ;
 	}
 	delete size4;
 }
@@ -117,4 +108,7 @@ char UserInterface::inputFileTexture() {
 void UserInterface::endFrame() {
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+void UserInterface::setLastedmatrix() {
+	LastedFloatFrame = *size1;
 }

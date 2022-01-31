@@ -17,17 +17,19 @@ public:
 	bool inputDemandingScaleCubeY();
 	bool inputDemandingScaleCubeZ();
 	char inputFileTexture();
-	float setScaleCube(GLuint shader);
-	float setScaleCubeX(GLuint shader);
-	float setScaleCubeY(GLuint shader);
-	float setScaleCubeZ(GLuint shader);
+	float setScaleCube();
+	float setScaleCubeX();
+	float setScaleCubeY();
+	float setScaleCubeZ();
 	void setSettingFrame();
+	void setLastedmatrix();
 	void endFrame();
 	float LastedFloatFrame;
 	float LastedFloatFrameX;
 	float LastedFloatFrameY;
 	float LastedFloatFrameZ;
-
+	protected:
+		float* size1 = nullptr;
 };
 
 #endif // !1
