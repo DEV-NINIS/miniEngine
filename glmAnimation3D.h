@@ -26,15 +26,20 @@ public:
 	void setRotateRight(float Radius);
 	void setRotateLeft(float Radius);
 	void linkMatrix(GLuint shader, float ValueX, float ValueY, float ValueZ);
-	glm::mat4 setScaleValue(GLuint shader, float Value, float ValueX, float ValueY, float ValueZ);
-	float setScaleValueX(GLuint shader, float Value);
-	float setScaleValueY(GLuint shader, float Value);
-	float setScaleValueZ(GLuint shader, float Value);
+	glm::mat4 setScaleValue(GLuint shader, float Value);
+	float setScaleValueX(GLuint shader);
+	float setScaleValueY(GLuint shader);
+	float setScaleValueZ(GLuint shader);
+	float getValueX(); float getValueY(); float getValueZ();
 	glm::mat4 getprojectionPerspectiveVARIABLE();
 	glm::mat4 getviewVARIABLE();
 	glm::mat4 getmodelVARIABLE();
 	glm::mat4 gettransformVARIABLE();
+	
 protected:
+	float LastedFloatFrameX;
+	float LastedFloatFrameY;
+	float LastedFloatFrameZ;
 	glm::mat4 projectionPerspective;
 	glm::mat4 view;
 	glm::mat4 model;

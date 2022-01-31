@@ -53,9 +53,10 @@ int main() {
 	}
 	// 
 	glViewport(0, 0, *resX, *resY);
-	float FOV = 65.0f;
+	float FOV = 45.0f;
 	delete resX; delete resY;
 	bool drawingCube = true;
+	float lastedLoadFrameX = 1.0f; float lastedLoadFrameY = 1.0f; float lastedLoadFrameZ = 1.0f;
 	int* IndicatorScaleDemanding = nullptr; IndicatorScaleDemanding = new int; *IndicatorScaleDemanding = 0;
 	int* IndicatorScaleDemandingX = nullptr; IndicatorScaleDemandingX = new int; *IndicatorScaleDemandingX = 0;
 	int* IndicatorScaleDemandingY = nullptr; IndicatorScaleDemandingY = new int; *IndicatorScaleDemandingY = 0;
@@ -72,7 +73,7 @@ int main() {
 	while (!glfwWindowShouldClose(window)) // render
 	{
 		processInput(window);
-		glClearColor(0.9f, 0.33f, 0.25f, 0.9f);
+		glClearColor(0.4f, 0.1f, 0.9f, 0.2f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		Interface->setSettingFrame();
 		Cube->useShaderCube();
@@ -82,17 +83,16 @@ int main() {
 		matrixAnimation->setMatrixPerspectiveProjection(FOV, resX2, resY2);
 		matrixAnimation->setTransformValue();
 		matrixAnimation->setRotateLeft(-45.0f);
-		matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame, Interface->LastedFloatFrameX, Interface->LastedFloatFrameY, Interface->LastedFloatFrameZ);
+		matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
+		ImGui::Checkbox(" draw ", &drawingCube);
+		// echelle du cube
 		if (Interface->inputDemandingScaleCube() == true) {
 			*IndicatorScaleDemanding = *IndicatorScaleDemanding + 1;
 		}
 		if (*IndicatorScaleDemanding == 1) {
 			if (*IndicatorScaleDemandingX == 0 && *IndicatorScaleDemandingY == 0 && *IndicatorScaleDemandingZ == 0) {
-				Interface->LastedFloatFrameX = 1.0f;
-				Interface->LastedFloatFrameY = 1.0f;
-				Interface->LastedFloatFrameZ = 1.0f;
-				Interface->setScaleCube(Cube->getshaderCube());
-				matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame, Interface->LastedFloatFrameX, Interface->LastedFloatFrameY, Interface->LastedFloatFrameZ);
+				Interface->setScaleCube();
+				matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
 				if (Interface->inputDemandingScaleCubeX() == true) {
 					*IndicatorScaleDemandingX = *IndicatorScaleDemandingX + 1;
 				}
@@ -108,8 +108,9 @@ int main() {
 				if (Interface->inputDemandingScaleCubeX() == true) {
 					*IndicatorScaleDemandingX = *IndicatorScaleDemandingX + 1;
 				}
-					Interface->setScaleCubeX(Cube->getshaderCube());
-					matrixAnimation->setScaleValueX(Cube->getshaderCube(), Interface->LastedFloatFrameX);
+				matrixAnimation->setScaleValueX(Cube->getshaderCube());
+				matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
+				matrixAnimation->frameMatrix(Cube->getshaderCube());
 			}
 			else if (*IndicatorScaleDemandingX > 1) {
 				*IndicatorScaleDemandingX = 0;
@@ -119,8 +120,9 @@ int main() {
 				if (Interface->inputDemandingScaleCubeY() == true) {
 					*IndicatorScaleDemandingY = *IndicatorScaleDemandingY + 1;
 				}
-				Interface->setScaleCubeY(Cube->getshaderCube());
-				matrixAnimation->setScaleValueY(Cube->getshaderCube(), Interface->LastedFloatFrameY);
+				lastedLoadFrameX = matrixAnimation->setScaleValueY(Cube->getshaderCube());
+				matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
+				matrixAnimation->frameMatrix(Cube->getshaderCube());
 			}
 			else if (*IndicatorScaleDemandingY > 1) {
 				*IndicatorScaleDemandingY = 0;
@@ -130,23 +132,25 @@ int main() {
 				if (Interface->inputDemandingScaleCubeZ() == true) {
 					*IndicatorScaleDemandingZ = *IndicatorScaleDemandingZ + 1;
 				}
-				Interface->setScaleCubeZ(Cube->getshaderCube());
-				matrixAnimation->setScaleValueZ(Cube->getshaderCube(), Interface->LastedFloatFrameZ);
+				matrixAnimation->setScaleValueZ(Cube->getshaderCube());
+				matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
+				matrixAnimation->frameMatrix(Cube->getshaderCube());
 			}
 			else if (*IndicatorScaleDemandingZ > 1) {
 				*IndicatorScaleDemandingZ = 0;
 			}
+			std::cout << Interface->LastedFloatFrame << std::endl;
+			std::cout << Interface->LastedFloatFrameX << std::endl;
+			std::cout << Interface->LastedFloatFrameY << std::endl;
+			std::cout << Interface->LastedFloatFrameZ << std::endl;
+			matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
 		}
 		else if (*IndicatorScaleDemanding == 2) {
 			*IndicatorScaleDemanding = 0;
-			matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame, Interface->LastedFloatFrameX, Interface->LastedFloatFrameY, Interface->LastedFloatFrameZ);
 		}
-		else if (*IndicatorScaleDemanding > 2 && *IndicatorScaleDemanding < 0) {
-			matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame, Interface->LastedFloatFrameX, Interface->LastedFloatFrameY, Interface->LastedFloatFrameZ);
-		}
-		matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame, Interface->LastedFloatFrameX, Interface->LastedFloatFrameY, Interface->LastedFloatFrameZ);
+		//
+		matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
 		matrixAnimation->frameMatrix(Cube->getshaderCube());
-		ImGui::Checkbox(" draw ", &drawingCube);
 		if (drawingCube == true) {
 			Cube->drawElements();
 		}
