@@ -27,6 +27,7 @@ public:
 	void setRotateLeft(float Radius);
 	void linkMatrix(GLuint shader, float ValueX, float ValueY, float ValueZ);
 	glm::mat4 setScaleValue(GLuint shader, float Value);
+	float setColorValueFrame();
 	float setScaleValueX(GLuint shader);
 	float setScaleValueY(GLuint shader);
 	float setScaleValueZ(GLuint shader);

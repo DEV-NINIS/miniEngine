@@ -36,7 +36,6 @@ int main() {
 #ifdef _APPLE_
 	glfwwindowhint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif // _APPLE_
-
 	//
 	int* resY = new int; *resY = 1440; float resX2 = 2560;
 	int* resX = new int; *resX = 2560; float resY2 = 1440;
@@ -56,6 +55,8 @@ int main() {
 	float FOV = 45.0f;
 	delete resX; delete resY;
 	bool drawingCube = true;
+	int* IndicatorDemandingAnimation = nullptr; IndicatorDemandingAnimation = new int; *IndicatorDemandingAnimation = 0;
+	int* IndicatorSetColorFrameDemanding = nullptr; IndicatorSetColorFrameDemanding = new int; *IndicatorSetColorFrameDemanding = 0;
 	int* IndicatorScaleDemanding = nullptr; IndicatorScaleDemanding = new int; *IndicatorScaleDemanding = 0;
 	int* IndicatorScaleDemandingX = nullptr; IndicatorScaleDemandingX = new int; *IndicatorScaleDemandingX = 0;
 	int* IndicatorScaleDemandingY = nullptr; IndicatorScaleDemandingY = new int; *IndicatorScaleDemandingY = 0;
@@ -64,17 +65,29 @@ int main() {
 	glmAnimation3D* matrixAnimation; matrixAnimation = new glmAnimation3D(window);
 	// initialise imgui
 	UserInterface* Interface = nullptr; Interface = new UserInterface(window); // in the builder of this class they create a imgui context is because in argument they have GLFWwindow* ...
-	//
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGui::StyleColorsDark();
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init("#version 460");
+	auto& style = ImGui::GetStyle();
+	ImVec4* color = ImGui::GetStyle().Colors;
+	color[ImGuiCol_WindowBg] = ImVec4(0.1, 0.3, 0.5, 0.9);
+																			   //
 	Cube->setShader();
 	Cube->setBuffer();
 	Cube->setTexture();
 	Interface->LastedFloatFrame = 1;
+	float valueXColor = 0.2f; float ValueYcolor = 0.6f; float ValueZColor = 0.9f; float ValueWColor = 0.1f;
 	while (!glfwWindowShouldClose(window)) // render
 	{
 		processInput(window);
-		glClearColor(0.4f, 0.1f, 0.9f, 0.2f);
+		glClearColor(valueXColor, ValueYcolor, ValueZColor, ValueWColor);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		Interface->setSettingFrame();
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
 		Cube->useShaderCube();
 		matrixAnimation->initialiseMatrix();
 		matrixAnimation->setModelProjection();
@@ -83,6 +96,7 @@ int main() {
 		matrixAnimation->setTransformValue();
 		matrixAnimation->setRotateLeft(-45.0f);
 		matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
+		ImGui::Begin("Engine");
 		ImGui::Checkbox(" draw ", &drawingCube);
 		// echelle du cube
 		if (Interface->inputDemandingScaleCube() == true) {
@@ -149,11 +163,35 @@ int main() {
 		//
 		matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
 		matrixAnimation->frameMatrix(Cube->getshaderCube());
+		// Animation
+		if (Interface->inputDemandingAnimation() == true) {
+			*IndicatorDemandingAnimation = *IndicatorDemandingAnimation + 1;
+		}
+		if (*IndicatorDemandingAnimation == 1) {
+
+		}
+		else if (*IndicatorDemandingAnimation >= 2) {
+			*IndicatorDemandingAnimation = 0;
+		}
+		// settings 
+		if (Interface->setSettings() == true) {
+			*IndicatorSetColorFrameDemanding = *IndicatorSetColorFrameDemanding + 1;
+		}
+		if (*IndicatorSetColorFrameDemanding == 1) {
+
+		}
+		else if (*IndicatorSetColorFrameDemanding >= 2)
+		{
+			*IndicatorSetColorFrameDemanding = 0;
+		}
 		if (drawingCube == true) {
 			Cube->drawElements();
 		}
+		ImGui::End();
 		glEnable(GL_DEPTH_TEST);
 		Interface->endFrame();
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}

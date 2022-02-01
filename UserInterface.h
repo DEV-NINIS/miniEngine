@@ -16,12 +16,16 @@ public:
 	bool inputDemandingScaleCubeX();
 	bool inputDemandingScaleCubeY();
 	bool inputDemandingScaleCubeZ();
+	bool inputDemandingAnimation();
 	char inputFileTexture();
 	float setScaleCube();
 	float setScaleCubeX();
 	float setScaleCubeY();
 	float setScaleCubeZ();
 	void setSettingFrame();
+	bool setSettings();
+	bool ButtonForSetAnimation();
+	bool changeColorFrame();
 	void setLastedmatrix();
 	void endFrame();
 	float LastedFloatFrame;

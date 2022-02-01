@@ -67,7 +67,12 @@ cube::cube() {
 		"uniform mat4 model;\n"
 		"uniform mat4 projection;\n"
 		"uniform mat4 transform;\n"
+		"uniform float LastedFrame;\n"
 		"uniform mat4 Scale;\n"
+		"uniform mat4 Scale2;\n"
+		"uniform float scaleX;\n"
+		"uniform float scaleY;\n"
+		"uniform float scaleZ;\n"
 
 		"void main() {\n"
 			"gl_Position = projection * view * model * transform * Scale * vec4(aPos, 1.0f);\n"
@@ -159,7 +164,7 @@ void cube::setTexture() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	stbi_set_flip_vertically_on_load(true);
 	int width, height, nrChanels;
-	unsigned char* data = stbi_load("img/containerBois.jpg", &width, &height, &nrChanels, 0);
+	unsigned char* data = stbi_load("img/containerBois2.jpg", &width, &height, &nrChanels, 0);
 	if (data) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);

@@ -21,7 +21,7 @@ void glmAnimation3D::setMatrixPerspectiveProjection(float FOV, float& width, flo
 	projectionPerspective = glm::perspective(glm::radians(FOV), (float)width / (float)height, 0.1f, 100.0f);
 }
 void glmAnimation3D::setModelProjection() {
-	model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(180.0f * static_cast<float>(sin(glfwGetTime()))), glm::vec3(1.0f, 0.5f, 0.0f));
 }
 void glmAnimation3D::setViewProjection() {
 	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
@@ -36,7 +36,7 @@ void glmAnimation3D::frameMatrix(GLuint shader) {
 	glUniformMatrix4fv(glGetUniformLocation(shader, "transform"), 1, GL_FALSE, glm::value_ptr(transform)); // frame transform matrix variable
 }
 void glmAnimation3D::setRotateRight(float Radius) {
-	transform = glm::rotate(transform, glm::radians(Radius), glm::vec3(0.0f, 0.0f, 1.0f));
+	transform = glm::rotate(transform, glm::radians(static_cast<float>(sin(glfwGetTime()))), glm::vec3(0.0f, 0.0f, 1.0f));
 }
 void glmAnimation3D::setRotateLeft(float Radius) {
 	transform = glm::rotate(transform, glm::radians(Radius), glm::vec3(0.0f, 0.0f, -1.0f));
@@ -102,6 +102,14 @@ void glmAnimation3D::linkMatrix(GLuint shader, float ValueX, float ValueY, float
 	Scale2 = glm::mat4(1.0f);
 	Scale2 = glm::translate(Scale2, glm::vec3(ValueX, ValueY, ValueZ));
 	glUniformMatrix4fv(glGetUniformLocation(shader, "Scale2"), 1, GL_FALSE, glm::value_ptr(Scale2));
+}
+float glmAnimation3D::setColorValueFrame() {
+	float* color = 0; color = new float; *color = 0;
+	ImGui::ColorEdit4(" Color Frame ", &*color);
+	if (*color > -401602080) {
+		return *color;
+	}
+	delete color;
 }
 float glmAnimation3D::getValueX() { return LastedFloatFrameX; }
 float glmAnimation3D::getValueY() { return LastedFloatFrameY; }
