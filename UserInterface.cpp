@@ -9,7 +9,15 @@
 #include <vector>
 
 UserInterface::UserInterface(GLFWwindow* window)  {
-	
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGui::StyleColorsDark();
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init("#version 460");
+	auto& style = ImGui::GetStyle();
+	ImVec4* color = ImGui::GetStyle().Colors;
+	color[ImGuiCol_WindowBg] = ImVec4(0.1, 0.3, 0.5, 0.9);
 	LastedFloatFrame = 1.0f; LastedFloatFrameX = 1.0f; LastedFloatFrameY = 1.0f; LastedFloatFrameZ = 1.0f; 
 	size1 = new float;
 }
@@ -28,9 +36,44 @@ bool UserInterface::inputDemandingAnimation() {
 	}
 	else { return false; }
 }
+bool UserInterface::inputDemandingRotateLeft() {
+	if (ImGui::Button("Left", ImVec2(50, 20))) {
+		return true;
+	}
+	else { return false; }
+}
+bool UserInterface::inputDemandingRotateRight() {
+	if (ImGui::Button("Right", ImVec2(50, 20))) {
+		return true;
+	}
+	else { return false; }
+}
+bool UserInterface::inputDemandingRotate() {
+	if (ImGui::Button("Rotate", ImVec2(60, 40))) {
+		return true;
+	}
+	else { return false; }
+}
 bool UserInterface::inputDemandingScaleCube() {
 	ImGui::Text("@Dev_ninis Frame : ", ImGui::GetFrameHeight());
-	if (ImGui::Button("Enter size Cube", ImVec2(150, 40))) {
+	if (ImGui::Button("Size Cube", ImVec2(150, 40))) {
+		return true;
+	}
+	else { return false; }
+}
+bool UserInterface::inputDemandingRotateAroundX() {
+	if (ImGui::Button("Rotate X", ImVec2(40, 20))) {
+		return true;
+	}
+	else { return false; }
+}
+bool UserInterface::inputDemandingRotateAroundY() {
+	if (ImGui::Button("Rotate Y", ImVec2(40, 20))) {
+		return true;
+	}
+	else { return false; }
+}bool UserInterface::inputDemandingRotateAroundZ() {
+	if (ImGui::Button("Rotate Z", ImVec2(40, 20))) {
 		return true;
 	}
 	else { return false; }

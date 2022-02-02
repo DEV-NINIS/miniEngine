@@ -18,7 +18,7 @@ public:
 	glmAnimation3D(GLFWwindow* window);
 	virtual ~glmAnimation3D();
 	void initialiseMatrix();
-	void setModelProjection();
+	void setModelProjection(float ValueRotate);
 	void setViewProjection();
 	void setMatrixPerspectiveProjection(float FOV, float& width, float& height);
 	void frameMatrix(GLuint shader);

@@ -17,6 +17,12 @@ public:
 	bool inputDemandingScaleCubeY();
 	bool inputDemandingScaleCubeZ();
 	bool inputDemandingAnimation();
+	bool inputDemandingRotate();
+	bool inputDemandingRotateAroundX();
+	bool inputDemandingRotateAroundY();
+	bool inputDemandingRotateAroundZ();
+	bool inputDemandingRotateRight();
+	bool inputDemandingRotateLeft();
 	char inputFileTexture();
 	float setScaleCube();
 	float setScaleCubeX();

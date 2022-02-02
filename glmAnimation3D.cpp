@@ -20,8 +20,8 @@ glmAnimation3D::~glmAnimation3D() {}
 void glmAnimation3D::setMatrixPerspectiveProjection(float FOV, float& width, float& height) {
 	projectionPerspective = glm::perspective(glm::radians(FOV), (float)width / (float)height, 0.1f, 100.0f);
 }
-void glmAnimation3D::setModelProjection() {
-	model = glm::rotate(model, glm::radians(180.0f * static_cast<float>(sin(glfwGetTime()))), glm::vec3(1.0f, 0.5f, 0.0f));
+void glmAnimation3D::setModelProjection(float ValueRotate) {
+	model = glm::rotate(model, glm::radians(ValueRotate), glm::vec3(0.1f, 0.0f, 0.0f));
 }
 void glmAnimation3D::setViewProjection() {
 	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
@@ -36,7 +36,7 @@ void glmAnimation3D::frameMatrix(GLuint shader) {
 	glUniformMatrix4fv(glGetUniformLocation(shader, "transform"), 1, GL_FALSE, glm::value_ptr(transform)); // frame transform matrix variable
 }
 void glmAnimation3D::setRotateRight(float Radius) {
-	transform = glm::rotate(transform, glm::radians(static_cast<float>(sin(glfwGetTime()))), glm::vec3(0.0f, 0.0f, 1.0f));
+	transform = glm::rotate(transform, glm::radians(Radius), glm::vec3(0.0f, 0.0f, 1.0f));
 }
 void glmAnimation3D::setRotateLeft(float Radius) {
 	transform = glm::rotate(transform, glm::radians(Radius), glm::vec3(0.0f, 0.0f, -1.0f));

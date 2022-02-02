@@ -52,9 +52,12 @@ int main() {
 	}
 	// 
 	glViewport(0, 0, *resX, *resY);
-	float FOV = 45.0f;
+	float FOV = 45.0f; float RotateValue = -55.0f;
 	delete resX; delete resY;
 	bool drawingCube = true;
+	int* IndicatorDemandingRotate = nullptr; IndicatorDemandingRotate = new int; *IndicatorDemandingRotate = 0;
+	int* IndicatorDemandingRotateRight = nullptr; IndicatorDemandingRotateRight = new int; *IndicatorDemandingRotateRight = 0;
+	int* IndicatorDemandingRotateLeft = nullptr; IndicatorDemandingRotateLeft = new int; *IndicatorDemandingRotateLeft = 0;
 	int* IndicatorDemandingAnimation = nullptr; IndicatorDemandingAnimation = new int; *IndicatorDemandingAnimation = 0;
 	int* IndicatorSetColorFrameDemanding = nullptr; IndicatorSetColorFrameDemanding = new int; *IndicatorSetColorFrameDemanding = 0;
 	int* IndicatorScaleDemanding = nullptr; IndicatorScaleDemanding = new int; *IndicatorScaleDemanding = 0;
@@ -65,16 +68,7 @@ int main() {
 	glmAnimation3D* matrixAnimation; matrixAnimation = new glmAnimation3D(window);
 	// initialise imgui
 	UserInterface* Interface = nullptr; Interface = new UserInterface(window); // in the builder of this class they create a imgui context is because in argument they have GLFWwindow* ...
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	ImGui::StyleColorsDark();
-	ImGui_ImplGlfw_InitForOpenGL(window, true);
-	ImGui_ImplOpenGL3_Init("#version 460");
-	auto& style = ImGui::GetStyle();
-	ImVec4* color = ImGui::GetStyle().Colors;
-	color[ImGuiCol_WindowBg] = ImVec4(0.1, 0.3, 0.5, 0.9);
-																			   //
+	//
 	Cube->setShader();
 	Cube->setBuffer();
 	Cube->setTexture();
@@ -90,8 +84,8 @@ int main() {
 		ImGui::NewFrame();
 		Cube->useShaderCube();
 		matrixAnimation->initialiseMatrix();
-		matrixAnimation->setModelProjection();
 		matrixAnimation->setViewProjection();
+		matrixAnimation->setModelProjection(RotateValue);
 		matrixAnimation->setMatrixPerspectiveProjection(FOV, resX2, resY2);
 		matrixAnimation->setTransformValue();
 		matrixAnimation->setRotateLeft(-45.0f);
@@ -168,9 +162,39 @@ int main() {
 			*IndicatorDemandingAnimation = *IndicatorDemandingAnimation + 1;
 		}
 		if (*IndicatorDemandingAnimation == 1) {
-
+			if (Interface->inputDemandingRotate() == true) {
+				*IndicatorDemandingRotate = *IndicatorDemandingRotate + 1;
+			}
+			if (*IndicatorDemandingRotate == 1) {
+				// rotate right or left
+				if (Interface->inputDemandingRotateRight() == true) {
+					*IndicatorDemandingRotateRight = *IndicatorDemandingRotateRight + 1;
+				}
+				if (*IndicatorDemandingRotateRight == 1) {
+					// fonction
+					RotateValue += 1;
+					matrixAnimation->setModelProjection(RotateValue);
+				}
+				else if (*IndicatorDemandingRotateRight > 1) {
+					*IndicatorDemandingRotateRight = 0;
+				}
+				if (Interface->inputDemandingRotateLeft() == true) {
+					*IndicatorDemandingRotateLeft = *IndicatorDemandingRotateLeft + 1;
+				}
+				if (*IndicatorDemandingRotateLeft == 1) {
+					// fonction
+					RotateValue -= 1;
+					matrixAnimation->setModelProjection(RotateValue);
+				}
+				else if (*IndicatorDemandingRotateLeft > 1) {
+					*IndicatorDemandingRotateLeft = 0;
+				}
+			}
+			else if (*IndicatorDemandingRotate > 1) {
+				*IndicatorDemandingRotate = 0;
+			}
 		}
-		else if (*IndicatorDemandingAnimation >= 2) {
+		else if (*IndicatorDemandingAnimation > 1) {
 			*IndicatorDemandingAnimation = 0;
 		}
 		// settings 
@@ -178,7 +202,7 @@ int main() {
 			*IndicatorSetColorFrameDemanding = *IndicatorSetColorFrameDemanding + 1;
 		}
 		if (*IndicatorSetColorFrameDemanding == 1) {
-
+			matrixAnimation->setColorValueFrame();
 		}
 		else if (*IndicatorSetColorFrameDemanding >= 2)
 		{
@@ -190,8 +214,6 @@ int main() {
 		ImGui::End();
 		glEnable(GL_DEPTH_TEST);
 		Interface->endFrame();
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
@@ -200,5 +222,8 @@ int main() {
 	delete Cube; 
 	delete IndicatorScaleDemanding; delete IndicatorScaleDemandingX; 
 	delete IndicatorScaleDemandingY; delete IndicatorScaleDemandingZ;
+	delete IndicatorDemandingRotate; delete IndicatorDemandingRotateLeft;
+	delete IndicatorDemandingRotateRight; delete IndicatorDemandingAnimation;
+	delete IndicatorSetColorFrameDemanding;
 
 }
