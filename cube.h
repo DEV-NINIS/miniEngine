@@ -17,7 +17,7 @@ public:
 	void setTexture();
 	void useShaderCube();
 	void drawElements();
-	GLuint getshaderCube();
+	GLuint& getshaderCube();
 protected:
 	static float vertecies[];
 	static unsigned int index[];

@@ -52,9 +52,12 @@ int main() {
 	}
 	// 
 	glViewport(0, 0, *resX, *resY);
-	float FOV = 45.0f; float RotateValue = -55.0f;
+	float FOV = 55.0f; float RotateValue = -55.0f;
 	delete resX; delete resY;
 	bool drawingCube = true;
+	int* IndicatorDemandingRotateAroundX = nullptr; IndicatorDemandingRotateAroundX = new int; *IndicatorDemandingRotateAroundX = 0;
+	int* IndicatorDemandingRotateAroundY = nullptr; IndicatorDemandingRotateAroundY = new int; *IndicatorDemandingRotateAroundY = 0;
+	int* IndicatorDemandingRotateAroundZ = nullptr; IndicatorDemandingRotateAroundZ = new int; *IndicatorDemandingRotateAroundZ = 0;
 	int* IndicatorDemandingRotate = nullptr; IndicatorDemandingRotate = new int; *IndicatorDemandingRotate = 0;
 	int* IndicatorDemandingRotateRight = nullptr; IndicatorDemandingRotateRight = new int; *IndicatorDemandingRotateRight = 0;
 	int* IndicatorDemandingRotateLeft = nullptr; IndicatorDemandingRotateLeft = new int; *IndicatorDemandingRotateLeft = 0;
@@ -85,10 +88,9 @@ int main() {
 		Cube->useShaderCube();
 		matrixAnimation->initialiseMatrix();
 		matrixAnimation->setViewProjection();
-		matrixAnimation->setModelProjection(RotateValue);
+		matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
 		matrixAnimation->setMatrixPerspectiveProjection(FOV, resX2, resY2);
 		matrixAnimation->setTransformValue();
-		matrixAnimation->setRotateLeft(-45.0f);
 		matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
 		ImGui::Begin("Engine");
 		ImGui::Checkbox(" draw ", &drawingCube);
@@ -166,6 +168,42 @@ int main() {
 				*IndicatorDemandingRotate = *IndicatorDemandingRotate + 1;
 			}
 			if (*IndicatorDemandingRotate == 1) {
+				// x
+				if (Interface->inputDemandingRotateAroundX() == true) {
+					*IndicatorDemandingRotateAroundX = *IndicatorDemandingRotateAroundX + 1;
+				}
+				if (*IndicatorDemandingRotateAroundX == 1) {
+					Interface->setRotateAroundXValue();
+					matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
+
+				}
+				else if (*IndicatorDemandingRotateAroundX > 1) {
+					*IndicatorDemandingRotateAroundX = 0;
+				}
+				// y
+				if (Interface->inputDemandingRotateAroundY() == true) {
+					*IndicatorDemandingRotateAroundY = *IndicatorDemandingRotateAroundY + 1;
+				}
+				if (*IndicatorDemandingRotateAroundY == 1) {
+					Interface->setRotateAroundYValue();
+					matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
+
+				}
+				else if (*IndicatorDemandingRotateAroundY > 1) {
+					*IndicatorDemandingRotateAroundY = 0;
+				}
+				// z
+				if (Interface->inputDemandingRotateAroundZ() == true) {
+					*IndicatorDemandingRotateAroundZ = *IndicatorDemandingRotateAroundZ + 1;
+				}
+				if (*IndicatorDemandingRotateAroundZ == 1) {
+					Interface->setRotateAroundZValue();
+					matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
+
+				}
+				else if (*IndicatorDemandingRotateAroundZ > 1) {
+					*IndicatorDemandingRotateAroundZ = 0;
+				}
 				// rotate right or left
 				if (Interface->inputDemandingRotateRight() == true) {
 					*IndicatorDemandingRotateRight = *IndicatorDemandingRotateRight + 1;
@@ -173,7 +211,6 @@ int main() {
 				if (*IndicatorDemandingRotateRight == 1) {
 					// fonction
 					RotateValue += 1;
-					matrixAnimation->setModelProjection(RotateValue);
 				}
 				else if (*IndicatorDemandingRotateRight > 1) {
 					*IndicatorDemandingRotateRight = 0;
@@ -184,7 +221,6 @@ int main() {
 				if (*IndicatorDemandingRotateLeft == 1) {
 					// fonction
 					RotateValue -= 1;
-					matrixAnimation->setModelProjection(RotateValue);
 				}
 				else if (*IndicatorDemandingRotateLeft > 1) {
 					*IndicatorDemandingRotateLeft = 0;
@@ -224,6 +260,7 @@ int main() {
 	delete IndicatorScaleDemandingY; delete IndicatorScaleDemandingZ;
 	delete IndicatorDemandingRotate; delete IndicatorDemandingRotateLeft;
 	delete IndicatorDemandingRotateRight; delete IndicatorDemandingAnimation;
-	delete IndicatorSetColorFrameDemanding;
+	delete IndicatorSetColorFrameDemanding; delete IndicatorDemandingRotateAroundZ;
+	delete IndicatorDemandingRotateAroundX; delete IndicatorDemandingRotateAroundY;
 
 }

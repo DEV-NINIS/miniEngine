@@ -6,7 +6,7 @@
 #include "stbi_image.h"
 
 float cube::vertecies[] = {
-		 
+
 		-0.5f, -0.5f, -0.5f,   0.2f, 0.6f, 0.9f, 0.0f, 0.0f,
 		 0.5f, -0.5f, -0.5f,  0.9f, 0.6f, 0.2f, 1.0f, 0.0f,
 		 0.5f,  0.5f, -0.5f,  0.5f, 0.6f, 0.9f,1.0f, 1.0f,
@@ -75,12 +75,12 @@ cube::cube() {
 		"uniform float scaleZ;\n"
 
 		"void main() {\n"
-			"gl_Position = projection * view * model * transform * Scale * vec4(aPos, 1.0f);\n"
-			"colorForFragmentShader = aColor;\n"
-			"texCoordsForFrag = texCoords;\n"
+		"gl_Position = projection * view * model * transform * Scale * vec4(aPos, 1.0f);\n"
+		"colorForFragmentShader = aColor;\n"
+		"texCoordsForFrag = texCoords;\n"
 		"}\n\0";
 
-		// vertex
+	// vertex
 	fragmentShaderCODE = "#version 460 core\n"
 
 		"in vec3 colorForFragmentShader;\n"
@@ -164,7 +164,7 @@ void cube::setTexture() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	stbi_set_flip_vertically_on_load(true);
 	int width, height, nrChanels;
-	unsigned char* data = stbi_load("img/containerBois2.jpg", &width, &height, &nrChanels, 0);
+	unsigned char* data = stbi_load("img/containerBois.jpg", &width, &height, &nrChanels, 0);
 	if (data) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
@@ -175,4 +175,4 @@ void cube::setTexture() {
 	glUniform1i(glGetUniformLocation(programShader, "Texture"), 0);
 }
 void cube::useShaderCube() { glUseProgram(programShader); }
-GLuint cube::getshaderCube() { return programShader; }
+GLuint& cube::getshaderCube() { return programShader; }

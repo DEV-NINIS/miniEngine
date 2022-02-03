@@ -24,10 +24,18 @@ public:
 	bool inputDemandingRotateRight();
 	bool inputDemandingRotateLeft();
 	char inputFileTexture();
+	float setRotateAroundXValue();
+	float setRotateAroundYValue();
+	float setRotateAroundZValue();
 	float setScaleCube();
 	float setScaleCubeX();
 	float setScaleCubeY();
 	float setScaleCubeZ();
+	// getting value 
+	float& getValueRotateX();
+	float& getValueRotateY();
+	float& getValueRotateZ();
+	// 
 	void setSettingFrame();
 	bool setSettings();
 	bool ButtonForSetAnimation();
@@ -40,6 +48,9 @@ public:
 	float LastedFloatFrameZ;
 	protected:
 		float* size1 = nullptr;
+		float LastedRotateXValue;
+		float LastedRotateYValue;
+		float LastedRotateZValue;
 };
 
 #endif // !1
