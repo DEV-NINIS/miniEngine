@@ -12,9 +12,10 @@ class cube
 public:
 	cube();
 	virtual ~cube();
+	int getLoaderTexture();
 	void setBuffer();
 	void setShader();
-	void setTexture();
+	void setTexture(char* filePath, int filepathIndicator);
 	void useShaderCube();
 	void drawElements();
 	GLuint& getshaderCube();
@@ -31,6 +32,7 @@ protected:
 	GLuint vertexShader;
 	GLuint programShader;
 	unsigned int tex;
+	int* LoaderTexture = nullptr;
 };
 
 #endif // !1

@@ -8,6 +8,8 @@
 #include <iostream>
 #include <vector>
 
+char UserInterface::filePath[] = { 0 };
+char* UserInterface::filePathPointer[] = { new char };
 UserInterface::UserInterface(GLFWwindow* window)  {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -19,8 +21,9 @@ UserInterface::UserInterface(GLFWwindow* window)  {
 	ImVec4* color = ImGui::GetStyle().Colors;
 	color[ImGuiCol_WindowBg] = ImVec4(0.1, 0.3, 0.5, 0.9);
 	LastedFloatFrame = 1.0f; LastedFloatFrameX = 1.0f; LastedFloatFrameY = 1.0f; LastedFloatFrameZ = 1.0f; 
-	LastedRotateXValue = 0.0f; LastedRotateYValue = 0.0f; LastedRotateZValue = 0.0f;
+	LastedRotateXValue = 0.1f; LastedRotateYValue = 0.0f; LastedRotateZValue = 0.0f;
 	size1 = new float;
+	lastedFilePath = -1;
 }
 UserInterface::~UserInterface() {
 	ImGui_ImplOpenGL3_Shutdown();
@@ -29,7 +32,9 @@ UserInterface::~UserInterface() {
 }
 
 void UserInterface::setSettingFrame() {
-	
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
 }
 bool UserInterface::inputDemandingAnimation() {
 	if (ImGui::Button("Animation", ImVec2(150, 40))) {
@@ -58,6 +63,12 @@ bool UserInterface::inputDemandingRotate() {
 bool UserInterface::inputDemandingScaleCube() {
 	ImGui::Text("@Dev_ninis Frame : ", ImGui::GetFrameHeight());
 	if (ImGui::Button("Size Cube", ImVec2(150, 40))) {
+		return true;
+	}
+	else { return false; }
+}
+bool UserInterface::inputDemandingTexture1() {
+	if (ImGui::Button("Texture", ImVec2(150, 40))) {
 		return true;
 	}
 	else { return false; }
@@ -184,10 +195,16 @@ bool UserInterface::ButtonForSetAnimation() {
 	}
 	else { return false; }
 }
-char UserInterface::inputFileTexture() {
-	char* FilePath; FilePath = new char; *FilePath = 'a';
-	ImGui::InputText("path texture", FilePath, IM_ARRAYSIZE(FilePath));
-	return *FilePath;
+void UserInterface::inputFileTexture(int successLoaderTexture) {
+	ImGui::InputText("path texture", this->filePath, IM_ARRAYSIZE(this->filePath));
+	if (successLoaderTexture == 1) {
+		ImGui::Text("failed to load texture");
+		this->lastedFilePath = 0;
+	}
+	else {
+		this->lastedFilePath = 1;
+	}
+	*filePathPointer = filePath;
 }
 void UserInterface::endFrame() {
 	ImGui::Render();
@@ -197,6 +214,7 @@ void UserInterface::setLastedmatrix() {
 	LastedFloatFrame = *size1;
 }
 // getting value
+int UserInterface::getIndicatorTextureFilePath() { return lastedFilePath; }
 float& UserInterface::getValueRotateX() { return LastedRotateXValue; }
 float& UserInterface::getValueRotateY() { return LastedRotateYValue; }
 float& UserInterface::getValueRotateZ() { return LastedRotateZValue; }

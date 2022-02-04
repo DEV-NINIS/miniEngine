@@ -5,7 +5,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stbi_image.h"
 
-float cube::vertecies[] = {
+float cube::vertecies[] ={
 
 		-0.5f, -0.5f, -0.5f,   0.2f, 0.6f, 0.9f, 0.0f, 0.0f,
 		 0.5f, -0.5f, -0.5f,  0.9f, 0.6f, 0.2f, 1.0f, 0.0f,
@@ -23,10 +23,10 @@ float cube::vertecies[] = {
 
 		-0.5f,  0.5f,  0.5f,  0.9f, 0.1f, 0.2f,1.0f, 0.0f,
 		-0.5f,  0.5f, -0.5f,  0.4f, 0.6f, 0.8f,1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.5f, 0.4f,0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.1f, 0.2f, 0.8f,0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.9f, 0.5f, 0.4f,0.0f, 0.4f,
+		-0.5f, -0.5f, -0.5f,  0.2f, 0.2f, 0.8f,0.0f, 1.0f,
 		-0.5f, -0.5f,  0.5f,  0.6f, 0.6f, 0.9f,0.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.5f, 0.3f,1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  0.6f, 0.5f, 0.3f,1.0f, 0.0f,
 
 		 0.5f,  0.5f,  0.5f, 0.3f, 0.9f, 0.9f, 1.0f, 0.0f,
 		 0.5f,  0.5f, -0.5f, 0.9f, 0.4f, 0.3f, 1.0f, 1.0f,
@@ -94,6 +94,7 @@ cube::cube() {
 
 	VAOcube; VBOcube; EBOcube;
 	TextureCube.push_back(new GLuint);
+	LoaderTexture = new int;
 
 }
 cube::~cube() {
@@ -152,10 +153,11 @@ void cube::drawElements() {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, tex);
 	glBindVertexArray(VAOcube);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glDrawArrays(GL_TRIANGLES, 0, 180);
 	glBindVertexArray(0);
 }
-void cube::setTexture() {
+void cube::setTexture(char* filePath, int filepathIndicator) {
+	*LoaderTexture = -1;
 	glGenTextures(1, &tex);
 	glBindTexture(GL_TEXTURE_2D, tex);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -164,15 +166,26 @@ void cube::setTexture() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	stbi_set_flip_vertically_on_load(true);
 	int width, height, nrChanels;
-	unsigned char* data = stbi_load("img/containerBois.jpg", &width, &height, &nrChanels, 0);
+	unsigned char* data;
+	if (filepathIndicator > -1) {
+		*LoaderTexture = 0;
+		data = stbi_load(static_cast<const char*>(filePath), &width, &height, &nrChanels, 0);
+	}
+	else {
+		data = stbi_load("img/basicTex.jpg", &width, &height, &nrChanels, 0);
+	}
 	if (data) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 		stbi_image_free(data);
 	}
-	else { std::cout << " failed to load texture " << std::endl; }
+	else { 
+		*LoaderTexture = 1;
+		std::cout << " failed to load texture " << std::endl; 
+	}
 	glUseProgram(programShader);
 	glUniform1i(glGetUniformLocation(programShader, "Texture"), 0);
 }
 void cube::useShaderCube() { glUseProgram(programShader); }
 GLuint& cube::getshaderCube() { return programShader; }
+int cube::getLoaderTexture() { return *LoaderTexture; }

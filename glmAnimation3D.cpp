@@ -39,8 +39,11 @@ void glmAnimation3D::setRotateRight(float& Radius) {
 	transform = glm::rotate(transform, glm::radians(Radius), glm::vec3(-0.5f, 0.0f, 0.0f));
 }
 void glmAnimation3D::setRotateLeft(float Radius, float& ValueX, float& ValueY, float& ValueZ) {
-	if (ValueX > 0 || ValueY > 0 || ValueZ > 0) {
+	if (ValueX > -1 || ValueY > -1 || ValueZ > -1) {
 		transform = glm::rotate(transform, glm::radians(Radius), glm::vec3(ValueX, ValueY, ValueZ));
+	}
+	else if (ValueX == 0 || ValueY == 0 || ValueZ == 0) {
+		transform = glm::rotate(transform, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	}
 	else {
 		transform = glm::rotate(transform, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -109,12 +112,14 @@ void glmAnimation3D::linkMatrix(GLuint& shader, float& ValueX, float& ValueY, fl
 	glUniformMatrix4fv(glGetUniformLocation(shader, "Scale2"), 1, GL_FALSE, glm::value_ptr(Scale2));
 }
 float glmAnimation3D::setColorValueFrame() {
-	float* color = 0; color = new float; *color = 0;
-	ImGui::ColorEdit4(" Color Frame ", &*color);
-	if (*color > -401602080) {
-		return *color;
+	float color = 0;
+	ImGui::ColorEdit4(" Color Frame ", &color);
+	if (color > -401602080) {
+		return color;
 	}
-	delete color;
+	else {
+		return 0.0f;
+	}
 }
 float glmAnimation3D::getValueX() { return LastedFloatFrameX; }
 float glmAnimation3D::getValueY() { return LastedFloatFrameY; }

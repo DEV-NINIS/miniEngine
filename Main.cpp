@@ -55,6 +55,7 @@ int main() {
 	float FOV = 55.0f; float RotateValue = -55.0f;
 	delete resX; delete resY;
 	bool drawingCube = true;
+	int* IndicatorDemandingTexture = nullptr; IndicatorDemandingTexture = new int; *IndicatorDemandingTexture = 0;
 	int* IndicatorDemandingRotateAroundX = nullptr; IndicatorDemandingRotateAroundX = new int; *IndicatorDemandingRotateAroundX = 0;
 	int* IndicatorDemandingRotateAroundY = nullptr; IndicatorDemandingRotateAroundY = new int; *IndicatorDemandingRotateAroundY = 0;
 	int* IndicatorDemandingRotateAroundZ = nullptr; IndicatorDemandingRotateAroundZ = new int; *IndicatorDemandingRotateAroundZ = 0;
@@ -72,9 +73,10 @@ int main() {
 	// initialise imgui
 	UserInterface* Interface = nullptr; Interface = new UserInterface(window); // in the builder of this class they create a imgui context is because in argument they have GLFWwindow* ...
 	//
+	int* IndicatorFilepath = nullptr; IndicatorFilepath = new int; *IndicatorFilepath = Interface->getIndicatorTextureFilePath();
 	Cube->setShader();
 	Cube->setBuffer();
-	Cube->setTexture();
+	Cube->setTexture(0, *IndicatorFilepath);
 	Interface->LastedFloatFrame = 1;
 	float valueXColor = 0.2f; float ValueYcolor = 0.6f; float ValueZColor = 0.9f; float ValueWColor = 0.1f;
 	while (!glfwWindowShouldClose(window)) // render
@@ -82,9 +84,6 @@ int main() {
 		processInput(window);
 		glClearColor(valueXColor, ValueYcolor, ValueZColor, ValueWColor);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
 		Cube->useShaderCube();
 		matrixAnimation->initialiseMatrix();
 		matrixAnimation->setViewProjection();
@@ -92,6 +91,7 @@ int main() {
 		matrixAnimation->setMatrixPerspectiveProjection(FOV, resX2, resY2);
 		matrixAnimation->setTransformValue();
 		matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
+		Interface->setSettingFrame();
 		ImGui::Begin("Engine");
 		ImGui::Checkbox(" draw ", &drawingCube);
 		// echelle du cube
@@ -233,6 +233,19 @@ int main() {
 		else if (*IndicatorDemandingAnimation > 1) {
 			*IndicatorDemandingAnimation = 0;
 		}
+		// texture
+		if (Interface->inputDemandingTexture1() == true) {
+			*IndicatorDemandingTexture = *IndicatorDemandingTexture + 1;
+		}
+		if (*IndicatorDemandingTexture == 1) {
+			Interface->inputFileTexture(Cube->getLoaderTexture());
+			if (Cube->getLoaderTexture() != 0) {
+				Cube->setTexture(*(Interface->filePathPointer), *IndicatorFilepath);
+			}
+		}
+		else if (*IndicatorDemandingTexture > 1) {
+			*IndicatorDemandingTexture = 0;
+		}
 		// settings 
 		if (Interface->setSettings() == true) {
 			*IndicatorSetColorFrameDemanding = *IndicatorSetColorFrameDemanding + 1;
@@ -248,6 +261,8 @@ int main() {
 			Cube->drawElements();
 		}
 		ImGui::End();
+		ImGui::Begin("Settings"); // check parametters and input parametters
+		ImGui::End();
 		glEnable(GL_DEPTH_TEST);
 		Interface->endFrame();
 		glfwSwapBuffers(window);
@@ -262,5 +277,5 @@ int main() {
 	delete IndicatorDemandingRotateRight; delete IndicatorDemandingAnimation;
 	delete IndicatorSetColorFrameDemanding; delete IndicatorDemandingRotateAroundZ;
 	delete IndicatorDemandingRotateAroundX; delete IndicatorDemandingRotateAroundY;
-
+	delete IndicatorDemandingTexture;
 }

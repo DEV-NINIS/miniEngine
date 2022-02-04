@@ -18,12 +18,13 @@ public:
 	bool inputDemandingScaleCubeZ();
 	bool inputDemandingAnimation();
 	bool inputDemandingRotate();
+	bool inputDemandingTexture1();
 	bool inputDemandingRotateAroundX();
 	bool inputDemandingRotateAroundY();
 	bool inputDemandingRotateAroundZ();
 	bool inputDemandingRotateRight();
 	bool inputDemandingRotateLeft();
-	char inputFileTexture();
+	void inputFileTexture(int successLoaderTexture);
 	float setRotateAroundXValue();
 	float setRotateAroundYValue();
 	float setRotateAroundZValue();
@@ -32,6 +33,7 @@ public:
 	float setScaleCubeY();
 	float setScaleCubeZ();
 	// getting value 
+	int getIndicatorTextureFilePath();
 	float& getValueRotateX();
 	float& getValueRotateY();
 	float& getValueRotateZ();
@@ -46,7 +48,10 @@ public:
 	float LastedFloatFrameX;
 	float LastedFloatFrameY;
 	float LastedFloatFrameZ;
+	static char* filePathPointer[150];
 	protected:
+		int lastedFilePath;
+		static char filePath[150];
 		float* size1 = nullptr;
 		float LastedRotateXValue;
 		float LastedRotateYValue;
