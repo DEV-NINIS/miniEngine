@@ -36,73 +36,73 @@ void UserInterface::setSettingFrame() {
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 }
-bool UserInterface::inputDemandingAnimation() {
+bool UserInterface::inputDemandingAnimation() const {
 	if (ImGui::Button("Animation", ImVec2(150, 40))) {
 		return true;
 	}
 	else { return false; }
 }
-bool UserInterface::inputDemandingRotateLeft() {
+bool UserInterface::inputDemandingRotateLeft() const {
 	if (ImGui::Button("save direction and Rotate", ImVec2(200, 20))) {
 		return true;
 	}
 	else { return false; }
 }
-bool UserInterface::inputDemandingRotateRight() {
+bool UserInterface::inputDemandingRotateRight() const {
 	if (ImGui::Button("change direction <- -> ", ImVec2(175, 20))) {
 		return true;
 	}
 	else { return false; }
 }
-bool UserInterface::inputDemandingRotate() {
+bool UserInterface::inputDemandingRotate() const {
 	if (ImGui::Button("Rotate", ImVec2(60, 40))) {
 		return true;
 	}
 	else { return false; }
 }
-bool UserInterface::inputDemandingScaleCube() {
+bool UserInterface::inputDemandingScaleCube() const {
 	ImGui::Text("@Dev_ninis Frame : ", ImGui::GetFrameHeight());
 	if (ImGui::Button("Size Cube", ImVec2(150, 40))) {
 		return true;
 	}
 	else { return false; }
 }
-bool UserInterface::inputDemandingTexture1() {
+bool UserInterface::inputDemandingTexture1() const {
 	if (ImGui::Button("Texture", ImVec2(150, 40))) {
 		return true;
 	}
 	else { return false; }
 }
-bool UserInterface::inputDemandingRotateAroundX() {
+bool UserInterface::inputDemandingRotateAroundX() const {
 	if (ImGui::Button("Rotate X", ImVec2(65, 20))) {
 		return true;
 	}
 	else { return false; }
 }
-bool UserInterface::inputDemandingRotateAroundY() {
+bool UserInterface::inputDemandingRotateAroundY() const {
 	if (ImGui::Button("Rotate Y", ImVec2(65, 20))) {
 		return true;
 	}
 	else { return false; }
-}bool UserInterface::inputDemandingRotateAroundZ() {
+}bool UserInterface::inputDemandingRotateAroundZ() const {
 	if (ImGui::Button("Rotate Z", ImVec2(65, 20))) {
 		return true;
 	}
 	else { return false; }
 }
-bool UserInterface::inputDemandingScaleCubeX() {
+bool UserInterface::inputDemandingScaleCubeX() const {
 	if (ImGui::Button("size X", ImVec2(60, 40))) {
 		return true;
 	}
 	else { return false; }
 }
-bool UserInterface::inputDemandingScaleCubeY() {
+bool UserInterface::inputDemandingScaleCubeY() const {
 	if (ImGui::Button("size Y", ImVec2(60, 40))) {
 		return true;
 	}
 	else { return false; }
 }
-bool UserInterface::inputDemandingScaleCubeZ() {
+bool UserInterface::inputDemandingScaleCubeZ() const {
 	if (ImGui::Button("size Z", ImVec2(60, 40))) {
 		return true;
 	}
@@ -191,6 +191,30 @@ bool UserInterface::setSettings() {
 }
 bool UserInterface::ButtonForSetAnimation() {
 	if (ImGui::Button("Animation ", ImVec2(75, 40))) {
+		return true;
+	}
+	else { return false; }
+}
+bool UserInterface::confirmFilePath() const {
+	if (ImGui::Button("load", ImVec2(50, 20))) {
+		return true;
+	}
+	else { return false; }
+}
+bool UserInterface::inputColorR() const {
+	if (ImGui::Button("R:", ImVec2(15, 20))) {
+		return true;
+	}
+	else { return false; }
+}
+bool UserInterface::inputColorG() const {
+	if (ImGui::Button("G:", ImVec2(15, 20))) {
+		return true;
+	}
+	else { return false; }
+}
+bool UserInterface::inputColorB() const {
+	if (ImGui::Button("B:", ImVec2(15, 20))) {
 		return true;
 	}
 	else { return false; }

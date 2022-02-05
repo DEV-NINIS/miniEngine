@@ -55,6 +55,9 @@ int main() {
 	float FOV = 55.0f; float RotateValue = -55.0f;
 	delete resX; delete resY;
 	bool drawingCube = true;
+	int* IndicatorDemandingColorR = nullptr; IndicatorDemandingColorR = new int; *IndicatorDemandingColorR = 0;
+	int* IndicatorDemandingColorG = nullptr; IndicatorDemandingColorG = new int; *IndicatorDemandingColorG = 0;
+	int* IndicatorDemandingColorB = nullptr; IndicatorDemandingColorB = new int; *IndicatorDemandingColorB = 0;
 	int* IndicatorDemandingTexture = nullptr; IndicatorDemandingTexture = new int; *IndicatorDemandingTexture = 0;
 	int* IndicatorDemandingRotateAroundX = nullptr; IndicatorDemandingRotateAroundX = new int; *IndicatorDemandingRotateAroundX = 0;
 	int* IndicatorDemandingRotateAroundY = nullptr; IndicatorDemandingRotateAroundY = new int; *IndicatorDemandingRotateAroundY = 0;
@@ -239,8 +242,7 @@ int main() {
 		}
 		if (*IndicatorDemandingTexture == 1) {
 			Interface->inputFileTexture(Cube->getLoaderTexture());
-			if (Cube->getLoaderTexture() != 0) {
-				std::cout << *(Interface->filePathPointer) << std::endl;
+			if (Interface->confirmFilePath() == true) {
 				Cube->setTexture(*(Interface->filePathPointer), *IndicatorFilepath);
 			}
 		}
@@ -248,6 +250,11 @@ int main() {
 			*IndicatorDemandingTexture = 0;
 		}
 		// settings 
+		if (drawingCube == true) {
+			Cube->drawElements();
+		}
+		ImGui::End();
+		ImGui::Begin("Settings"); // check parametters and input parametters
 		if (Interface->setSettings() == true) {
 			*IndicatorSetColorFrameDemanding = *IndicatorSetColorFrameDemanding + 1;
 		}
@@ -258,11 +265,6 @@ int main() {
 		{
 			*IndicatorSetColorFrameDemanding = 0;
 		}
-		if (drawingCube == true) {
-			Cube->drawElements();
-		}
-		ImGui::End();
-		ImGui::Begin("Settings"); // check parametters and input parametters
 		ImGui::End();
 		glEnable(GL_DEPTH_TEST);
 		Interface->endFrame();
