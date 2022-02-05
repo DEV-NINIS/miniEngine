@@ -95,7 +95,7 @@ cube::cube() {
 	VAOcube; VBOcube; EBOcube;
 	TextureCube.push_back(new GLuint);
 	LoaderTexture = new int;
-
+	finalPathTexture;
 }
 cube::~cube() {
 	glDeleteVertexArrays(1, &VAOcube);
@@ -167,12 +167,11 @@ void cube::setTexture(char* filePath, int filepathIndicator) {
 	stbi_set_flip_vertically_on_load(true);
 	int width, height, nrChanels;
 	unsigned char* data;
-	if (filepathIndicator > -1) {
+	finalPathTexture = static_cast<const char*>(filePath);
+	data = stbi_load("img/basicTex.jpg", &width, &height, &nrChanels, 0);
+	if (filePath != nullptr) {
 		*LoaderTexture = 0;
-		data = stbi_load(static_cast<const char*>(filePath), &width, &height, &nrChanels, 0);
-	}
-	else {
-		data = stbi_load("img/basicTex.jpg", &width, &height, &nrChanels, 0);
+		data = stbi_load(finalPathTexture, &width, &height, &nrChanels, 0);
 	}
 	if (data) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);

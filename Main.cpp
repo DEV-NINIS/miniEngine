@@ -240,6 +240,7 @@ int main() {
 		if (*IndicatorDemandingTexture == 1) {
 			Interface->inputFileTexture(Cube->getLoaderTexture());
 			if (Cube->getLoaderTexture() != 0) {
+				std::cout << *(Interface->filePathPointer) << std::endl;
 				Cube->setTexture(*(Interface->filePathPointer), *IndicatorFilepath);
 			}
 		}
