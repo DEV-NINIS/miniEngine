@@ -55,6 +55,7 @@ int main() {
 	float FOV = 55.0f; float RotateValue = -55.0f;
 	delete resX; delete resY;
 	bool drawingCube = true;
+	int* IndicatorDemandingColorA = nullptr; IndicatorDemandingColorA = new int; *IndicatorDemandingColorA = 0;
 	int* IndicatorDemandingColorR = nullptr; IndicatorDemandingColorR = new int; *IndicatorDemandingColorR = 0;
 	int* IndicatorDemandingColorG = nullptr; IndicatorDemandingColorG = new int; *IndicatorDemandingColorG = 0;
 	int* IndicatorDemandingColorB = nullptr; IndicatorDemandingColorB = new int; *IndicatorDemandingColorB = 0;
@@ -85,7 +86,8 @@ int main() {
 	while (!glfwWindowShouldClose(window)) // render
 	{
 		processInput(window);
-		glClearColor(valueXColor, ValueYcolor, ValueZColor, ValueWColor);
+		std::cout << Interface->getColorA();
+		glClearColor(Interface->getColorR(), Interface->getColorG(), Interface->getColorB() , Interface->getColorA());
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		Cube->useShaderCube();
 		matrixAnimation->initialiseMatrix();
@@ -255,11 +257,46 @@ int main() {
 		}
 		ImGui::End();
 		ImGui::Begin("Settings"); // check parametters and input parametters
-		if (Interface->setSettings() == true) {
+		if (Interface->inputDemandingChangeColorFrame() == true) {
 			*IndicatorSetColorFrameDemanding = *IndicatorSetColorFrameDemanding + 1;
 		}
 		if (*IndicatorSetColorFrameDemanding == 1) {
-			matrixAnimation->setColorValueFrame();
+			if (Interface->inputColorR() == true) {
+				*IndicatorDemandingColorR = *IndicatorDemandingColorR + 1;
+			}
+			if (*IndicatorDemandingColorR == 1) {
+				Interface->setColorR();
+			}
+			else if (*IndicatorDemandingColorR > 1) {
+				*IndicatorDemandingColorR = 0;
+			}
+			if (Interface->inputColorG() == true) {
+				*IndicatorDemandingColorG = *IndicatorDemandingColorG + 1;
+			}
+			if (*IndicatorDemandingColorG == 1) {
+				Interface->setColorG();
+			}
+			else if (*IndicatorDemandingColorG > 1) {
+				*IndicatorDemandingColorG = 0;
+			}
+			if (Interface->inputColorB() == true) {
+				*IndicatorDemandingColorB = *IndicatorDemandingColorB + 1;
+			}
+			if (*IndicatorDemandingColorB == 1) {
+				Interface->setColorB();
+			}
+			else if (*IndicatorDemandingColorB > 1) {
+				*IndicatorDemandingColorB = 0;
+			}
+			if (Interface->inputColorA() == true) {
+				*IndicatorDemandingColorA = *IndicatorDemandingColorA + 1;
+			}
+			if (*IndicatorDemandingColorA == 1) {
+				Interface->setColorA();
+			}
+			else if (*IndicatorDemandingColorA > 1) {
+				*IndicatorDemandingColorA = 0;
+			}
 		}
 		else if (*IndicatorSetColorFrameDemanding >= 2)
 		{
@@ -280,5 +317,7 @@ int main() {
 	delete IndicatorDemandingRotateRight; delete IndicatorDemandingAnimation;
 	delete IndicatorSetColorFrameDemanding; delete IndicatorDemandingRotateAroundZ;
 	delete IndicatorDemandingRotateAroundX; delete IndicatorDemandingRotateAroundY;
-	delete IndicatorDemandingTexture;
+	delete IndicatorDemandingTexture; delete IndicatorDemandingColorB;
+	delete IndicatorDemandingColorG; delete IndicatorDemandingColorR;
+	delete IndicatorDemandingColorA;
 }

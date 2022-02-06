@@ -15,6 +15,7 @@ public:
 	bool inputColorR() const;
 	bool inputColorG() const;
 	bool inputColorB() const;
+	bool inputColorA() const;
 	bool inputDemandingScaleCube() const;
 	bool inputDemandingScaleCubeX() const;
 	bool inputDemandingScaleCubeY() const;
@@ -36,14 +37,24 @@ public:
 	float setScaleCubeX();
 	float setScaleCubeY();
 	float setScaleCubeZ();
-	// getting value 
+	void setColorR();
+	void setColorG();
+	void setColorB();
+	void setColorA();
+	// getting value rotate
 	int getIndicatorTextureFilePath();
 	float& getValueRotateX();
 	float& getValueRotateY();
 	float& getValueRotateZ();
 	// 
+	// getting value color
+	float getColorR() const;
+	float getColorG() const;
+	float getColorB() const;
+	float getColorA() const;
+
 	void setSettingFrame();
-	bool setSettings();
+	bool inputDemandingChangeColorFrame();
 	bool ButtonForSetAnimation();
 	bool changeColorFrame();
 	void setLastedmatrix();
@@ -57,6 +68,10 @@ public:
 		int lastedFilePath;
 		static char filePath[150];
 		float* size1 = nullptr;
+		float LastedFrameColorR;
+		float LastedFrameColorG;
+		float LastedFrameColorB;
+		float LastedFrameColorA;
 		float LastedRotateXValue;
 		float LastedRotateYValue;
 		float LastedRotateZValue;

@@ -20,6 +20,7 @@ UserInterface::UserInterface(GLFWwindow* window)  {
 	auto& style = ImGui::GetStyle();
 	ImVec4* color = ImGui::GetStyle().Colors;
 	color[ImGuiCol_WindowBg] = ImVec4(0.1, 0.3, 0.5, 0.9);
+	LastedFrameColorR = 0.2f; LastedFrameColorG = 0.5f; LastedFrameColorB = 0.7f; LastedFrameColorA = 0.9f;
 	LastedFloatFrame = 1.0f; LastedFloatFrameX = 1.0f; LastedFloatFrameY = 1.0f; LastedFloatFrameZ = 1.0f; 
 	LastedRotateXValue = 0.1f; LastedRotateYValue = 0.0f; LastedRotateZValue = 0.0f;
 	size1 = new float;
@@ -183,8 +184,8 @@ bool UserInterface::changeColorFrame() {
 	}
 	else { return false; }
 }
-bool UserInterface::setSettings() {
-	if (ImGui::Button("settings ", ImVec2(75, 20))) {
+bool UserInterface::inputDemandingChangeColorFrame() {
+	if (ImGui::Button("Clear Color", ImVec2(100, 30))) {
 		return true;
 	}
 	else { return false; }
@@ -202,22 +203,52 @@ bool UserInterface::confirmFilePath() const {
 	else { return false; }
 }
 bool UserInterface::inputColorR() const {
-	if (ImGui::Button("R:", ImVec2(15, 20))) {
+	if (ImGui::Button("R:", ImVec2(20, 20))) {
 		return true;
 	}
 	else { return false; }
 }
 bool UserInterface::inputColorG() const {
-	if (ImGui::Button("G:", ImVec2(15, 20))) {
+	if (ImGui::Button("G:", ImVec2(20, 20))) {
 		return true;
 	}
 	else { return false; }
 }
 bool UserInterface::inputColorB() const {
-	if (ImGui::Button("B:", ImVec2(15, 20))) {
+	if (ImGui::Button("B:", ImVec2(20, 20))) {
 		return true;
 	}
 	else { return false; }
+}
+bool UserInterface::inputColorA() const {
+	if (ImGui::Button("A:", ImVec2(20, 20))) {
+		return true;
+	}
+	else { return false; }
+}
+void UserInterface::setColorR() {
+	ImGui::SliderFloat("R", &LastedFrameColorR, 0, 1);
+	if (LastedFrameColorR < -401602080) {
+		LastedFrameColorR = 0.4f;
+	}
+}
+void UserInterface::setColorG() {
+	ImGui::SliderFloat("G", &LastedFrameColorG, 0, 1);
+	if (LastedFrameColorG < -401602080) {
+		LastedFrameColorG = 0.1f;
+	}
+}
+void UserInterface::setColorB() {
+	ImGui::SliderFloat("B", &LastedFrameColorB, 0, 1);
+	if (LastedFrameColorB < -401602080) {
+		LastedFrameColorB = 0.9f;
+	}
+}
+void UserInterface::setColorA() {
+	ImGui::SliderFloat("A", &LastedFrameColorA, 0, 1);
+	if (LastedFrameColorA < -401602080) {
+		LastedFrameColorA = 0.2f;
+	}
 }
 void UserInterface::inputFileTexture(int successLoaderTexture) {
 	ImGui::InputText("path texture", this->filePath, IM_ARRAYSIZE(this->filePath));
@@ -242,3 +273,7 @@ int UserInterface::getIndicatorTextureFilePath() { return lastedFilePath; }
 float& UserInterface::getValueRotateX() { return LastedRotateXValue; }
 float& UserInterface::getValueRotateY() { return LastedRotateYValue; }
 float& UserInterface::getValueRotateZ() { return LastedRotateZValue; }
+float UserInterface::getColorR() const { return LastedFrameColorR; }
+float UserInterface::getColorG() const { return LastedFrameColorG; }
+float UserInterface::getColorB() const { return LastedFrameColorB; }
+float UserInterface::getColorA() const { return LastedFrameColorA; }
