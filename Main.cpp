@@ -55,6 +55,7 @@ int main() {
 	float FOV = 55.0f; float RotateValue = -55.0f;
 	delete resX; delete resY;
 	bool drawingCube = true;
+	int* IndicatorDemandingChangeFOV = nullptr; IndicatorDemandingChangeFOV = new int; *IndicatorDemandingChangeFOV = 0;
 	int* IndicatorDemandingColorA = nullptr; IndicatorDemandingColorA = new int; *IndicatorDemandingColorA = 0;
 	int* IndicatorDemandingColorR = nullptr; IndicatorDemandingColorR = new int; *IndicatorDemandingColorR = 0;
 	int* IndicatorDemandingColorG = nullptr; IndicatorDemandingColorG = new int; *IndicatorDemandingColorG = 0;
@@ -86,7 +87,6 @@ int main() {
 	while (!glfwWindowShouldClose(window)) // render
 	{
 		processInput(window);
-		std::cout << Interface->getColorA();
 		glClearColor(Interface->getColorR(), Interface->getColorG(), Interface->getColorB() , Interface->getColorA());
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		Cube->useShaderCube();
@@ -301,6 +301,16 @@ int main() {
 		else if (*IndicatorSetColorFrameDemanding >= 2)
 		{
 			*IndicatorSetColorFrameDemanding = 0;
+		}
+		if (Interface->inputDemandingChangeFOV() == true) {
+			*IndicatorDemandingChangeFOV = *IndicatorDemandingChangeFOV + 1;
+		}
+		if (*IndicatorDemandingChangeFOV == 1) {
+			Interface->setChangeFOV();
+			FOV = Interface->getFOV_Value();
+		}
+		else if (*IndicatorDemandingChangeFOV > 1) {
+			*IndicatorDemandingChangeFOV = 0;
 		}
 		ImGui::End();
 		glEnable(GL_DEPTH_TEST);

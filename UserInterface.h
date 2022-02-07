@@ -28,6 +28,7 @@ public:
 	bool inputDemandingRotateAroundZ() const;
 	bool inputDemandingRotateRight() const;
 	bool inputDemandingRotateLeft() const;
+	bool inputDemandingChangeFOV() const; 
 	bool confirmFilePath() const;
 	void inputFileTexture(int successLoaderTexture);
 	float setRotateAroundXValue();
@@ -41,11 +42,13 @@ public:
 	void setColorG();
 	void setColorB();
 	void setColorA();
+	void setChangeFOV();
 	// getting value rotate
 	int getIndicatorTextureFilePath();
 	float& getValueRotateX();
 	float& getValueRotateY();
 	float& getValueRotateZ();
+	float getFOV_Value() const;
 	// 
 	// getting value color
 	float getColorR() const;
@@ -68,6 +71,7 @@ public:
 		int lastedFilePath;
 		static char filePath[150];
 		float* size1 = nullptr;
+		float FOV;
 		float LastedFrameColorR;
 		float LastedFrameColorG;
 		float LastedFrameColorB;

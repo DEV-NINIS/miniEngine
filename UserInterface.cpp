@@ -24,6 +24,7 @@ UserInterface::UserInterface(GLFWwindow* window)  {
 	LastedFloatFrame = 1.0f; LastedFloatFrameX = 1.0f; LastedFloatFrameY = 1.0f; LastedFloatFrameZ = 1.0f; 
 	LastedRotateXValue = 0.1f; LastedRotateYValue = 0.0f; LastedRotateZValue = 0.0f;
 	size1 = new float;
+	FOV = 55.0f;
 	lastedFilePath = -1;
 }
 UserInterface::~UserInterface() {
@@ -226,6 +227,12 @@ bool UserInterface::inputColorA() const {
 	}
 	else { return false; }
 }
+bool UserInterface::inputDemandingChangeFOV() const {
+	if (ImGui::Button("FOV", ImVec2(100, 30))) {
+		return true;
+	}
+	else { return false; }
+}
 void UserInterface::setColorR() {
 	ImGui::SliderFloat("R", &LastedFrameColorR, 0, 1);
 	if (LastedFrameColorR < -401602080) {
@@ -248,6 +255,12 @@ void UserInterface::setColorA() {
 	ImGui::SliderFloat("A", &LastedFrameColorA, 0, 1);
 	if (LastedFrameColorA < -401602080) {
 		LastedFrameColorA = 0.2f;
+	}
+}
+void UserInterface::setChangeFOV() {
+	ImGui::SliderFloat("change FOV", &FOV, 10, 145);
+	if (FOV < -401602080) {
+		FOV = 45.0f;
 	}
 }
 void UserInterface::inputFileTexture(int successLoaderTexture) {
@@ -277,3 +290,4 @@ float UserInterface::getColorR() const { return LastedFrameColorR; }
 float UserInterface::getColorG() const { return LastedFrameColorG; }
 float UserInterface::getColorB() const { return LastedFrameColorB; }
 float UserInterface::getColorA() const { return LastedFrameColorA; }
+float UserInterface::getFOV_Value() const { return FOV; }
