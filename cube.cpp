@@ -7,7 +7,7 @@
 
 float cube::vertecies[] ={
 
-		-0.5f, -0.5f, -0.5f,   0.2f, 0.6f, 0.9f, 0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,  0.2f, 0.6f, 0.9f, 0.0f, 0.0f,
 		 0.5f, -0.5f, -0.5f,  0.9f, 0.6f, 0.2f, 1.0f, 0.0f,
 		 0.5f,  0.5f, -0.5f,  0.5f, 0.6f, 0.9f,1.0f, 1.0f,
 		 0.5f,  0.5f, -0.5f,  0.7f, 0.6f, 0.8f,1.0f, 1.0f,
@@ -29,7 +29,7 @@ float cube::vertecies[] ={
 		-0.5f,  0.5f,  0.5f,  0.6f, 0.5f, 0.3f,1.0f, 0.0f,
 
 		 0.5f,  0.5f,  0.5f, 0.3f, 0.9f, 0.9f, 1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f, 0.9f, 0.4f, 0.3f, 1.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f, 0.9f, 0.4f, 0.3f, 1.0f, 0.0f,
 		 0.5f, -0.5f, -0.5f, 0.1f, 0.6f, 0.9f, 0.0f, 1.0f,
 		 0.5f, -0.5f, -0.5f, 0.7f, 0.1f, 0.5f, 0.0f, 1.0f,
 		 0.5f, -0.5f,  0.5f, 0.2f, 0.4f, 0.1f, 0.0f, 0.0f,
@@ -69,7 +69,6 @@ cube::cube() {
 		"uniform mat4 transform;\n"
 		"uniform float LastedFrame;\n"
 		"uniform mat4 Scale;\n"
-		"uniform mat4 Scale2;\n"
 		"uniform float scaleX;\n"
 		"uniform float scaleY;\n"
 		"uniform float scaleZ;\n"
@@ -87,9 +86,17 @@ cube::cube() {
 		"in vec2 texCoordsForFrag;\n"
 		"out vec4 Frag_color;\n"
 		"uniform sampler2D Texture;\n"
+		"uniform float ColorR;\n"
+		"uniform float ColorG;\n"
+		"uniform float ColorB;\n"
 
 		"void main() {\n"
+		"if (ColorR == 0 && ColorG == 0 && ColorB == 0) {"
 		"Frag_color = texture(Texture, texCoordsForFrag) * vec4(colorForFragmentShader, 1.0);\n"
+		"}\n"
+		"else {\n"
+		"Frag_color = texture(Texture, texCoordsForFrag) * vec4(ColorR, ColorG, ColorB, 1.0f);\n"
+		"}\n"
 		"}\n\0";
 
 	VAOcube; VBOcube; EBOcube;
@@ -110,11 +117,11 @@ void cube::setBuffer() {
 	//vbo
 	glGenBuffers(1, &VBOcube);
 	glBindBuffer(GL_ARRAY_BUFFER, VBOcube);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertecies), vertecies, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertecies), vertecies, GL_DYNAMIC_DRAW);
 	// ebo
 	glGenBuffers(1, &EBOcube);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOcube);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index), index, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index), index, GL_DYNAMIC_DRAW);
 	//pointers
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0); // pointer position 
 	glEnableVertexAttribArray(0);

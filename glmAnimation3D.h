@@ -24,6 +24,7 @@ public:
 	void frameMatrix(GLuint& shader);
 	void setTransformValue();
 	void setRotateRight(float& Radius);
+	void setColorObject(GLuint& shader, float ValueR, float ValueG, float ValueB);
 	void setRotateLeft(float Radius, float& ValueX, float& ValueY, float& ValueZ);
 	void linkMatrix(GLuint& shader, float& ValueX, float& ValueY, float& ValueZ);
 	glm::mat4 setScaleValue(GLuint& shader, float& Value);

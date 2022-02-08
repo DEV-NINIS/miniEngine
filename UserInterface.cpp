@@ -26,6 +26,7 @@ UserInterface::UserInterface(GLFWwindow* window)  {
 	size1 = new float;
 	FOV = 55.0f;
 	lastedFilePath = -1;
+	LastedColorObjectR = 0.5f; LastedColorObjectG = 0.6f; LastedColorObjectB = 0.9f; LastedColorObjectA = 0.4f;
 }
 UserInterface::~UserInterface() {
 	ImGui_ImplOpenGL3_Shutdown();
@@ -64,13 +65,13 @@ bool UserInterface::inputDemandingRotate() const {
 }
 bool UserInterface::inputDemandingScaleCube() const {
 	ImGui::Text("@Dev_ninis Frame : ", ImGui::GetFrameHeight());
-	if (ImGui::Button("Size Cube", ImVec2(150, 40))) {
+	if (ImGui::Button("Size Cube", ImVec2(250, 40))) {
 		return true;
 	}
 	else { return false; }
 }
 bool UserInterface::inputDemandingTexture1() const {
-	if (ImGui::Button("Texture", ImVec2(150, 40))) {
+	if (ImGui::Button("Texture", ImVec2(250, 40))) {
 		return true;
 	}
 	else { return false; }
@@ -192,7 +193,7 @@ bool UserInterface::inputDemandingChangeColorFrame() {
 	else { return false; }
 }
 bool UserInterface::ButtonForSetAnimation() {
-	if (ImGui::Button("Animation ", ImVec2(75, 40))) {
+	if (ImGui::Button("Animation ", ImVec2(350, 60))) {
 		return true;
 	}
 	else { return false; }
@@ -228,7 +229,13 @@ bool UserInterface::inputColorA() const {
 	else { return false; }
 }
 bool UserInterface::inputDemandingChangeFOV() const {
-	if (ImGui::Button("FOV", ImVec2(100, 30))) {
+	if (ImGui::Button("FOV", ImVec2(150, 30))) {
+		return true;
+	}
+	else { return false; }
+}
+bool UserInterface::inputDemandingChangeColorObject() const {
+	if (ImGui::Button("Color Object", ImVec2(250, 40))) {
 		return true;
 	}
 	else { return false; }
@@ -274,6 +281,30 @@ void UserInterface::inputFileTexture(int successLoaderTexture) {
 	}
 	*filePathPointer = filePath;
 }
+void UserInterface::setColorObjectR() {
+	ImGui::SliderFloat("R", &LastedColorObjectR, -1, 1);
+	if (LastedColorObjectR < -401602080) {
+		LastedColorObjectR = 0.5f;
+	}
+}
+void UserInterface::setColorObjectG() {
+	ImGui::SliderFloat("G", &LastedColorObjectG, -1, 1);
+	if (LastedColorObjectG < -401602080) {
+		LastedColorObjectG = 0.5f;
+	}
+}
+void UserInterface::setColorObjectB() {
+	ImGui::SliderFloat("B", &LastedColorObjectB, -1, 1);
+	if (LastedColorObjectB < -401602080) {
+		LastedColorObjectB = 0.5f;
+	}
+}
+void UserInterface::setColorObjectA() {
+	ImGui::SliderFloat("A", &LastedColorObjectA, -1, 1);
+	if (LastedColorObjectA < -401602080) {
+		LastedColorObjectA = 0.5f;
+	}
+}
 void UserInterface::endFrame() {
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -291,3 +322,7 @@ float UserInterface::getColorG() const { return LastedFrameColorG; }
 float UserInterface::getColorB() const { return LastedFrameColorB; }
 float UserInterface::getColorA() const { return LastedFrameColorA; }
 float UserInterface::getFOV_Value() const { return FOV; }
+float UserInterface::getColorObjectR() const { return LastedColorObjectR; }
+float UserInterface::getColorObjectG() const { return LastedColorObjectG; }
+float UserInterface::getColorObjectB() const { return LastedColorObjectB; }
+float UserInterface::getColorObjectA() const { return LastedColorObjectA; }

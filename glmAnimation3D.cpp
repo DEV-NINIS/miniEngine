@@ -121,6 +121,11 @@ float glmAnimation3D::setColorValueFrame() {
 		return 0.0f;
 	}
 }
+void glmAnimation3D::setColorObject(GLuint& shader, float ValueR, float ValueG, float ValueB) {
+	glUniform1f(glGetUniformLocation(shader, "ColorR"), ValueR);
+	glUniform1f(glGetUniformLocation(shader, "ColorG"), ValueG);
+	glUniform1f(glGetUniformLocation(shader, "ColorB"), ValueB);
+}
 float glmAnimation3D::getValueX() { return LastedFloatFrameX; }
 float glmAnimation3D::getValueY() { return LastedFloatFrameY; }
 float glmAnimation3D::getValueZ() { return LastedFloatFrameZ; }

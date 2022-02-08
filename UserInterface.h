@@ -22,6 +22,7 @@ public:
 	bool inputDemandingScaleCubeZ() const;
 	bool inputDemandingAnimation() const;
 	bool inputDemandingRotate() const;
+	bool inputDemandingChangeColorObject() const;
 	bool inputDemandingTexture1() const;
 	bool inputDemandingRotateAroundX() const;
 	bool inputDemandingRotateAroundY() const;
@@ -42,6 +43,10 @@ public:
 	void setColorG();
 	void setColorB();
 	void setColorA();
+	void setColorObjectR();
+	void setColorObjectG();
+	void setColorObjectB();
+	void setColorObjectA();
 	void setChangeFOV();
 	// getting value rotate
 	int getIndicatorTextureFilePath();
@@ -55,6 +60,11 @@ public:
 	float getColorG() const;
 	float getColorB() const;
 	float getColorA() const;
+	float getColorObjectR() const;
+	float getColorObjectG() const;
+	float getColorObjectB() const;
+	float getColorObjectA() const;
+
 
 	void setSettingFrame();
 	bool inputDemandingChangeColorFrame();
@@ -79,6 +89,10 @@ public:
 		float LastedRotateXValue;
 		float LastedRotateYValue;
 		float LastedRotateZValue;
+		float LastedColorObjectR;
+		float LastedColorObjectG;
+		float LastedColorObjectB;
+		float LastedColorObjectA;
 };
 
 #endif // !1

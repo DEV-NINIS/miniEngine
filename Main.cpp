@@ -55,6 +55,10 @@ int main() {
 	float FOV = 55.0f; float RotateValue = -55.0f;
 	delete resX; delete resY;
 	bool drawingCube = true;
+	int* IndicatorDemandingChangeColorCube = nullptr; IndicatorDemandingChangeColorCube = new int; *IndicatorDemandingChangeColorCube = 0;
+	int* IndicatorDemandingChangeColorCubeR = nullptr; IndicatorDemandingChangeColorCubeR = new int; *IndicatorDemandingChangeColorCubeR = 0;
+	int* IndicatorDemandingChangeColorCubeG = nullptr; IndicatorDemandingChangeColorCubeG = new int; *IndicatorDemandingChangeColorCubeG = 0;
+	int* IndicatorDemandingChangeColorCubeB = nullptr; IndicatorDemandingChangeColorCubeB = new int; *IndicatorDemandingChangeColorCubeB = 0;
 	int* IndicatorDemandingChangeFOV = nullptr; IndicatorDemandingChangeFOV = new int; *IndicatorDemandingChangeFOV = 0;
 	int* IndicatorDemandingColorA = nullptr; IndicatorDemandingColorA = new int; *IndicatorDemandingColorA = 0;
 	int* IndicatorDemandingColorR = nullptr; IndicatorDemandingColorR = new int; *IndicatorDemandingColorR = 0;
@@ -238,6 +242,46 @@ int main() {
 		else if (*IndicatorDemandingAnimation > 1) {
 			*IndicatorDemandingAnimation = 0;
 		}
+		if (Interface->inputDemandingChangeColorObject() == true) {
+			*IndicatorDemandingChangeColorCube = *IndicatorDemandingChangeColorCube + 1;
+		}
+		if (*IndicatorDemandingChangeColorCube == 1) {
+			// colors
+			if (Interface->inputColorR() == true) {
+				*IndicatorDemandingChangeColorCubeR = *IndicatorDemandingChangeColorCubeR + 1;
+			}
+			if (*IndicatorDemandingChangeColorCubeR == 1) {
+				//fonction 
+				Interface->setColorObjectR();
+			}
+			else if (*IndicatorDemandingChangeColorCubeR > 1) {
+				*IndicatorDemandingChangeColorCubeR = 0;
+			}
+			if (Interface->inputColorG() == true) {
+				*IndicatorDemandingChangeColorCubeG = *IndicatorDemandingChangeColorCubeG + 1;
+			}
+			if (*IndicatorDemandingChangeColorCubeG == 1) {
+				// fonction
+				Interface->setColorObjectG();
+			}
+			else if (*IndicatorDemandingChangeColorCubeG > 1) {
+				*IndicatorDemandingChangeColorCubeG = 0;
+			}
+			if (Interface->inputColorB() == true) {
+				*IndicatorDemandingChangeColorCubeB = *IndicatorDemandingChangeColorCubeB + 1;
+			}
+			if (*IndicatorDemandingChangeColorCubeB == 1) {
+				// fonction 
+				Interface->setColorObjectB();
+			}
+			else if (*IndicatorDemandingChangeColorCubeB > 1) {
+				*IndicatorDemandingChangeColorCubeB = 0;
+			}
+			matrixAnimation->setColorObject(Cube->getshaderCube(), Interface->getColorObjectR(), Interface->getColorObjectG(), Interface->getColorObjectB());
+		}
+		else if (*IndicatorDemandingChangeColorCube > 1) {
+			*IndicatorDemandingChangeColorCube = 0;
+		}
 		// texture
 		if (Interface->inputDemandingTexture1() == true) {
 			*IndicatorDemandingTexture = *IndicatorDemandingTexture + 1;
@@ -329,5 +373,7 @@ int main() {
 	delete IndicatorDemandingRotateAroundX; delete IndicatorDemandingRotateAroundY;
 	delete IndicatorDemandingTexture; delete IndicatorDemandingColorB;
 	delete IndicatorDemandingColorG; delete IndicatorDemandingColorR;
-	delete IndicatorDemandingColorA;
+	delete IndicatorDemandingColorA; delete IndicatorDemandingChangeFOV;
+	delete IndicatorDemandingChangeColorCube; delete IndicatorDemandingChangeColorCubeR;
+	delete IndicatorDemandingChangeColorCubeG; delete IndicatorDemandingChangeColorCubeB;
 }

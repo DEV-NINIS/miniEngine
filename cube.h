@@ -33,6 +33,7 @@ protected:
 	GLuint programShader;
 	unsigned int tex;
 	int* LoaderTexture = nullptr;
+	const char* finalPathTexture;
 };
 
 #endif // !1
