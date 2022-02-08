@@ -282,25 +282,25 @@ void UserInterface::inputFileTexture(int successLoaderTexture) {
 	*filePathPointer = filePath;
 }
 void UserInterface::setColorObjectR() {
-	ImGui::SliderFloat("R", &LastedColorObjectR, -1, 1);
+	ImGui::SliderFloat("R", &LastedColorObjectR, 0, 1);
 	if (LastedColorObjectR < -401602080) {
 		LastedColorObjectR = 0.5f;
 	}
 }
 void UserInterface::setColorObjectG() {
-	ImGui::SliderFloat("G", &LastedColorObjectG, -1, 1);
+	ImGui::SliderFloat("G", &LastedColorObjectG, 0, 1);
 	if (LastedColorObjectG < -401602080) {
 		LastedColorObjectG = 0.5f;
 	}
 }
 void UserInterface::setColorObjectB() {
-	ImGui::SliderFloat("B", &LastedColorObjectB, -1, 1);
+	ImGui::SliderFloat("B", &LastedColorObjectB, 0, 1);
 	if (LastedColorObjectB < -401602080) {
 		LastedColorObjectB = 0.5f;
 	}
 }
 void UserInterface::setColorObjectA() {
-	ImGui::SliderFloat("A", &LastedColorObjectA, -1, 1);
+	ImGui::SliderFloat("A", &LastedColorObjectA, 0, 1);
 	if (LastedColorObjectA < -401602080) {
 		LastedColorObjectA = 0.5f;
 	}
