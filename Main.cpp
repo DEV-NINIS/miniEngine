@@ -1,3 +1,14 @@
+#define IMGUI_IMPL_OPENGL_LOADER_GLAD
+#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
+#include <GL/gl3w.h>  // Initialize with gl3wInit()
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
+#include <GL/glew.h>  // Initialize with glewInit()
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
+#include <glad/glad.h>  // Initialize with gladLoadGL()
+#else
+#include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
+#endif
+
 #include <iostream>
 #include <string>
 #include "cube.h"
@@ -12,6 +23,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <GLFW/glfw3.h>
+#include <Windows.h>
 //												_____
 //               /\         |\		|	 |	   |
 //				/  \		| \		|	 |	   |
@@ -55,6 +67,14 @@ int main() {
 	float FOV = 55.0f; float RotateValue = -55.0f;
 	delete resX; delete resY;
 	bool drawingCube = true;
+	int* IndicatorChgangePositionCube = nullptr; IndicatorChgangePositionCube = new int; *IndicatorChgangePositionCube = 0;
+	int* IndicatorChgangePositionCubeX = nullptr; IndicatorChgangePositionCubeX = new int; *IndicatorChgangePositionCubeX = 0;
+	int* IndicatorChgangePositionCubeY = nullptr; IndicatorChgangePositionCubeY = new int; *IndicatorChgangePositionCubeY = 0;
+	int* IndicatorChgangePositionCubeZ = nullptr; IndicatorChgangePositionCubeZ = new int; *IndicatorChgangePositionCubeZ = 0;
+	int* IndicatorDemandingChangeCubePosition = nullptr; IndicatorDemandingChangeCubePosition = new int; *IndicatorDemandingChangeCubePosition = 0;
+	int* IndicatorDemandingChangeCubePositionX = nullptr; IndicatorDemandingChangeCubePositionX = new int; *IndicatorDemandingChangeCubePositionX = 0;
+	int* IndicatorDemandingChangeCubePositionY = nullptr; IndicatorDemandingChangeCubePositionY = new int; *IndicatorDemandingChangeCubePositionY = 0;
+	int* IndicatorDemandingChangeCubePositionZ = nullptr; IndicatorDemandingChangeCubePositionZ = new int; *IndicatorDemandingChangeCubePositionZ = 0;
 	int* IndicatorDemandingChangeColorCube = nullptr; IndicatorDemandingChangeColorCube = new int; *IndicatorDemandingChangeColorCube = 0;
 	int* IndicatorDemandingChangeColorCubeR = nullptr; IndicatorDemandingChangeColorCubeR = new int; *IndicatorDemandingChangeColorCubeR = 0;
 	int* IndicatorDemandingChangeColorCubeG = nullptr; IndicatorDemandingChangeColorCubeG = new int; *IndicatorDemandingChangeColorCubeG = 0;
@@ -168,8 +188,55 @@ int main() {
 		//
 		matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
 		matrixAnimation->frameMatrix(Cube->getshaderCube());
+		// position cube
+		if (Interface->inputDemandingPositionObject() == true) {
+			*IndicatorChgangePositionCube = *IndicatorChgangePositionCube + 1;
+		}
+		if (*IndicatorChgangePositionCube == 1) {
+			// fonction
+			// x
+			if (Interface->inputDemandingPositionObjectX() == true) {
+				*IndicatorChgangePositionCubeX = *IndicatorChgangePositionCubeX + 1;
+			}
+			if (*IndicatorChgangePositionCubeX == 1) {
+				// fonction
+				Interface->setPositionObjectX();
+				matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
+			}
+			else if (*IndicatorChgangePositionCubeX > 1) {
+				*IndicatorChgangePositionCubeX = 0;
+			}
+			// y
+			if (Interface->inputDemandingPositionObjectY() == true) {
+				*IndicatorChgangePositionCubeY = *IndicatorChgangePositionCubeY + 1;
+			}
+			if (*IndicatorChgangePositionCubeY == 1) {
+				// fonction
+				Interface->setPositionObjectY();
+				matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
+			}
+			else if (*IndicatorChgangePositionCubeY > 1) {
+				*IndicatorChgangePositionCubeY = 0;
+			}
+			// z
+			if (Interface->inputDemandingPositionObjectZ() == true) {
+				*IndicatorChgangePositionCubeZ = *IndicatorChgangePositionCubeZ + 1;
+			}
+			if (*IndicatorChgangePositionCubeZ == 1) {
+				// fonction
+				Interface->setPositionObjectZ();
+				matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
+			}
+			else if (*IndicatorChgangePositionCubeZ > 1) {
+				*IndicatorChgangePositionCubeZ = 0;
+			}
+			matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
+		}
+		else if (*IndicatorChgangePositionCube > 1) {
+			*IndicatorChgangePositionCube = 0;
+		}
 		// Animation
-		if (Interface->inputDemandingAnimation() == true) {
+		if (Interface->ButtonForSetAnimation() == true) {
 			*IndicatorDemandingAnimation = *IndicatorDemandingAnimation + 1;
 		}
 		if (*IndicatorDemandingAnimation == 1) {
@@ -376,4 +443,8 @@ int main() {
 	delete IndicatorDemandingColorA; delete IndicatorDemandingChangeFOV;
 	delete IndicatorDemandingChangeColorCube; delete IndicatorDemandingChangeColorCubeR;
 	delete IndicatorDemandingChangeColorCubeG; delete IndicatorDemandingChangeColorCubeB;
+	delete IndicatorDemandingChangeCubePosition; delete IndicatorDemandingChangeCubePositionX;
+	delete IndicatorDemandingChangeCubePositionY; delete IndicatorDemandingChangeCubePositionZ;
+	delete IndicatorChgangePositionCube; delete IndicatorChgangePositionCubeX;
+	delete IndicatorChgangePositionCubeY; delete IndicatorChgangePositionCubeZ;
 }

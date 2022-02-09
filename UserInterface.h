@@ -20,6 +20,10 @@ public:
 	bool inputDemandingScaleCubeX() const;
 	bool inputDemandingScaleCubeY() const;
 	bool inputDemandingScaleCubeZ() const;
+	bool inputDemandingPositionObject() const;
+	bool inputDemandingPositionObjectX() const;
+	bool inputDemandingPositionObjectY() const;
+	bool inputDemandingPositionObjectZ() const;
 	bool inputDemandingAnimation() const;
 	bool inputDemandingRotate() const;
 	bool inputDemandingChangeColorObject() const;
@@ -47,6 +51,9 @@ public:
 	void setColorObjectG();
 	void setColorObjectB();
 	void setColorObjectA();
+	void setPositionObjectX();
+	void setPositionObjectY();
+	void setPositionObjectZ();
 	void setChangeFOV();
 	// getting value rotate
 	int getIndicatorTextureFilePath();
@@ -64,6 +71,11 @@ public:
 	float getColorObjectG() const;
 	float getColorObjectB() const;
 	float getColorObjectA() const;
+
+	// getting value Position
+	float getPositionObjectX() const;
+	float getPositionObjectY() const;
+	float getPositionObjectZ() const;
 
 
 	void setSettingFrame();
@@ -93,6 +105,9 @@ public:
 		float LastedColorObjectG;
 		float LastedColorObjectB;
 		float LastedColorObjectA;
+		float LastedPositionObjectX;
+		float LastedPositionObjectY;
+		float LastedPositionObjectZ;
 };
 
 #endif // !1

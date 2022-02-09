@@ -126,6 +126,11 @@ void glmAnimation3D::setColorObject(GLuint& shader, float ValueR, float ValueG, 
 	glUniform1f(glGetUniformLocation(shader, "ColorG"), ValueG);
 	glUniform1f(glGetUniformLocation(shader, "ColorB"), ValueB);
 }
+void glmAnimation3D::setPositionObject(GLuint& shader, float ValueX, float ValueY, float ValueZ) {
+	glUniform1f(glGetUniformLocation(shader, "PositionX"), ValueX);
+	glUniform1f(glGetUniformLocation(shader, "PositionY"), ValueY);
+	glUniform1f(glGetUniformLocation(shader, "PositionZ"), ValueZ);
+}
 float glmAnimation3D::getValueX() { return LastedFloatFrameX; }
 float glmAnimation3D::getValueY() { return LastedFloatFrameY; }
 float glmAnimation3D::getValueZ() { return LastedFloatFrameZ; }

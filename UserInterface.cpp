@@ -27,6 +27,7 @@ UserInterface::UserInterface(GLFWwindow* window)  {
 	FOV = 55.0f;
 	lastedFilePath = -1;
 	LastedColorObjectR = 0.5f; LastedColorObjectG = 0.6f; LastedColorObjectB = 0.9f; LastedColorObjectA = 0.4f;
+	LastedPositionObjectX = 0.0f; LastedPositionObjectY = 0.0f; LastedPositionObjectZ = 0.0f;
 }
 UserInterface::~UserInterface() {
 	ImGui_ImplOpenGL3_Shutdown();
@@ -40,7 +41,7 @@ void UserInterface::setSettingFrame() {
 	ImGui::NewFrame();
 }
 bool UserInterface::inputDemandingAnimation() const {
-	if (ImGui::Button("Animation", ImVec2(150, 40))) {
+	if (ImGui::CollapsingHeader("Animation")) {
 		return true;
 	}
 	else { return false; }
@@ -65,13 +66,13 @@ bool UserInterface::inputDemandingRotate() const {
 }
 bool UserInterface::inputDemandingScaleCube() const {
 	ImGui::Text("@Dev_ninis Frame : ", ImGui::GetFrameHeight());
-	if (ImGui::Button("Size Cube", ImVec2(250, 40))) {
+	if (ImGui::Button("Size Object", ImVec2(300, 40))) {
 		return true;
 	}
 	else { return false; }
 }
 bool UserInterface::inputDemandingTexture1() const {
-	if (ImGui::Button("Texture", ImVec2(250, 40))) {
+	if (ImGui::Button("Texture", ImVec2(300, 40))) {
 		return true;
 	}
 	else { return false; }
@@ -175,7 +176,7 @@ float UserInterface::setScaleCubeZ() {
 		LastedFloatFrameZ = *size4;
 		return *size4;
 	}
-	else { 
+	else {
 		return LastedFloatFrameZ;
 	}
 	delete size4;
@@ -187,13 +188,13 @@ bool UserInterface::changeColorFrame() {
 	else { return false; }
 }
 bool UserInterface::inputDemandingChangeColorFrame() {
-	if (ImGui::Button("Clear Color", ImVec2(100, 30))) {
+	if (ImGui::Button("Clear Color", ImVec2(200, 30))) {
 		return true;
 	}
 	else { return false; }
 }
 bool UserInterface::ButtonForSetAnimation() {
-	if (ImGui::Button("Animation ", ImVec2(350, 60))) {
+	if (ImGui::CollapsingHeader("Animation")) {
 		return true;
 	}
 	else { return false; }
@@ -229,13 +230,38 @@ bool UserInterface::inputColorA() const {
 	else { return false; }
 }
 bool UserInterface::inputDemandingChangeFOV() const {
-	if (ImGui::Button("FOV", ImVec2(150, 30))) {
+	if (ImGui::Button("FOV", ImVec2(200, 30))) {
 		return true;
 	}
 	else { return false; }
 }
 bool UserInterface::inputDemandingChangeColorObject() const {
-	if (ImGui::Button("Color Object", ImVec2(250, 40))) {
+	if (ImGui::Button("Color Object", ImVec2(300, 40))) {
+		return true;
+	}
+	else { return false; }
+}
+// position object
+bool UserInterface::inputDemandingPositionObject() const {
+	if (ImGui::Button("Position Object", ImVec2(300, 40))) {
+		return true;
+	}
+	else { return false; }
+}
+bool UserInterface::inputDemandingPositionObjectX() const {
+	if (ImGui::Button("position X Object", ImVec2(125, 20))) {
+		return true;
+	}
+	else { return false; }
+}
+bool UserInterface::inputDemandingPositionObjectY() const {
+	if (ImGui::Button("position Y Object", ImVec2(125, 20))) {
+		return true;
+	}
+	else { return false; }
+}
+bool UserInterface::inputDemandingPositionObjectZ() const {
+	if (ImGui::Button("position Z Object", ImVec2(125, 20))) {
 		return true;
 	}
 	else { return false; }
@@ -305,6 +331,25 @@ void UserInterface::setColorObjectA() {
 		LastedColorObjectA = 0.5f;
 	}
 }
+// set positions 
+void UserInterface::setPositionObjectX() {
+	ImGui::SliderFloat("PositionX", &LastedPositionObjectX, -100, 100);
+	if (LastedPositionObjectX < -401602080) {
+		LastedPositionObjectX = 0.0f;
+	}
+}
+void UserInterface::setPositionObjectY() {
+	ImGui::SliderFloat("PositionY", &LastedPositionObjectY, -100, 100);
+	if (LastedPositionObjectY < -401602080) {
+		LastedPositionObjectY = 0.0f;
+	}
+}
+void UserInterface::setPositionObjectZ() {
+	ImGui::SliderFloat("PositionZ", &LastedPositionObjectZ, -100, 100);
+	if (LastedPositionObjectZ < -401602080) {
+		LastedPositionObjectZ = 0.0f;
+	}
+}
 void UserInterface::endFrame() {
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -326,3 +371,6 @@ float UserInterface::getColorObjectR() const { return LastedColorObjectR; }
 float UserInterface::getColorObjectG() const { return LastedColorObjectG; }
 float UserInterface::getColorObjectB() const { return LastedColorObjectB; }
 float UserInterface::getColorObjectA() const { return LastedColorObjectA; }
+float UserInterface::getPositionObjectX() const { return LastedPositionObjectX; }
+float UserInterface::getPositionObjectY() const { return LastedPositionObjectY; }
+float UserInterface::getPositionObjectZ() const { return LastedPositionObjectZ; }
