@@ -35,7 +35,7 @@ public:
 	bool inputDemandingRotateLeft() const;
 	bool inputDemandingChangeFOV() const; 
 	bool confirmFilePath() const;
-	void inputFileTexture(int successLoaderTexture);
+	void inputFileTexture(std::vector<int*> successLoaderTexture, int indicatorLoaderValuePathVector);
 	float setRotateAroundXValue();
 	float setRotateAroundYValue();
 	float setRotateAroundZValue();
@@ -46,11 +46,9 @@ public:
 	void setColorR();
 	void setColorG();
 	void setColorB();
-	void setColorA();
 	void setColorObjectR();
 	void setColorObjectG();
 	void setColorObjectB();
-	void setColorObjectA();
 	void setPositionObjectX();
 	void setPositionObjectY();
 	void setPositionObjectZ();
@@ -66,12 +64,9 @@ public:
 	float getColorR() const;
 	float getColorG() const;
 	float getColorB() const;
-	float getColorA() const;
 	float getColorObjectR() const;
 	float getColorObjectG() const;
 	float getColorObjectB() const;
-	float getColorObjectA() const;
-
 	// getting value Position
 	float getPositionObjectX() const;
 	float getPositionObjectY() const;
@@ -88,7 +83,7 @@ public:
 	float LastedFloatFrameX;
 	float LastedFloatFrameY;
 	float LastedFloatFrameZ;
-	static char* filePathPointer[150];
+	std::vector<char*> filePathPointer;
 	protected:
 		int lastedFilePath;
 		static char filePath[150];
@@ -97,14 +92,12 @@ public:
 		float LastedFrameColorR;
 		float LastedFrameColorG;
 		float LastedFrameColorB;
-		float LastedFrameColorA;
 		float LastedRotateXValue;
 		float LastedRotateYValue;
 		float LastedRotateZValue;
 		float LastedColorObjectR;
 		float LastedColorObjectG;
 		float LastedColorObjectB;
-		float LastedColorObjectA;
 		float LastedPositionObjectX;
 		float LastedPositionObjectY;
 		float LastedPositionObjectZ;

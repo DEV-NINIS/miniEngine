@@ -80,7 +80,6 @@ int main() {
 	int* IndicatorDemandingChangeColorCubeG = nullptr; IndicatorDemandingChangeColorCubeG = new int; *IndicatorDemandingChangeColorCubeG = 0;
 	int* IndicatorDemandingChangeColorCubeB = nullptr; IndicatorDemandingChangeColorCubeB = new int; *IndicatorDemandingChangeColorCubeB = 0;
 	int* IndicatorDemandingChangeFOV = nullptr; IndicatorDemandingChangeFOV = new int; *IndicatorDemandingChangeFOV = 0;
-	int* IndicatorDemandingColorA = nullptr; IndicatorDemandingColorA = new int; *IndicatorDemandingColorA = 0;
 	int* IndicatorDemandingColorR = nullptr; IndicatorDemandingColorR = new int; *IndicatorDemandingColorR = 0;
 	int* IndicatorDemandingColorG = nullptr; IndicatorDemandingColorG = new int; *IndicatorDemandingColorG = 0;
 	int* IndicatorDemandingColorB = nullptr; IndicatorDemandingColorB = new int; *IndicatorDemandingColorB = 0;
@@ -105,13 +104,13 @@ int main() {
 	int* IndicatorFilepath = nullptr; IndicatorFilepath = new int; *IndicatorFilepath = Interface->getIndicatorTextureFilePath();
 	Cube->setShader();
 	Cube->setBuffer();
-	Cube->setTexture(0, *IndicatorFilepath);
+	Cube->setTexture(Interface->filePathPointer, *IndicatorFilepath);
 	Interface->LastedFloatFrame = 1;
 	float valueXColor = 0.2f; float ValueYcolor = 0.6f; float ValueZColor = 0.9f; float ValueWColor = 0.1f;
 	while (!glfwWindowShouldClose(window)) // render
 	{
 		processInput(window);
-		glClearColor(Interface->getColorR(), Interface->getColorG(), Interface->getColorB() , Interface->getColorA());
+		glClearColor(Interface->getColorR(), Interface->getColorG(), Interface->getColorB() , 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		Cube->useShaderCube();
 		matrixAnimation->initialiseMatrix();
@@ -354,9 +353,11 @@ int main() {
 			*IndicatorDemandingTexture = *IndicatorDemandingTexture + 1;
 		}
 		if (*IndicatorDemandingTexture == 1) {
-			Interface->inputFileTexture(Cube->getLoaderTexture());
-			if (Interface->confirmFilePath() == true) {
-				Cube->setTexture(*(Interface->filePathPointer), *IndicatorFilepath);
+			for (int i(0); i < Cube->getLoaderValueIndicator(); i++) {
+				Interface->inputFileTexture(Cube->getLoaderTexture(), Cube->getLoaderValueIndicator());
+				if (Interface->confirmFilePath() == true) {
+					Cube->setTexture(Interface->filePathPointer, *IndicatorFilepath);
+				}
 			}
 		}
 		else if (*IndicatorDemandingTexture > 1) {
@@ -396,18 +397,6 @@ int main() {
 			if (*IndicatorDemandingColorB == 1) {
 				Interface->setColorB();
 			}
-			else if (*IndicatorDemandingColorB > 1) {
-				*IndicatorDemandingColorB = 0;
-			}
-			if (Interface->inputColorA() == true) {
-				*IndicatorDemandingColorA = *IndicatorDemandingColorA + 1;
-			}
-			if (*IndicatorDemandingColorA == 1) {
-				Interface->setColorA();
-			}
-			else if (*IndicatorDemandingColorA > 1) {
-				*IndicatorDemandingColorA = 0;
-			}
 		}
 		else if (*IndicatorSetColorFrameDemanding >= 2)
 		{
@@ -439,8 +428,7 @@ int main() {
 	delete IndicatorSetColorFrameDemanding; delete IndicatorDemandingRotateAroundZ;
 	delete IndicatorDemandingRotateAroundX; delete IndicatorDemandingRotateAroundY;
 	delete IndicatorDemandingTexture; delete IndicatorDemandingColorB;
-	delete IndicatorDemandingColorG; delete IndicatorDemandingColorR;
-	delete IndicatorDemandingColorA; delete IndicatorDemandingChangeFOV;
+	delete IndicatorDemandingColorG; delete IndicatorDemandingColorR; delete IndicatorDemandingChangeFOV;
 	delete IndicatorDemandingChangeColorCube; delete IndicatorDemandingChangeColorCubeR;
 	delete IndicatorDemandingChangeColorCubeG; delete IndicatorDemandingChangeColorCubeB;
 	delete IndicatorDemandingChangeCubePosition; delete IndicatorDemandingChangeCubePositionX;

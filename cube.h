@@ -12,16 +12,19 @@ class cube
 public:
 	cube();
 	virtual ~cube();
-	int getLoaderTexture();
 	void setBuffer();
 	void setShader();
-	void setTexture(char* filePath, int filepathIndicator);
+	void setParametterTexture();
+	void setTexture(std::vector<char*> filePath, int filepathIndicator);
 	void useShaderCube();
 	void drawElements();
 	GLuint& getshaderCube();
+	std::vector<int*> getLoaderTexture();
+	int getLoaderValueIndicator();
 protected:
 	static float vertecies[];
 	static unsigned int index[];
+	std::vector<const char*> nuberValueTexShader;
 	const char* fragmentShaderCODE;
 	const char* vertexShaderCODE;
 	GLuint VAOcube;
@@ -31,9 +34,10 @@ protected:
 	GLuint fragmentShader;
 	GLuint vertexShader;
 	GLuint programShader;
+	int indicatorLoaderValue;
 	unsigned int tex;
-	int* LoaderTexture = nullptr;
-	const char* finalPathTexture;
+	std::vector<int*> LoaderTexture;
+	std::vector<const char*> finalPathTexture;
 };
 
 #endif // !1

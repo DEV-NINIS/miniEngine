@@ -9,7 +9,6 @@
 #include <vector>
 
 char UserInterface::filePath[] = { 0 };
-char* UserInterface::filePathPointer[] = { new char };
 UserInterface::UserInterface(GLFWwindow* window)  {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -20,14 +19,19 @@ UserInterface::UserInterface(GLFWwindow* window)  {
 	auto& style = ImGui::GetStyle();
 	ImVec4* color = ImGui::GetStyle().Colors;
 	color[ImGuiCol_WindowBg] = ImVec4(0.1, 0.3, 0.5, 0.9);
-	LastedFrameColorR = 0.2f; LastedFrameColorG = 0.5f; LastedFrameColorB = 0.7f; LastedFrameColorA = 0.9f;
+	LastedFrameColorR = 0.2f; LastedFrameColorG = 0.5f; LastedFrameColorB = 0.7f; 
 	LastedFloatFrame = 1.0f; LastedFloatFrameX = 1.0f; LastedFloatFrameY = 1.0f; LastedFloatFrameZ = 1.0f; 
 	LastedRotateXValue = 0.1f; LastedRotateYValue = 0.0f; LastedRotateZValue = 0.0f;
 	size1 = new float;
 	FOV = 55.0f;
 	lastedFilePath = -1;
-	LastedColorObjectR = 0.5f; LastedColorObjectG = 0.6f; LastedColorObjectB = 0.9f; LastedColorObjectA = 0.4f;
+	LastedColorObjectR = 0.5f; LastedColorObjectG = 0.6f; LastedColorObjectB = 0.9f; 
 	LastedPositionObjectX = 0.0f; LastedPositionObjectY = 0.0f; LastedPositionObjectZ = 0.0f;
+	filePathPointer.push_back(new char); *filePathPointer[0] = '0';
+	filePathPointer.push_back(new char); *filePathPointer[1] = '0';
+	filePathPointer.push_back(new char); *filePathPointer[2] = '0';
+	filePathPointer.push_back(new char); *filePathPointer[3] = '0';
+	filePathPointer.push_back(new char); *filePathPointer[4] = '0';
 }
 UserInterface::~UserInterface() {
 	ImGui_ImplOpenGL3_Shutdown();
@@ -194,7 +198,7 @@ bool UserInterface::inputDemandingChangeColorFrame() {
 	else { return false; }
 }
 bool UserInterface::ButtonForSetAnimation() {
-	if (ImGui::CollapsingHeader("Animation")) {
+	if (ImGui::Button("Animation", ImVec2(300, 40))) {
 		return true;
 	}
 	else { return false; }
@@ -284,28 +288,22 @@ void UserInterface::setColorB() {
 		LastedFrameColorB = 0.9f;
 	}
 }
-void UserInterface::setColorA() {
-	ImGui::SliderFloat("A", &LastedFrameColorA, 0, 1);
-	if (LastedFrameColorA < -401602080) {
-		LastedFrameColorA = 0.2f;
-	}
-}
 void UserInterface::setChangeFOV() {
 	ImGui::SliderFloat("change FOV", &FOV, 10, 145);
 	if (FOV < -401602080) {
 		FOV = 45.0f;
 	}
 }
-void UserInterface::inputFileTexture(int successLoaderTexture) {
-	ImGui::InputText("path texture", this->filePath, IM_ARRAYSIZE(this->filePath));
-	if (successLoaderTexture == 1) {
-		ImGui::Text("failed to load texture");
-		this->lastedFilePath = 0;
-	}
-	else {
-		this->lastedFilePath = 1;
-	}
-	*filePathPointer = filePath;
+void UserInterface::inputFileTexture(std::vector<int*> successLoaderTexture, int indicatorLoaderValuePathVector) {
+		ImGui::InputText("path texture", this->filePath, IM_ARRAYSIZE(this->filePath));
+		if (*successLoaderTexture[indicatorLoaderValuePathVector] == 1) {
+			ImGui::Text("failed to load texture");
+			this->lastedFilePath = 0;
+		}
+		else {
+			this->lastedFilePath = 1;
+		}
+		filePathPointer[indicatorLoaderValuePathVector] = filePath;
 }
 void UserInterface::setColorObjectR() {
 	ImGui::SliderFloat("R", &LastedColorObjectR, 0, 1);
@@ -323,12 +321,6 @@ void UserInterface::setColorObjectB() {
 	ImGui::SliderFloat("B", &LastedColorObjectB, 0, 1);
 	if (LastedColorObjectB < -401602080) {
 		LastedColorObjectB = 0.5f;
-	}
-}
-void UserInterface::setColorObjectA() {
-	ImGui::SliderFloat("A", &LastedColorObjectA, 0, 1);
-	if (LastedColorObjectA < -401602080) {
-		LastedColorObjectA = 0.5f;
 	}
 }
 // set positions 
@@ -365,12 +357,10 @@ float& UserInterface::getValueRotateZ() { return LastedRotateZValue; }
 float UserInterface::getColorR() const { return LastedFrameColorR; }
 float UserInterface::getColorG() const { return LastedFrameColorG; }
 float UserInterface::getColorB() const { return LastedFrameColorB; }
-float UserInterface::getColorA() const { return LastedFrameColorA; }
 float UserInterface::getFOV_Value() const { return FOV; }
 float UserInterface::getColorObjectR() const { return LastedColorObjectR; }
 float UserInterface::getColorObjectG() const { return LastedColorObjectG; }
 float UserInterface::getColorObjectB() const { return LastedColorObjectB; }
-float UserInterface::getColorObjectA() const { return LastedColorObjectA; }
 float UserInterface::getPositionObjectX() const { return LastedPositionObjectX; }
 float UserInterface::getPositionObjectY() const { return LastedPositionObjectY; }
 float UserInterface::getPositionObjectZ() const { return LastedPositionObjectZ; }

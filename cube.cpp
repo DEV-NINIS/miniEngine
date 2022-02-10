@@ -90,24 +90,41 @@ cube::cube() {
 		"in vec3 colorForFragmentShader;\n"
 		"in vec2 texCoordsForFrag;\n"
 		"out vec4 Frag_color;\n"
-		"uniform sampler2D Texture;\n"
+		"uniform sampler2D Texture1;\n"
+		"uniform sampler2D Texture2;\n"
+		"uniform sampler2D Texture3;\n"
+		"uniform sampler2D Texture4;\n"
+		"uniform sampler2D Texture5;\n"
 		"uniform float ColorR;\n"
 		"uniform float ColorG;\n"
 		"uniform float ColorB;\n"
 
 		"void main() {\n"
 		"if (ColorR == 0 && ColorG == 0 && ColorB == 0) {"
-		"Frag_color = texture(Texture, texCoordsForFrag) * vec4(colorForFragmentShader, 1.0);\n"
+		"Frag_color = texture(Texture1, texCoordsForFrag) * vec4(colorForFragmentShader, 1.0);\n"
 		"}\n"
 		"else {\n"
-		"Frag_color = texture(Texture, texCoordsForFrag) * vec4(ColorR, ColorG, ColorB, 1.0f);\n"
+		"Frag_color = texture(Texture1, texCoordsForFrag) * vec4(ColorR, ColorG, ColorB, 1.0f);\n"
 		"}\n"
 		"}\n\0";
 
 	VAOcube; VBOcube; EBOcube;
 	TextureCube.push_back(new GLuint);
-	LoaderTexture = new int;
-	finalPathTexture;
+	LoaderTexture.push_back(new int);
+	LoaderTexture.push_back(new int);
+	LoaderTexture.push_back(new int);
+	LoaderTexture.push_back(new int);
+	LoaderTexture.push_back(new int);
+	nuberValueTexShader.push_back("Texture1");
+	nuberValueTexShader.push_back("Texture2");
+	nuberValueTexShader.push_back("Texture3");
+	nuberValueTexShader.push_back("Texture4");
+	nuberValueTexShader.push_back("Texture5");
+	finalPathTexture.push_back(new char);
+	finalPathTexture.push_back(new char);
+	finalPathTexture.push_back(new char);
+	finalPathTexture.push_back(new char);
+	finalPathTexture.push_back(new char);
 }
 cube::~cube() {
 	glDeleteVertexArrays(1, &VAOcube);
@@ -168,35 +185,41 @@ void cube::drawElements() {
 	glDrawArrays(GL_TRIANGLES, 0, 180);
 	glBindVertexArray(0);
 }
-void cube::setTexture(char* filePath, int filepathIndicator) {
-	*LoaderTexture = -1;
+void cube::setTexture(std::vector<char*> filePath, int filepathIndicator) {
 	glGenTextures(1, &tex);
 	glBindTexture(GL_TEXTURE_2D, tex);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	stbi_set_flip_vertically_on_load(true);
 	int width, height, nrChanels;
 	unsigned char* data;
-	finalPathTexture = static_cast<const char*>(filePath);
-	data = stbi_load("img/basicTex.jpg", &width, &height, &nrChanels, 0);
-	if (filePath != nullptr) {
-		*LoaderTexture = 0;
-		data = stbi_load(finalPathTexture, &width, &height, &nrChanels, 0);
+	for (int i(0); i < finalPathTexture.size(); i++) {
+		indicatorLoaderValue = i;
+		if (i == 0) { std::cout << i << std::endl; }
+		*LoaderTexture[i] = -1;
+		finalPathTexture[i] = static_cast<const char*>(filePath[i]);
+		data = stbi_load("img/basicTex.jpg", &width, &height, &nrChanels, 0);
+		if (filePath[i] != nullptr || *filePath[i] != '0') {
+			*LoaderTexture[i] = 0;
+			data = stbi_load(finalPathTexture[i], &width, &height, &nrChanels, 0);
+		}
+		if (data) {
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+			glGenerateMipmap(GL_TEXTURE_2D);
+			stbi_image_free(data);
+		}
+		else {
+			*LoaderTexture[i] = 1;
+			std::cout << " failed to load texture " << std::endl;
+		}
+		glUseProgram(programShader);
+		glUniform1i(glGetUniformLocation(programShader, nuberValueTexShader[i]), i);
+		this->getLoaderValueIndicator();
 	}
-	if (data) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-		stbi_image_free(data);
-	}
-	else { 
-		*LoaderTexture = 1;
-		std::cout << " failed to load texture " << std::endl; 
-	}
-	glUseProgram(programShader);
-	glUniform1i(glGetUniformLocation(programShader, "Texture"), 0);
 }
 void cube::useShaderCube() { glUseProgram(programShader); }
 GLuint& cube::getshaderCube() { return programShader; }
-int cube::getLoaderTexture() { return *LoaderTexture; }
+std::vector<int*> cube::getLoaderTexture() { return LoaderTexture; }
+int cube::getLoaderValueIndicator() { return indicatorLoaderValue; }
