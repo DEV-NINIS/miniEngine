@@ -1,4 +1,5 @@
 #include "cube.h"
+#include "UserInterface.h"
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -52,7 +53,7 @@ float cube::vertecies[] ={
 unsigned int cube::index[] = {
 	0, 1, 2
 };
-cube::cube() {
+cube::cube(GLFWwindow* window)  {
 
 	fragmentShader; vertexShader; programShader;
 	// shaders
@@ -104,7 +105,7 @@ cube::cube() {
 		"Frag_color = texture(Texture1, texCoordsForFrag) * vec4(colorForFragmentShader, 1.0);\n"
 		"}\n"
 		"else {\n"
-		"Frag_color = texture(Texture1, texCoordsForFrag) * vec4(ColorR, ColorG, ColorB, 1.0f);\n"
+		"Frag_color = mix(texture(Texture2, texCoordsForFrag), texture(Texture1, texCoordsForFrag), 0.5) * vec4(ColorR, ColorG, ColorB, 1.0f);\n"
 		"}\n"
 		"}\n\0";
 
@@ -125,6 +126,7 @@ cube::cube() {
 	finalPathTexture.push_back(new char);
 	finalPathTexture.push_back(new char);
 	finalPathTexture.push_back(new char);
+	tex[4];
 }
 cube::~cube() {
 	glDeleteVertexArrays(1, &VAOcube);
@@ -178,46 +180,50 @@ void cube::setShader() {
 	glLinkProgram(programShader);
 	// deleted pointer of GL_COMPILE_STATUS
 }
+void cube::setParametterTexture(int numberValueVectorPathTexture) {
+	if (numberValueVectorPathTexture == 0) { glActiveTexture(GL_TEXTURE0); }
+	else if (numberValueVectorPathTexture == 1) { glActiveTexture(GL_TEXTURE1); }
+	else if (numberValueVectorPathTexture == 2) { glActiveTexture(GL_TEXTURE2); }
+	else if (numberValueVectorPathTexture == 3) { glActiveTexture(GL_TEXTURE3); }
+	else if (numberValueVectorPathTexture == 4) { glActiveTexture(GL_TEXTURE4); }
+	glBindTexture(GL_TEXTURE_2D, tex[numberValueVectorPathTexture]);
+}
 void cube::drawElements() {
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, tex);
 	glBindVertexArray(VAOcube);
 	glDrawArrays(GL_TRIANGLES, 0, 180);
 	glBindVertexArray(0);
 }
-void cube::setTexture(std::vector<char*> filePath, int filepathIndicator) {
-	glGenTextures(1, &tex);
-	glBindTexture(GL_TEXTURE_2D, tex);
+void cube::setTexture(std::vector<char*> filePath, int filepathIndicator, int numberValueVectorPathTexture) {
+	glGenTextures(1, &tex[numberValueVectorPathTexture]);
+	glBindTexture(GL_TEXTURE_2D, tex[numberValueVectorPathTexture]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	stbi_set_flip_vertically_on_load(true);
 	int width, height, nrChanels;
-	unsigned char* data;
-	for (int i(0); i < finalPathTexture.size(); i++) {
-		indicatorLoaderValue = i;
-		if (i == 0) { std::cout << i << std::endl; }
-		*LoaderTexture[i] = -1;
-		finalPathTexture[i] = static_cast<const char*>(filePath[i]);
-		data = stbi_load("img/basicTex.jpg", &width, &height, &nrChanels, 0);
-		if (filePath[i] != nullptr || *filePath[i] != '0') {
-			*LoaderTexture[i] = 0;
-			data = stbi_load(finalPathTexture[i], &width, &height, &nrChanels, 0);
-		}
-		if (data) {
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-			glGenerateMipmap(GL_TEXTURE_2D);
-			stbi_image_free(data);
-		}
-		else {
-			*LoaderTexture[i] = 1;
-			std::cout << " failed to load texture " << std::endl;
-		}
-		glUseProgram(programShader);
-		glUniform1i(glGetUniformLocation(programShader, nuberValueTexShader[i]), i);
-		this->getLoaderValueIndicator();
+	unsigned char* data = 0;
+	indicatorLoaderValue = 0;
+	*LoaderTexture[numberValueVectorPathTexture] = -1;
+	finalPathTexture[numberValueVectorPathTexture] = static_cast<const char*>(filePath[numberValueVectorPathTexture]);
+	if (*filePath[numberValueVectorPathTexture] == '0') {
+		finalPathTexture[numberValueVectorPathTexture] = static_cast<const char*>("img/basicTex.jpg");
 	}
+	if (filePath[numberValueVectorPathTexture] != nullptr) {
+		*LoaderTexture[numberValueVectorPathTexture] = 0;
+		data = stbi_load(finalPathTexture[numberValueVectorPathTexture], &width, &height, &nrChanels, 0);
+	}
+	if (data) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+		stbi_image_free(data);
+	}
+	else {
+		*LoaderTexture[0] = 1;
+		std::cout << " failed to load texture " << std::endl;
+	}
+		glUseProgram(programShader);
+		glUniform1i(glGetUniformLocation(programShader, nuberValueTexShader[0]), 0);
 }
 void cube::useShaderCube() { glUseProgram(programShader); }
 GLuint& cube::getshaderCube() { return programShader; }

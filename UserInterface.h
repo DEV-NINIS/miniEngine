@@ -34,6 +34,7 @@ public:
 	bool inputDemandingRotateRight() const;
 	bool inputDemandingRotateLeft() const;
 	bool inputDemandingChangeFOV() const; 
+	bool valueIndicatorVectorTexture() const;
 	bool confirmFilePath() const;
 	void inputFileTexture(std::vector<int*> successLoaderTexture, int indicatorLoaderValuePathVector);
 	float setRotateAroundXValue();
@@ -84,9 +85,13 @@ public:
 	float LastedFloatFrameY;
 	float LastedFloatFrameZ;
 	std::vector<char*> filePathPointer;
+	static char filePath1[150];
+	static char filePath2[150];
+	static char filePath3[150];
+	static char filePath4[150];
+	static char filePath5[150];
 	protected:
 		int lastedFilePath;
-		static char filePath[150];
 		float* size1 = nullptr;
 		float FOV;
 		float LastedFrameColorR;

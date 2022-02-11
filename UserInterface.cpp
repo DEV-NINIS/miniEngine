@@ -8,7 +8,11 @@
 #include <iostream>
 #include <vector>
 
-char UserInterface::filePath[] = { 0 };
+char UserInterface::filePath1[] = { 0 };
+char UserInterface::filePath2[] = { 0 };
+char UserInterface::filePath3[] = { 0 };
+char UserInterface::filePath4[] = { 0 };
+char UserInterface::filePath5[] = { 0 };
 UserInterface::UserInterface(GLFWwindow* window)  {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -43,6 +47,12 @@ void UserInterface::setSettingFrame() {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
+}
+bool UserInterface::valueIndicatorVectorTexture() const {
+	if (ImGui::Button("+", ImVec2(40, 40))) {
+		return true;
+	}
+	else { return false; }
 }
 bool UserInterface::inputDemandingAnimation() const {
 	if (ImGui::CollapsingHeader("Animation")) {
@@ -295,7 +305,8 @@ void UserInterface::setChangeFOV() {
 	}
 }
 void UserInterface::inputFileTexture(std::vector<int*> successLoaderTexture, int indicatorLoaderValuePathVector) {
-		ImGui::InputText("path texture", this->filePath, IM_ARRAYSIZE(this->filePath));
+	if (indicatorLoaderValuePathVector == 0) {
+		ImGui::InputText("path texture", this->filePath1, IM_ARRAYSIZE(this->filePath1));
 		if (*successLoaderTexture[indicatorLoaderValuePathVector] == 1) {
 			ImGui::Text("failed to load texture");
 			this->lastedFilePath = 0;
@@ -303,7 +314,52 @@ void UserInterface::inputFileTexture(std::vector<int*> successLoaderTexture, int
 		else {
 			this->lastedFilePath = 1;
 		}
-		filePathPointer[indicatorLoaderValuePathVector] = filePath;
+		filePathPointer[indicatorLoaderValuePathVector] = filePath1;
+	}
+	else if (indicatorLoaderValuePathVector == 1) {
+		ImGui::InputText("path texture", this->filePath2, IM_ARRAYSIZE(this->filePath2));
+		if (*successLoaderTexture[indicatorLoaderValuePathVector] == 1) {
+			ImGui::Text("failed to load texture");
+			this->lastedFilePath = 0;
+		}
+		else {
+			this->lastedFilePath = 1;
+		}
+		filePathPointer[indicatorLoaderValuePathVector] = filePath2;
+	}
+	else if (indicatorLoaderValuePathVector == 2) {
+		ImGui::InputText("path texture", this->filePath3, IM_ARRAYSIZE(this->filePath3));
+		if (*successLoaderTexture[indicatorLoaderValuePathVector] == 1) {
+			ImGui::Text("failed to load texture");
+			this->lastedFilePath = 0;
+		}
+		else {
+			this->lastedFilePath = 1;
+		}
+		filePathPointer[indicatorLoaderValuePathVector] = filePath3;
+	}
+	else if (indicatorLoaderValuePathVector == 3) {
+		ImGui::InputText("path texture", this->filePath4, IM_ARRAYSIZE(this->filePath4));
+		if (*successLoaderTexture[indicatorLoaderValuePathVector] == 1) {
+			ImGui::Text("failed to load texture");
+			this->lastedFilePath = 0;
+		}
+		else {
+			this->lastedFilePath = 1;
+		}
+		filePathPointer[indicatorLoaderValuePathVector] = filePath4;
+	}
+	else if (indicatorLoaderValuePathVector == 4) {
+		ImGui::InputText("path texture", this->filePath5, IM_ARRAYSIZE(this->filePath5));
+		if (*successLoaderTexture[indicatorLoaderValuePathVector] == 1) {
+			ImGui::Text("failed to load texture");
+			this->lastedFilePath = 0;
+		}
+		else {
+			this->lastedFilePath = 1;
+		}
+		filePathPointer[indicatorLoaderValuePathVector] = filePath5;
+	}
 }
 void UserInterface::setColorObjectR() {
 	ImGui::SliderFloat("R", &LastedColorObjectR, 0, 1);

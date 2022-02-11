@@ -67,6 +67,7 @@ int main() {
 	float FOV = 55.0f; float RotateValue = -55.0f;
 	delete resX; delete resY;
 	bool drawingCube = true;
+	int indicatorNumberTexVector = 0;
 	int* IndicatorChgangePositionCube = nullptr; IndicatorChgangePositionCube = new int; *IndicatorChgangePositionCube = 0;
 	int* IndicatorChgangePositionCubeX = nullptr; IndicatorChgangePositionCubeX = new int; *IndicatorChgangePositionCubeX = 0;
 	int* IndicatorChgangePositionCubeY = nullptr; IndicatorChgangePositionCubeY = new int; *IndicatorChgangePositionCubeY = 0;
@@ -96,7 +97,7 @@ int main() {
 	int* IndicatorScaleDemandingX = nullptr; IndicatorScaleDemandingX = new int; *IndicatorScaleDemandingX = 0;
 	int* IndicatorScaleDemandingY = nullptr; IndicatorScaleDemandingY = new int; *IndicatorScaleDemandingY = 0;
 	int* IndicatorScaleDemandingZ = nullptr; IndicatorScaleDemandingZ = new int; *IndicatorScaleDemandingZ = 0;
-	cube* Cube; Cube = new cube;
+	cube* Cube; Cube = new cube(window);
 	glmAnimation3D* matrixAnimation; matrixAnimation = new glmAnimation3D(window);
 	// initialise imgui
 	UserInterface* Interface = nullptr; Interface = new UserInterface(window); // in the builder of this class they create a imgui context is because in argument they have GLFWwindow* ...
@@ -104,7 +105,7 @@ int main() {
 	int* IndicatorFilepath = nullptr; IndicatorFilepath = new int; *IndicatorFilepath = Interface->getIndicatorTextureFilePath();
 	Cube->setShader();
 	Cube->setBuffer();
-	Cube->setTexture(Interface->filePathPointer, *IndicatorFilepath);
+	Cube->setTexture(Interface->filePathPointer, *IndicatorFilepath, 0);
 	Interface->LastedFloatFrame = 1;
 	float valueXColor = 0.2f; float ValueYcolor = 0.6f; float ValueZColor = 0.9f; float ValueWColor = 0.1f;
 	while (!glfwWindowShouldClose(window)) // render
@@ -353,12 +354,18 @@ int main() {
 			*IndicatorDemandingTexture = *IndicatorDemandingTexture + 1;
 		}
 		if (*IndicatorDemandingTexture == 1) {
-			for (int i(0); i < Cube->getLoaderValueIndicator(); i++) {
-				Interface->inputFileTexture(Cube->getLoaderTexture(), Cube->getLoaderValueIndicator());
-				if (Interface->confirmFilePath() == true) {
-					Cube->setTexture(Interface->filePathPointer, *IndicatorFilepath);
-				}
+			if (Interface->confirmFilePath() == true) {
+				Cube->setTexture(Interface->filePathPointer, *IndicatorFilepath, indicatorNumberTexVector);
 			}
+			if (Interface->valueIndicatorVectorTexture() == true) {
+				indicatorNumberTexVector++;
+			}
+			if (indicatorNumberTexVector > 4) {
+				indicatorNumberTexVector = 0;
+			}
+			Interface->inputFileTexture(Cube->getLoaderTexture(), Cube->getLoaderValueIndicator());
+			Interface->inputFileTexture(Cube->getLoaderTexture(), Cube->getLoaderValueIndicator());
+			Cube->setParametterTexture(indicatorNumberTexVector);
 		}
 		else if (*IndicatorDemandingTexture > 1) {
 			*IndicatorDemandingTexture = 0;

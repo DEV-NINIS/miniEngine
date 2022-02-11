@@ -4,18 +4,19 @@
 
 #include <iostream>
 #include <vector>
+#include "UserInterface.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 // cube object
 class cube
 {
 public:
-	cube();
+	cube(GLFWwindow* window);
 	virtual ~cube();
 	void setBuffer();
 	void setShader();
-	void setParametterTexture();
-	void setTexture(std::vector<char*> filePath, int filepathIndicator);
+	void setParametterTexture(int numberValueVectorPathTexture);
+	void setTexture(std::vector<char*> filePath, int filepathIndicator, int numberValueVectorPathTexture); // the variable numberValueVectorPathTexture correspponding to vector value : filePath[numberValueVectorPathTexture]
 	void useShaderCube();
 	void drawElements();
 	GLuint& getshaderCube();
@@ -35,7 +36,7 @@ protected:
 	GLuint vertexShader;
 	GLuint programShader;
 	int indicatorLoaderValue;
-	unsigned int tex;
+	unsigned int tex[4];
 	std::vector<int*> LoaderTexture;
 	std::vector<const char*> finalPathTexture;
 };
