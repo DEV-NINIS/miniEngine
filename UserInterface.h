@@ -34,9 +34,12 @@ public:
 	bool inputDemandingRotateRight() const;
 	bool inputDemandingRotateLeft() const;
 	bool inputDemandingChangeFOV() const; 
-	bool valueIndicatorVectorTexture() const;
 	bool confirmFilePath() const;
-	void inputFileTexture(std::vector<int*> successLoaderTexture, int indicatorLoaderValuePathVector);
+	void inputFileTexture1(std::vector<int*> successLoaderTexture);
+	void inputFileTexture2(std::vector<int*> successLoaderTexture);
+	void inputFileTexture3(std::vector<int*> successLoaderTexture);
+	void inputFileTexture4(std::vector<int*> successLoaderTexture);
+	void inputFileTexture5(std::vector<int*> successLoaderTexture);
 	float setRotateAroundXValue();
 	float setRotateAroundYValue();
 	float setRotateAroundZValue();

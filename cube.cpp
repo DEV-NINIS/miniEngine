@@ -193,7 +193,7 @@ void cube::drawElements() {
 	glDrawArrays(GL_TRIANGLES, 0, 180);
 	glBindVertexArray(0);
 }
-void cube::setTexture(std::vector<char*> filePath, int filepathIndicator, int numberValueVectorPathTexture) {
+void cube::setTexture(char* filePath, int numberValueVectorPathTexture) {
 	glGenTextures(1, &tex[numberValueVectorPathTexture]);
 	glBindTexture(GL_TEXTURE_2D, tex[numberValueVectorPathTexture]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -205,11 +205,11 @@ void cube::setTexture(std::vector<char*> filePath, int filepathIndicator, int nu
 	unsigned char* data = 0;
 	indicatorLoaderValue = 0;
 	*LoaderTexture[numberValueVectorPathTexture] = -1;
-	finalPathTexture[numberValueVectorPathTexture] = static_cast<const char*>(filePath[numberValueVectorPathTexture]);
-	if (*filePath[numberValueVectorPathTexture] == '0') {
+	finalPathTexture[numberValueVectorPathTexture] = static_cast<const char*>(filePath);
+	if (*filePath == '0') {
 		finalPathTexture[numberValueVectorPathTexture] = static_cast<const char*>("img/basicTex.jpg");
 	}
-	if (filePath[numberValueVectorPathTexture] != nullptr) {
+	if (filePath != nullptr) {
 		*LoaderTexture[numberValueVectorPathTexture] = 0;
 		data = stbi_load(finalPathTexture[numberValueVectorPathTexture], &width, &height, &nrChanels, 0);
 	}
