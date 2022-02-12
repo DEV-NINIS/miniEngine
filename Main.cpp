@@ -105,7 +105,7 @@ int main() {
 	int* IndicatorFilepath = nullptr; IndicatorFilepath = new int; *IndicatorFilepath = Interface->getIndicatorTextureFilePath();
 	Cube->setShader();
 	Cube->setBuffer();
-	Cube->setTexture(Interface->filePathPointer[0], 0);
+	Cube->setTexture1(Interface->filePathPointer[0]);
 	Interface->LastedFloatFrame = 1;
 	float valueXColor = 0.2f; float ValueYcolor = 0.6f; float ValueZColor = 0.9f; float ValueWColor = 0.1f;
 	while (!glfwWindowShouldClose(window)) // render
@@ -121,6 +121,7 @@ int main() {
 		matrixAnimation->setTransformValue();
 		matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
 		Interface->setSettingFrame();
+		matrixAnimation->setPercentTexture(Cube->getshaderCube(), Interface->getpercentTexture());
 		ImGui::Begin("Engine");
 		ImGui::Checkbox(" draw ", &drawingCube);
 		// echelle du cube
@@ -356,21 +357,13 @@ int main() {
 		if (*IndicatorDemandingTexture == 1) {
 			Interface->inputFileTexture1(Cube->getLoaderTexture());
 			Interface->inputFileTexture2(Cube->getLoaderTexture());
-			Interface->inputFileTexture3(Cube->getLoaderTexture());
-			Interface->inputFileTexture4(Cube->getLoaderTexture());
-			Interface->inputFileTexture5(Cube->getLoaderTexture());
+			Interface->setPercentTexture();
 			if (Interface->confirmFilePath() == true) {
-				Cube->setTexture(Interface->filePath1, 0);
-				Cube->setParametterTexture(0);
-				Cube->setTexture(Interface->filePath1, 1);
-				Cube->setParametterTexture(1); 
-				Cube->setTexture(Interface->filePath1, 2);
-				Cube->setParametterTexture(2); 
-				Cube->setTexture(Interface->filePath1, 3);
-				Cube->setParametterTexture(3); 
-				Cube->setTexture(Interface->filePath1, 4);
-				Cube->setParametterTexture(4);
+				Cube->setTexture1(Interface->filePath1);
+				Cube->setTexture2(Interface->filePath2);
 			}
+			matrixAnimation->setPercentTexture(Cube->getshaderCube(), Interface->getpercentTexture());
+			Cube->setParametterTexture();
 		}
 		else if (*IndicatorDemandingTexture > 1) {
 			*IndicatorDemandingTexture = 0;
@@ -433,7 +426,7 @@ int main() {
 	Interface->~UserInterface();
 	Cube->~cube();
 	delete Cube; 
-	delete IndicatorScaleDemanding; delete IndicatorScaleDemandingX; 
+	delete IndicatorScaleDemanding; delete IndicatorScaleDemandingX;
 	delete IndicatorScaleDemandingY; delete IndicatorScaleDemandingZ;
 	delete IndicatorDemandingRotate; delete IndicatorDemandingRotateLeft;
 	delete IndicatorDemandingRotateRight; delete IndicatorDemandingAnimation;

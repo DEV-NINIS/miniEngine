@@ -12,7 +12,7 @@
 #include "UserInterface.h"
 
 // the fonction of this class is animate de 3d objects and set the matrix projection of the engine
-class glmAnimation3D : public cube
+class glmAnimation3D
 {
 public:
 	glmAnimation3D(GLFWwindow* window);
@@ -33,6 +33,7 @@ public:
 	float setScaleValueX(GLuint& shader);
 	float setScaleValueY(GLuint& shader);
 	float setScaleValueZ(GLuint& shader);
+	void setPercentTexture(GLuint& shader, float Value);
 	float getValueX(); float getValueY(); float getValueZ();
 	glm::mat4 getprojectionPerspectiveVARIABLE();
 	glm::mat4 getviewVARIABLE();

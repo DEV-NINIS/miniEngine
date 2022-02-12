@@ -15,8 +15,9 @@ public:
 	virtual ~cube();
 	void setBuffer();
 	void setShader();
-	void setParametterTexture(int numberValueVectorPathTexture);
-	void setTexture(char* filePath, int numberValueVectorPathTexture); // the variable numberValueVectorPathTexture correspponding to vector value : filePath[numberValueVectorPathTexture]
+	void setParametterTexture();
+	void setTexture1(char* filePath); // the variable numberValueVectorPathTexture correspponding to vector value : filePath[numberValueVectorPathTexture]
+	void setTexture2(char* filePath); // the variable numberValueVectorPathTexture correspponding to vector value : filePath[numberValueVectorPathTexture]
 	void useShaderCube();
 	void drawElements();
 	GLuint& getshaderCube();

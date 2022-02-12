@@ -36,6 +36,7 @@ UserInterface::UserInterface(GLFWwindow* window)  {
 	filePathPointer.push_back(new char); *filePathPointer[2] = '0';
 	filePathPointer.push_back(new char); *filePathPointer[3] = '0';
 	filePathPointer.push_back(new char); *filePathPointer[4] = '0';
+	percentTexture = 0.5f;
 }
 UserInterface::~UserInterface() {
 	ImGui_ImplOpenGL3_Shutdown();
@@ -299,25 +300,14 @@ void UserInterface::setChangeFOV() {
 	}
 }
 void UserInterface::inputFileTexture1(std::vector<int*> successLoaderTexture) {
-	ImGui::InputText("texture 1", this->filePath1, IM_ARRAYSIZE(this->filePath1));
+	ImGui::InputText("texture1", this->filePath1, IM_ARRAYSIZE(this->filePath1));
 	if (*successLoaderTexture[0] == 1) { ImGui::Text("failer to load texture"); }
 }
 void UserInterface::inputFileTexture2(std::vector<int*> successLoaderTexture) {
-	ImGui::InputText("texture 1", this->filePath2, IM_ARRAYSIZE(this->filePath2));
+	ImGui::InputText("texture2", this->filePath2, IM_ARRAYSIZE(this->filePath2));
 	if (*successLoaderTexture[1] == 1) { ImGui::Text("failer to load texture"); }
 }
-void UserInterface::inputFileTexture3(std::vector<int*> successLoaderTexture) {
-	ImGui::InputText("texture 1", this->filePath3, IM_ARRAYSIZE(this->filePath3));
-	if (*successLoaderTexture[2] == 1) { ImGui::Text("failer to load texture"); }
-}
-void UserInterface::inputFileTexture4(std::vector<int*> successLoaderTexture) {
-	ImGui::InputText("texture 1", this->filePath4, IM_ARRAYSIZE(this->filePath4));
-	if (*successLoaderTexture[3] == 1) { ImGui::Text("failer to load texture"); }
-}
-void UserInterface::inputFileTexture5(std::vector<int*> successLoaderTexture) {
-	ImGui::InputText("texture 1", this->filePath5, IM_ARRAYSIZE(this->filePath5));
-	if (*successLoaderTexture[4] == 1) { ImGui::Text("failer to load texture"); }
-}
+
 void UserInterface::setColorObjectR() {
 	ImGui::SliderFloat("R", &LastedColorObjectR, 0, 1);
 	if (LastedColorObjectR < -401602080) {
@@ -355,6 +345,9 @@ void UserInterface::setPositionObjectZ() {
 		LastedPositionObjectZ = 0.0f;
 	}
 }
+void UserInterface::setPercentTexture() {
+	ImGui::SliderFloat("percentTexture", &percentTexture, 0, 1);
+}
 void UserInterface::endFrame() {
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -377,3 +370,4 @@ float UserInterface::getColorObjectB() const { return LastedColorObjectB; }
 float UserInterface::getPositionObjectX() const { return LastedPositionObjectX; }
 float UserInterface::getPositionObjectY() const { return LastedPositionObjectY; }
 float UserInterface::getPositionObjectZ() const { return LastedPositionObjectZ; }
+float UserInterface::getpercentTexture() const { return percentTexture; }

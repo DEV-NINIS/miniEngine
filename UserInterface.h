@@ -37,9 +37,6 @@ public:
 	bool confirmFilePath() const;
 	void inputFileTexture1(std::vector<int*> successLoaderTexture);
 	void inputFileTexture2(std::vector<int*> successLoaderTexture);
-	void inputFileTexture3(std::vector<int*> successLoaderTexture);
-	void inputFileTexture4(std::vector<int*> successLoaderTexture);
-	void inputFileTexture5(std::vector<int*> successLoaderTexture);
 	float setRotateAroundXValue();
 	float setRotateAroundYValue();
 	float setRotateAroundZValue();
@@ -47,6 +44,7 @@ public:
 	float setScaleCubeX();
 	float setScaleCubeY();
 	float setScaleCubeZ();
+	void setPercentTexture();
 	void setColorR();
 	void setColorG();
 	void setColorB();
@@ -58,6 +56,7 @@ public:
 	void setPositionObjectZ();
 	void setChangeFOV();
 	// getting value rotate
+	float getpercentTexture() const;
 	int getIndicatorTextureFilePath();
 	float& getValueRotateX();
 	float& getValueRotateY();
@@ -109,6 +108,7 @@ public:
 		float LastedPositionObjectX;
 		float LastedPositionObjectY;
 		float LastedPositionObjectZ;
+		float percentTexture;
 };
 
 #endif // !1

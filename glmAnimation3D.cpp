@@ -131,6 +131,9 @@ void glmAnimation3D::setPositionObject(GLuint& shader, float ValueX, float Value
 	glUniform1f(glGetUniformLocation(shader, "PositionY"), ValueY);
 	glUniform1f(glGetUniformLocation(shader, "PositionZ"), ValueZ);
 }
+void glmAnimation3D::setPercentTexture(GLuint& shader, float Value) {
+	glUniform1f(glGetUniformLocation(shader, "PercentTexture"), Value);
+}
 float glmAnimation3D::getValueX() { return LastedFloatFrameX; }
 float glmAnimation3D::getValueY() { return LastedFloatFrameY; }
 float glmAnimation3D::getValueZ() { return LastedFloatFrameZ; }
