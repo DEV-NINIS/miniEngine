@@ -18,6 +18,7 @@
 #include "UserInterface.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "glmAnimation3D.h"
+#include "Camera.h"
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -102,20 +103,26 @@ int main() {
 	// initialise imgui
 	UserInterface* Interface = nullptr; Interface = new UserInterface(window); // in the builder of this class they create a imgui context is because in argument they have GLFWwindow* ...
 	//
+	Camera camera;
 	int* IndicatorFilepath = nullptr; IndicatorFilepath = new int; *IndicatorFilepath = Interface->getIndicatorTextureFilePath();
 	Cube->setShader();
 	Cube->setBuffer();
 	Cube->setTexture1(Interface->filePathPointer[0]);
 	Interface->LastedFloatFrame = 1;
 	float valueXColor = 0.2f; float ValueYcolor = 0.6f; float ValueZColor = 0.9f; float ValueWColor = 0.1f;
+	float deltatime = 0, currentFrame = 0, lastedFrame = 0;
 	while (!glfwWindowShouldClose(window)) // render
 	{
+		currentFrame = glfwGetTime();
+		deltatime = currentFrame - lastedFrame;
+		lastedFrame = currentFrame;
 		processInput(window);
 		glClearColor(Interface->getColorR(), Interface->getColorG(), Interface->getColorB() , 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		camera.processInputCamera(window, deltatime);
 		Cube->useShaderCube();
 		matrixAnimation->initialiseMatrix();
-		matrixAnimation->setViewProjection();
+		matrixAnimation->setLookAtMatrixCamera(camera.getcamPos(), camera.getcamFront(), camera.getcamUp());
 		matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
 		matrixAnimation->setMatrixPerspectiveProjection(FOV, resX2, resY2);
 		matrixAnimation->setTransformValue();
@@ -417,6 +424,7 @@ int main() {
 		else if (*IndicatorDemandingChangeFOV > 1) {
 			*IndicatorDemandingChangeFOV = 0;
 		}
+		matrixAnimation->setLookAtMatrixCamera(camera.getcamPos(), camera.getcamPos() - camera.getcamFront(), camera.getcamUp());
 		ImGui::End();
 		glEnable(GL_DEPTH_TEST);
 		Interface->endFrame();

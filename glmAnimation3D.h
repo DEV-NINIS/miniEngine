@@ -27,7 +27,7 @@ public:
 	void setColorObject(GLuint& shader, float ValueR, float ValueG, float ValueB);
 	void setPositionObject(GLuint& shader, float ValueX, float ValueY, float ValueZ);
 	void setRotateLeft(float Radius, float& ValueX, float& ValueY, float& ValueZ);
-	void linkMatrix(GLuint& shader, float& ValueX, float& ValueY, float& ValueZ);
+	void setLookAtMatrixCamera(glm::vec3 camPos, glm::vec3 camFront, glm::vec3 camUp);
 	glm::mat4 setScaleValue(GLuint& shader, float& Value);
 	float setColorValueFrame();
 	float setScaleValueX(GLuint& shader);

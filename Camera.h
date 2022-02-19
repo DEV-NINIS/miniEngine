@@ -13,15 +13,16 @@ class Camera
 public:
 	Camera();
 	~Camera();
-	void processInputCamera();
+	void processInputCamera(GLFWwindow* window, float deltaTime);
 	// getting values of camera
 	glm::vec3 getcamPos();
 	glm::vec3 getcamFront();
-	glm::vec3 getcamUp
+	glm::vec3 getcamUp();
 protected:
 	glm::vec3 camPos;
 	glm::vec3 camFront;
 	glm::vec3 camUp;
+	float cameraSpeed;
 };
 
 

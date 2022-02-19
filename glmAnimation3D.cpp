@@ -51,7 +51,6 @@ void glmAnimation3D::setRotateLeft(float Radius, float& ValueX, float& ValueY, f
 }
 void glmAnimation3D::initialiseMatrix() {
 	model = glm::mat4(1.0f);
-	view = glm::mat4(1.0f);
 	transform = glm::mat4(1.0f);
 	projectionPerspective = glm::mat4(1.0f);
 }
@@ -106,11 +105,6 @@ float glmAnimation3D::setScaleValueZ(GLuint& shader) {
 	glUniform1f(glGetUniformLocation(shader, "LastedFrame"), LastedFloatFrameZ);
 	glUniform1f(glGetUniformLocation(shader, "scaleZ"), LastedFloatFrameZ);
 }
-void glmAnimation3D::linkMatrix(GLuint& shader, float& ValueX, float& ValueY, float& ValueZ) {
-	Scale2 = glm::mat4(1.0f);
-	Scale2 = glm::translate(Scale2, glm::vec3(ValueX, ValueY, ValueZ));
-	glUniformMatrix4fv(glGetUniformLocation(shader, "Scale2"), 1, GL_FALSE, glm::value_ptr(Scale2));
-}
 float glmAnimation3D::setColorValueFrame() {
 	float color = 0;
 	ImGui::ColorEdit4(" Color Frame ", &color);
@@ -133,6 +127,9 @@ void glmAnimation3D::setPositionObject(GLuint& shader, float ValueX, float Value
 }
 void glmAnimation3D::setPercentTexture(GLuint& shader, float Value) {
 	glUniform1f(glGetUniformLocation(shader, "PercentTexture"), Value);
+}
+void glmAnimation3D::setLookAtMatrixCamera(glm::vec3 camPos, glm::vec3 camFront, glm::vec3 camUp) {
+	view = glm::lookAt(camPos, camPos - camFront, camUp);
 }
 float glmAnimation3D::getValueX() { return LastedFloatFrameX; }
 float glmAnimation3D::getValueY() { return LastedFloatFrameY; }
