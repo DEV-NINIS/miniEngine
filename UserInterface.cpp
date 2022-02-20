@@ -37,6 +37,7 @@ UserInterface::UserInterface(GLFWwindow* window)  {
 	filePathPointer.push_back(new char); *filePathPointer[3] = '0';
 	filePathPointer.push_back(new char); *filePathPointer[4] = '0';
 	percentTexture = 0.5f;
+	CameraSpeed = 10.0f;
 }
 UserInterface::~UserInterface() {
 	ImGui_ImplOpenGL3_Shutdown();
@@ -51,6 +52,18 @@ void UserInterface::setSettingFrame() {
 }
 bool UserInterface::inputDemandingAnimation() const {
 	if (ImGui::CollapsingHeader("Animation")) {
+		return true;
+	}
+	else { return false; }
+}
+bool UserInterface::inputDemandingCamera() const {
+	if (ImGui::Button("Camera", ImVec2(200, 30)) == true) {
+		return true;
+	}
+	else { return false; }
+}
+bool UserInterface::inputDemandCameraSpeed() const {
+	if (ImGui::Button("Camera Speed", ImVec2(150, 20)) == true) {
 		return true;
 	}
 	else { return false; }
@@ -122,34 +135,20 @@ bool UserInterface::inputDemandingScaleCubeZ() const {
 	else { return false; }
 }
 float UserInterface::setScaleCube() {
-	ImGui::SliderFloat("size", &*size1, -5.0f, 5.0f);
+	ImGui::SliderFloat("size", &*size1, 0, 5.0f);
 	LastedFloatFrame = *size1;
 	return *size1;
 	delete size1;
 }
 float UserInterface::setScaleCubeX() {
-	float* size2 = nullptr; size2 = new float;
-	ImGui::SliderFloat("sizeX", &*size2, -5.0f, 5.0f);
-	if (*size2 > -401602080) {
-		LastedFloatFrameX = *size2;
-		return *size2;
+	ImGui::SliderFloat("sizeX", &LastedFloatFrameX, 0, 5.0f);
+	if (LastedFloatFrameX > -401602080) {
+		LastedFloatFrameX = 1.0f;
+		return LastedFloatFrameX;
 	}
 	else { 
 		return LastedFloatFrameX;
 	}
-	delete size2;
-}
-float UserInterface::setScaleCubeY() {
-	float* size3 = nullptr; size3 = new float;
-	ImGui::SliderFloat("sizeY", &*size3, -5.0f, 5.0f);
-	if (*size3 > -401602080) {
-		LastedFloatFrameY = *size3;
-		return *size3;
-	}
-	else {
-		return LastedFloatFrameY;
-	}
-	delete size3;
 }
 float UserInterface::setRotateAroundXValue() {
 	float* RotateXValue = nullptr; RotateXValue = new float;
@@ -160,6 +159,7 @@ float UserInterface::setRotateAroundXValue() {
 	}
 	else { return 0.0f; }
 }
+
 float UserInterface::setRotateAroundYValue() {
 	float* RotateYValue = nullptr; RotateYValue = new float;
 	ImGui::SliderFloat("ValueX_MatrixY", &*RotateYValue, -1.0f, 1.0f);
@@ -178,17 +178,18 @@ float UserInterface::setRotateAroundZValue() {
 	}
 	else { return 0.0f; }
 }
+void UserInterface::setCameraSpeed() {
+	ImGui::SliderFloat("valueCameraSpeed", &CameraSpeed, 0.0f, 100.0f);
+}
 float UserInterface::setScaleCubeZ() {
-	float* size4 = nullptr; size4 = new float;
-	ImGui::SliderFloat("sizeZ", &*size4, -5.0f, 5.0f);
-	if (*size4 > -401602080) {
-		LastedFloatFrameZ = *size4;
-		return *size4;
+	ImGui::SliderFloat("sizeZ", &LastedFloatFrameZ, -5.0f, 5.0f);
+	if (LastedFloatFrameZ > -401602080) {
+		LastedFloatFrameZ = 1.0f;
+		return LastedFloatFrameZ;
 	}
 	else {
 		return LastedFloatFrameZ;
 	}
-	delete size4;
 }
 bool UserInterface::changeColorFrame() {
 	if (ImGui::Button("Color ", ImVec2(75, 50))) {
@@ -371,3 +372,4 @@ float UserInterface::getPositionObjectX() const { return LastedPositionObjectX; 
 float UserInterface::getPositionObjectY() const { return LastedPositionObjectY; }
 float UserInterface::getPositionObjectZ() const { return LastedPositionObjectZ; }
 float UserInterface::getpercentTexture() const { return percentTexture; }
+float UserInterface::getCmerraSpeed() const { return CameraSpeed; }

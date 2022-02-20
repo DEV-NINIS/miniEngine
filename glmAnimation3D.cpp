@@ -18,7 +18,7 @@ glmAnimation3D::glmAnimation3D(GLFWwindow* window) {
 }
 glmAnimation3D::~glmAnimation3D() {}
 void glmAnimation3D::setMatrixPerspectiveProjection(float& FOV, float& width, float& height) {
-	projectionPerspective = glm::perspective(glm::radians(FOV), (float)width / (float)height, 0.1f, 100.0f);
+	projectionPerspective = glm::perspective(glm::radians(FOV), (float)width / (float)height, 0.1f, 1000.0f);
 }
 void glmAnimation3D::setModelProjection(float& ValueRotate) {
 	model = glm::rotate(model, glm::radians(ValueRotate), glm::vec3(0.1f, 0.1f, 0.1f));

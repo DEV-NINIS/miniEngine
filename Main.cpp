@@ -69,6 +69,8 @@ int main() {
 	delete resX; delete resY;
 	bool drawingCube = true;
 	int indicatorNumberTexVector = 0;
+	int* IndicatorDemandCamera = nullptr; IndicatorDemandCamera = new int; *IndicatorDemandCamera = 0;
+	int* IndicatorDemandChangeCameraSpeed = nullptr; IndicatorDemandChangeCameraSpeed = new int; *IndicatorDemandChangeCameraSpeed = 0;
 	int* IndicatorChgangePositionCube = nullptr; IndicatorChgangePositionCube = new int; *IndicatorChgangePositionCube = 0;
 	int* IndicatorChgangePositionCubeX = nullptr; IndicatorChgangePositionCubeX = new int; *IndicatorChgangePositionCubeX = 0;
 	int* IndicatorChgangePositionCubeY = nullptr; IndicatorChgangePositionCubeY = new int; *IndicatorChgangePositionCubeY = 0;
@@ -119,7 +121,7 @@ int main() {
 		processInput(window);
 		glClearColor(Interface->getColorR(), Interface->getColorG(), Interface->getColorB() , 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		camera.processInputCamera(window, deltatime);
+		camera.processInputCamera(window, deltatime, Interface->getCmerraSpeed());
 		Cube->useShaderCube();
 		matrixAnimation->initialiseMatrix();
 		matrixAnimation->setLookAtMatrixCamera(camera.getcamPos(), camera.getcamFront(), camera.getcamUp());
@@ -364,6 +366,7 @@ int main() {
 		if (*IndicatorDemandingTexture == 1) {
 			Interface->inputFileTexture1(Cube->getLoaderTexture());
 			Interface->inputFileTexture2(Cube->getLoaderTexture());
+			ImGui::Text("enter the path where is your texture.");
 			Interface->setPercentTexture();
 			if (Interface->confirmFilePath() == true) {
 				Cube->setTexture1(Interface->filePath1);
@@ -381,6 +384,7 @@ int main() {
 		}
 		ImGui::End();
 		ImGui::Begin("Settings"); // check parametters and input parametters
+		// colors
 		if (Interface->inputDemandingChangeColorFrame() == true) {
 			*IndicatorSetColorFrameDemanding = *IndicatorSetColorFrameDemanding + 1;
 		}
@@ -414,6 +418,30 @@ int main() {
 		{
 			*IndicatorSetColorFrameDemanding = 0;
 		}
+		// camera
+		if (Interface->inputDemandingCamera() == true) {
+			*IndicatorDemandCamera = *IndicatorDemandCamera + 1;
+		}
+		if (*IndicatorDemandCamera == 1) {
+			// FONCTION
+			if (Interface->inputDemandCameraSpeed() == true) {
+				*IndicatorDemandChangeCameraSpeed = *IndicatorDemandChangeCameraSpeed + 1;
+			}
+			if (*IndicatorDemandChangeCameraSpeed == 1) {
+				Interface->setCameraSpeed();
+			}
+			else if (*IndicatorDemandChangeCameraSpeed > 1) {
+				*IndicatorDemandChangeCameraSpeed = 0;
+			}
+			ImGui::Text("press E to forward");
+			ImGui::Text("press D to move back");
+			ImGui::Text("press S to move right");
+			ImGui::Text("press F to move left");
+		}
+		else if (*IndicatorDemandCamera > 1) {
+			*IndicatorDemandCamera = 0;
+		}
+		// FOV
 		if (Interface->inputDemandingChangeFOV() == true) {
 			*IndicatorDemandingChangeFOV = *IndicatorDemandingChangeFOV + 1;
 		}
@@ -448,4 +476,5 @@ int main() {
 	delete IndicatorDemandingChangeCubePositionY; delete IndicatorDemandingChangeCubePositionZ;
 	delete IndicatorChgangePositionCube; delete IndicatorChgangePositionCubeX;
 	delete IndicatorChgangePositionCubeY; delete IndicatorChgangePositionCubeZ;
+	delete IndicatorDemandCamera; delete IndicatorDemandChangeCameraSpeed;
 }

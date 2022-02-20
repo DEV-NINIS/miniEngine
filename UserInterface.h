@@ -24,6 +24,8 @@ public:
 	bool inputDemandingPositionObjectX() const;
 	bool inputDemandingPositionObjectY() const;
 	bool inputDemandingPositionObjectZ() const;
+	bool inputDemandCameraSpeed() const;
+	bool inputDemandingCamera() const;
 	bool inputDemandingAnimation() const;
 	bool inputDemandingRotate() const;
 	bool inputDemandingChangeColorObject() const;
@@ -45,6 +47,7 @@ public:
 	float setScaleCubeY();
 	float setScaleCubeZ();
 	void setPercentTexture();
+	void setCameraSpeed();
 	void setColorR();
 	void setColorG();
 	void setColorB();
@@ -74,7 +77,8 @@ public:
 	float getPositionObjectX() const;
 	float getPositionObjectY() const;
 	float getPositionObjectZ() const;
-
+	// value camera
+	float getCmerraSpeed() const;
 
 	void setSettingFrame();
 	bool inputDemandingChangeColorFrame();
@@ -109,6 +113,7 @@ public:
 		float LastedPositionObjectY;
 		float LastedPositionObjectZ;
 		float percentTexture;
+		float CameraSpeed;
 };
 
 #endif // !1
