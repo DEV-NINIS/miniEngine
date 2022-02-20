@@ -131,7 +131,13 @@ int main() {
 		matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
 		Interface->setSettingFrame();
 		matrixAnimation->setPercentTexture(Cube->getshaderCube(), Interface->getpercentTexture());
+
+
 		ImGui::Begin("Engine");
+		ImGui::BeginMainMenuBar();
+		ImGui::Button("file", ImVec2(100, 20));
+		ImGui::Button("a", ImVec2(100, 20));
+		ImGui::EndMainMenuBar();
 		ImGui::Checkbox(" draw ", &drawingCube);
 		// echelle du cube
 		if (Interface->inputDemandingScaleCube() == true) {
