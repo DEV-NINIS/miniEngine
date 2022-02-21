@@ -26,8 +26,9 @@ UserInterface::UserInterface(GLFWwindow* window)  {
 
 	style->WindowBorderSize = 0;
 	style->WindowTitleAlign = ImVec2(0.5, 0.5);
+	style->ButtonTextAlign = ImVec2(0.5, 0.5);
 	style->WindowMinSize = ImVec2(901, 430);
-	style->FramePadding = ImVec2(8, 6);
+	style->FramePadding = ImVec2(10, 9);
 	style->WindowMenuButtonPosition = ImGuiDir();
 	style->Colors[ImGuiCol_TitleBg] = ImColor(79, 86, 98, 255);
 	style->Colors[ImGuiCol_TitleBgActive] = ImColor(79, 86, 98, 255);
@@ -41,8 +42,10 @@ UserInterface::UserInterface(GLFWwindow* window)  {
 	style->Colors[ImGuiCol_SeparatorActive] = ImColor(76, 76, 76, 255);
 	style->Colors[ImGuiCol_SeparatorHovered] = ImColor(76, 76, 76, 255);
 
+	style->Colors[ImGuiCol_MenuBarBg] = ImColor(37, 36, 37, 255);
+
 	style->Colors[ImGuiCol_FrameBg] = ImColor(37, 36, 37, 255);
-	style->Colors[ImGuiCol_FrameBgActive] = ImColor(37, 36, 37, 255);
+	style->Colors[ImGuiCol_FrameBgActive] = ImColor(37, 36, 50, 255);
 	style->Colors[ImGuiCol_FrameBgHovered] = ImColor(37, 36, 37, 255);
 
 	

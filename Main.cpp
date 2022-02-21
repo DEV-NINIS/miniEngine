@@ -13,6 +13,7 @@
 #include <string>
 #include "cube.h"
 #include "stbi_image.h"
+#include "file.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "UserInterface.h"
@@ -27,6 +28,8 @@
 #include <Windows.h>
 #include <commdlg.h>
 #include <shellapi.h>
+#include <fileapi.h>
+#include <commdlg.h>
 #include <filesystem> // C++17 standard header file name
 //												_____
 //               /\         |\		|	 |	   |
@@ -102,12 +105,13 @@ int main() {
 	int* IndicatorScaleDemandingX = nullptr; IndicatorScaleDemandingX = new int; *IndicatorScaleDemandingX = 0;
 	int* IndicatorScaleDemandingY = nullptr; IndicatorScaleDemandingY = new int; *IndicatorScaleDemandingY = 0;
 	int* IndicatorScaleDemandingZ = nullptr; IndicatorScaleDemandingZ = new int; *IndicatorScaleDemandingZ = 0;
+	const char* filePath;
 	cube* Cube; Cube = new cube(window);
 	glmAnimation3D* matrixAnimation; matrixAnimation = new glmAnimation3D(window);
 	// initialise imgui
 	UserInterface* Interface = nullptr; Interface = new UserInterface(window); // in the builder of this class they create a imgui context is because in argument they have GLFWwindow* ...
 	//
-	Camera camera;
+	Camera camera; writing::save Save; reading::read Read;
 	int* IndicatorFilepath = nullptr; IndicatorFilepath = new int; *IndicatorFilepath = Interface->getIndicatorTextureFilePath();
 	Cube->setShader();
 	Cube->setBuffer();
@@ -115,6 +119,8 @@ int main() {
 	Interface->LastedFloatFrame = 1;
 	float valueXColor = 0.2f; float ValueYcolor = 0.6f; float ValueZColor = 0.9f; float ValueWColor = 0.1f;
 	float deltatime = 0, currentFrame = 0, lastedFrame = 0;
+	TCHAR filepath = 100; char filePathBuffer[100]; filePathBuffer[100];
+	TCHAR nBufferLength = 102; char lpFileName[2]; char* lpFilePart = nullptr; lpFilePart = &filePathBuffer[1];
 	while (!glfwWindowShouldClose(window)) // render
 	{
 		currentFrame = glfwGetTime();
@@ -136,13 +142,25 @@ int main() {
 
 
 		ImGui::Begin("Engine");
-		ImGui::BeginMainMenuBar();
-		if (ImGui::Button("file", ImVec2(100, 20))) {
-			ShellExecuteA(NULL, "open", "https://github.com/DEV-NINIS/miniEngine", NULL, NULL, SW_SHOWDEFAULT);
+		if (ImGui::BeginMainMenuBar()) {
+			if (ImGui::BeginMenu("file")) {
+				if (ImGui::MenuItem("Open")) {
+					Read.selectPath(window);
+				}
+				if (ImGui::MenuItem("Save")) {
+
+				}
+				if (ImGui::MenuItem("Save as")) {
+				
+				}
+				if (ImGui::MenuItem("Wiew Source Code ")) {
+					ShellExecuteA(NULL, "open", "https://github.com/DEV-NINIS/miniEngine", NULL, NULL, SW_SHOWDEFAULT);
+				}
+				ImGui::EndMenu();
+			}
+			ImGui::EndMainMenuBar();
 		}
-		ImGui::EndMainMenuBar();
 		ImGui::Checkbox(" draw ", &drawingCube);
-		ImGui::BeginPopup("fil32556e");
 		// echelle du cube
 		if (Interface->inputDemandingScaleCube() == true) {
 			*IndicatorScaleDemanding = *IndicatorScaleDemanding + 1;

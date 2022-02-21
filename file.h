@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <filesystem>
+#include <string>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -16,14 +17,13 @@ namespace writing
 	class save
 	{
 	public:
-		save(char* filePath);
+		save();
 		virtual ~save();
-		void setFilePath();
+		std::string setFilePath(GLFWwindow* window);
 		void setFileContent(const char* filetexture, float colorObjectR, float ColorObjectG, float ColorObjectB, float ValuePositionObjectX,
 			float ValuePositionObjectY, float ValuePositionObjectZ, float ValueTransformX, float ValueTransformY, float ValueTransformZ,
-			float ValueColorFrameR, float ValueColorFrameG, float ValueColorFrameB, float ValueCameraSpeed, float ValueFOV);
+			float ValueColorFrameR, float ValueColorFrameG, float ValueColorFrameB, float ValueCameraSpeed, float ValueFOV, std::string filepath);
 	protected:
-		std::ofstream flux;
 		const char* fileContent;
 	};
 	#endif 
@@ -39,9 +39,24 @@ namespace reading
 	public:
 		read();
 		~read();
-
+		std::string selectPath(GLFWwindow* window);
+		void setValueFile(std::string filePath);
 	protected:
-
+		float colorObjectFileR;
+		float ColorObjectFileG;
+		float ColorObjectFileB;
+		float ValuePositionObjectFileX;
+		float ValuePositionObjectFileY;
+		float ValuePositionObjectFileZ;
+		float ValueTransformXFile;
+		float ValueTransformYFile;
+		float ValueTransformZFile;
+		float ValueColorFrameRFile;
+		float ValueColorFrameGFile;
+		float ValueColorFrameBFile;
+		float ValueCameraSpeedFile;
+		float ValueFOVFile;
+		const char* filetextureFile;
 	};
 	#endif 
 
