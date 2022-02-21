@@ -16,11 +16,16 @@ save::save(char* filePath) : flux(filePath) {
 save::~save() {}
 
 void save::setFilePath() {
-	flux << fileContent << std::endl;
+
 }
 void save::setFileContent(const char* filetexture, float colorObjectR, float ColorObjectG, 
 	float ColorObjectB, float ValuePositionObjectX,float ValuePositionObjectY, float ValuePositionObjectZ,
 	float ValueTransformX, float ValueTransformY, float ValueTransformZ,float ValueColorFrameR, 
-	float ValueColorFrameG, float ValueColorFrameB, float ValueCameraSpeed, float ValueFOV) {
+	float ValueColorFrameG, float ValueColorFrameB, float ValueCameraSpeed, float ValueFOV) 
+{
 	// fonction
+	flux << filetexture << "  " << colorObjectR << " " << ColorObjectG << " " << ColorObjectB << "  " << ValuePositionObjectX 
+	<< " " << ValuePositionObjectY << " " << ValuePositionObjectZ << "  " << ValueTransformX << " " <<
+	ValueTransformY << " " << ValueTransformZ << "  " << ValueColorFrameR << " " << ValueColorFrameG <<
+	" " << ValueColorFrameB << "  " << ValueCameraSpeed << "  " << ValueFOV << std::endl;
 }

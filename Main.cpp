@@ -25,6 +25,9 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <GLFW/glfw3.h>
 #include <Windows.h>
+#include <commdlg.h>
+#include <shellapi.h>
+#include <filesystem> // C++17 standard header file name
 //												_____
 //               /\         |\		|	 |	   |
 //				/  \		| \		|	 |	   |
@@ -33,7 +36,6 @@
 //			 /		  \		|	 \	|	 |			 |
 //			/		   \	|	  \	|	 |		_____|
 //
-
 
 void processInput(GLFWwindow* window) {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -135,10 +137,12 @@ int main() {
 
 		ImGui::Begin("Engine");
 		ImGui::BeginMainMenuBar();
-		ImGui::Button("file", ImVec2(100, 20));
-		ImGui::Button("a", ImVec2(100, 20));
+		if (ImGui::Button("file", ImVec2(100, 20))) {
+			ShellExecuteA(NULL, "open", "https://github.com/DEV-NINIS/miniEngine", NULL, NULL, SW_SHOWDEFAULT);
+		}
 		ImGui::EndMainMenuBar();
 		ImGui::Checkbox(" draw ", &drawingCube);
+		ImGui::BeginPopup("fil32556e");
 		// echelle du cube
 		if (Interface->inputDemandingScaleCube() == true) {
 			*IndicatorScaleDemanding = *IndicatorScaleDemanding + 1;

@@ -20,9 +20,32 @@ UserInterface::UserInterface(GLFWwindow* window)  {
 	ImGui::StyleColorsDark();
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 460");
-	auto& style = ImGui::GetStyle();
 	ImVec4* color = ImGui::GetStyle().Colors;
-	color[ImGuiCol_WindowBg] = ImVec4(0.1, 0.3, 0.5, 0.9);
+	color[ImGuiCol_WindowBg] = ImColor(5, 5, 20, 255);
+	ImGuiStyle* style = &ImGui::GetStyle();
+
+	style->WindowBorderSize = 0;
+	style->WindowTitleAlign = ImVec2(0.5, 0.5);
+	style->WindowMinSize = ImVec2(901, 430);
+	style->FramePadding = ImVec2(8, 6);
+	style->WindowMenuButtonPosition = ImGuiDir();
+	style->Colors[ImGuiCol_TitleBg] = ImColor(79, 86, 98, 255);
+	style->Colors[ImGuiCol_TitleBgActive] = ImColor(79, 86, 98, 255);
+	style->Colors[ImGuiCol_TitleBgCollapsed] = ImColor(79, 86, 98, 130);
+
+	style->Colors[ImGuiCol_Button] = ImColor(79, 86, 98, 255);
+	style->Colors[ImGuiCol_ButtonActive] = ImColor(79, 86, 98, 255);
+	style->Colors[ImGuiCol_ButtonHovered] = ImColor(187, 180, 150, 255);
+
+	style->Colors[ImGuiCol_Separator] = ImColor(70, 70, 70, 255);
+	style->Colors[ImGuiCol_SeparatorActive] = ImColor(76, 76, 76, 255);
+	style->Colors[ImGuiCol_SeparatorHovered] = ImColor(76, 76, 76, 255);
+
+	style->Colors[ImGuiCol_FrameBg] = ImColor(37, 36, 37, 255);
+	style->Colors[ImGuiCol_FrameBgActive] = ImColor(37, 36, 37, 255);
+	style->Colors[ImGuiCol_FrameBgHovered] = ImColor(37, 36, 37, 255);
+
+	
 	LastedFrameColorR = 0.2f; LastedFrameColorG = 0.5f; LastedFrameColorB = 0.7f; 
 	LastedFloatFrame = 1.0f; LastedFloatFrameX = 1.0f; LastedFloatFrameY = 1.0f; LastedFloatFrameZ = 1.0f; 
 	LastedRotateXValue = 0.1f; LastedRotateYValue = 0.0f; LastedRotateZValue = 0.0f;
