@@ -21,7 +21,7 @@ UserInterface::UserInterface(GLFWwindow* window)  {
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 460");
 	ImVec4* color = ImGui::GetStyle().Colors;
-	color[ImGuiCol_WindowBg] = ImColor(5, 5, 20, 255);
+	color[ImGuiCol_WindowBg] = ImColor(50, 56, 57, 255);
 	ImGuiStyle* style = &ImGui::GetStyle();
 
 	style->WindowBorderSize = 0;
@@ -42,11 +42,12 @@ UserInterface::UserInterface(GLFWwindow* window)  {
 	style->Colors[ImGuiCol_SeparatorActive] = ImColor(76, 76, 76, 255);
 	style->Colors[ImGuiCol_SeparatorHovered] = ImColor(76, 76, 76, 255);
 
-	style->Colors[ImGuiCol_MenuBarBg] = ImColor(37, 36, 37, 255);
+	style->Colors[ImGuiCol_MenuBarBg] = ImColor(50, 56, 57, 255);
 
-	style->Colors[ImGuiCol_FrameBg] = ImColor(37, 36, 37, 255);
-	style->Colors[ImGuiCol_FrameBgActive] = ImColor(37, 36, 50, 255);
-	style->Colors[ImGuiCol_FrameBgHovered] = ImColor(37, 36, 37, 255);
+	style->Colors[ImGuiCol_FrameBg] = ImColor(60, 56, 47, 255);
+	style->Colors[ImGuiCol_FrameBgActive] = ImColor(60, 56, 47, 255);
+	style->Colors[ImGuiCol_FrameBgHovered] = ImColor(60, 56, 47, 255);
+	style->SelectableTextAlign = ImVec2(0.1, 0.6);
 
 	
 	LastedFrameColorR = 0.2f; LastedFrameColorG = 0.5f; LastedFrameColorB = 0.7f; 

@@ -29,7 +29,8 @@ read::read() {
 	 ValueColorFrameBFile = 0;
 	 ValueCameraSpeedFile = 0;
 	 ValueFOVFile = 0;
-	 filetextureFile = 0;
+	 filetextureFile;
+	 fileContent; NumberMove = 0;
 }
 read::~read() {}
 
@@ -48,7 +49,111 @@ std::string read::selectPath(GLFWwindow* window) {
 	}
 	return std::string();
 }
-void read::setValueFile(std::string filepath) {
-	std::ifstream flux(filepath.c_str());
+void read::MoveInFile(std::ifstream flux) {
 
+}
+void read::setValueFile(std::string filepath) {
+	std::string* fileTexTemp = nullptr; fileTexTemp = new std::string;
+	std::string* colorObjectFileRTemp = nullptr; colorObjectFileRTemp = new std::string;
+	std::string* colorObjectFileGTemp = nullptr; colorObjectFileGTemp = new std::string;
+	std::string* colorObjectFileBTemp = nullptr; colorObjectFileBTemp = new std::string;
+	std::string* ValuePositionObjectFileXTemp = nullptr; ValuePositionObjectFileXTemp = new std::string;
+	std::string* ValuePositionObjectFileYTemp = nullptr; ValuePositionObjectFileYTemp = new std::string;
+	std::string* ValuePositionObjectFileZTemp = nullptr; ValuePositionObjectFileZTemp = new std::string;
+	std::string* ValueTransformObjectTempX = nullptr; ValueTransformObjectTempX = new std::string;
+	std::string* ValueTransformObjectTempY = nullptr; ValueTransformObjectTempY = new std::string;
+	std::string* ValueTransformObjectTempZ = nullptr; ValueTransformObjectTempZ = new std::string;
+	std::string* ValueColorFrameRFileTemp = nullptr; ValueColorFrameRFileTemp = new std::string;
+	std::string* ValueColorFrameGFileTemp = nullptr; ValueColorFrameGFileTemp = new std::string;
+	std::string* ValueColorFrameBFileTemp = nullptr; ValueColorFrameBFileTemp = new std::string;
+	std::string* ValueCameraSpeedFileTemp = nullptr; ValueCameraSpeedFileTemp = new std::string;
+	std::string* ValueFOVfileTemp = nullptr; ValueFOVfileTemp = new std::string;
+
+	std::ifstream flux(filepath.c_str()); 
+	flux.seekg(0, std::ios::beg);	
+	// on se deplace au debut du fichier 
+
+	flux >> *fileTexTemp; filetextureFile = static_cast<const char*>(fileTexTemp->c_str()); // cin in string and convert to const char for file texture
+	NumberMove += fileTexTemp->size() + 1;
+	flux.seekg(NumberMove, std::ios::beg);
+
+	flux >> *colorObjectFileRTemp; colorObjectFileR = std::stof(*colorObjectFileRTemp);
+	NumberMove += colorObjectFileRTemp->size() + 1;
+	flux.seekg(NumberMove, std::ios::beg);
+
+	flux >> *colorObjectFileGTemp; ColorObjectFileG = std::stof(*colorObjectFileGTemp);
+	NumberMove += colorObjectFileGTemp->size() + 1;
+	flux.seekg(NumberMove, std::ios::beg);
+
+	flux >> *colorObjectFileBTemp; ColorObjectFileB = std::stof(*colorObjectFileBTemp);
+	NumberMove += colorObjectFileBTemp->size() + 1;
+	flux.seekg(NumberMove, std::ios::beg);
+
+	flux >> *ValuePositionObjectFileXTemp; ValuePositionObjectFileX = std::stof(*ValuePositionObjectFileXTemp);
+	NumberMove += ValuePositionObjectFileXTemp->size() + 1;
+	flux.seekg(NumberMove, std::ios::beg);
+
+	flux >> *ValuePositionObjectFileYTemp; ValuePositionObjectFileY = std::stof(*ValuePositionObjectFileYTemp);
+	NumberMove += ValuePositionObjectFileYTemp->size() + 1;
+	flux.seekg(NumberMove, std::ios::beg);
+
+	flux >> *ValuePositionObjectFileZTemp; ValuePositionObjectFileZ = std::stof(*ValuePositionObjectFileZTemp);
+	NumberMove += ValuePositionObjectFileZTemp->size() + 1;
+	flux.seekg(NumberMove, std::ios::beg);
+
+	flux >> *ValueTransformObjectTempX; ValueTransformXFile = std::stof(*ValueTransformObjectTempX);
+	NumberMove += ValueTransformObjectTempX->size() + 1;
+	flux.seekg(NumberMove, std::ios::beg);
+
+	flux >> *ValueTransformObjectTempY; ValueTransformYFile = std::stof(*ValueTransformObjectTempY);
+	NumberMove += ValueTransformObjectTempY->size() + 1;
+	flux.seekg(NumberMove, std::ios::beg);
+
+	flux >> *ValueTransformObjectTempZ; ValueTransformZFile = std::stof(*ValueTransformObjectTempZ);
+	NumberMove += ValueTransformObjectTempZ->size() + 1;
+	flux.seekg(NumberMove, std::ios::beg);
+
+	flux >> *ValueColorFrameRFileTemp; ValueColorFrameRFile = std::stof(*ValueColorFrameRFileTemp);
+	NumberMove += ValueColorFrameRFileTemp->size() + 1;
+	flux.seekg(NumberMove, std::ios::beg);
+
+	flux >> *ValueColorFrameGFileTemp; ValueColorFrameGFile = std::stof(*ValueColorFrameGFileTemp);
+	NumberMove += ValueColorFrameGFileTemp->size() + 1;
+	flux.seekg(NumberMove, std::ios::beg);
+
+	flux >> *ValueColorFrameBFileTemp; ValueColorFrameBFile = std::stof(*ValueColorFrameBFileTemp);
+	NumberMove += ValueColorFrameBFileTemp->size() + 1;
+	flux.seekg(NumberMove, std::ios::beg);
+
+	flux >> *ValueCameraSpeedFileTemp; ValueCameraSpeedFile = std::stof(*ValueCameraSpeedFileTemp);
+	NumberMove += ValueCameraSpeedFileTemp->size() + 1;
+	flux.seekg(NumberMove, std::ios::beg);
+
+	flux >> *ValueFOVfileTemp; ValueFOVFile = std::stof(*ValueFOVfileTemp);
+	NumberMove += ValueFOVfileTemp->size() + 1;
+	flux.seekg(NumberMove, std::ios::beg);
+
+	std::cout << filetextureFile << std::endl;
+	std::cout << colorObjectFileR << std::endl;
+	std::cout << ColorObjectFileG << std::endl;
+	std::cout << ColorObjectFileB << std::endl;
+	std::cout << ValuePositionObjectFileX << std::endl;
+	std::cout << ValuePositionObjectFileY << std::endl;
+	std::cout << ValuePositionObjectFileZ << std::endl;
+	std::cout << ValueTransformXFile << std::endl;
+	std::cout << ValueTransformYFile << std::endl;
+	std::cout << ValueTransformZFile << std::endl;
+	std::cout << ValueColorFrameRFile << std::endl;
+	std::cout << ValueColorFrameGFile << std::endl;
+	std::cout << ValueColorFrameBFile << std::endl;
+	std::cout << ValueCameraSpeedFile << std::endl;
+	std::cout << ValueFOVFile << std::endl;
+
+	delete fileTexTemp; delete colorObjectFileRTemp;
+	delete colorObjectFileGTemp; delete colorObjectFileBTemp;
+	delete ValuePositionObjectFileXTemp; delete ValuePositionObjectFileYTemp;
+	delete ValuePositionObjectFileZTemp; delete ValueColorFrameRFileTemp;
+	delete ValueColorFrameGFileTemp; delete ValueColorFrameBFileTemp;
+	delete ValueCameraSpeedFileTemp; delete ValueFOVfileTemp;
+	
 }

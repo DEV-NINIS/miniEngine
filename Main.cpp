@@ -145,7 +145,7 @@ int main() {
 		if (ImGui::BeginMainMenuBar()) {
 			if (ImGui::BeginMenu("file")) {
 				if (ImGui::MenuItem("Open")) {
-					Read.selectPath(window);
+					Read.setValueFile(Read.selectPath(window));
 				}
 				if (ImGui::MenuItem("Save")) {
 

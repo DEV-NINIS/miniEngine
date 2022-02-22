@@ -41,6 +41,12 @@ namespace reading
 		~read();
 		std::string selectPath(GLFWwindow* window);
 		void setValueFile(std::string filePath);
+		void MoveInFile(std::ifstream flux);
+		const char* getfiletextureFile() const;
+		float getcolorObjectFileR() const;
+		float getcolorObjectFileG() const;
+		float getcolorObjectFileB() const;
+		float get
 	protected:
 		float colorObjectFileR;
 		float ColorObjectFileG;
@@ -57,6 +63,8 @@ namespace reading
 		float ValueCameraSpeedFile;
 		float ValueFOVFile;
 		const char* filetextureFile;
+		std::string fileContent;
+		float NumberMove;
 	};
 	#endif 
 
