@@ -10,7 +10,14 @@
 class UserInterface 
 {
 public:
+	// 2 constructors
 	UserInterface(GLFWwindow* window);
+	UserInterface(GLFWwindow* window, float LastedFrameColorRFile, float LastedFrameColorGFile,
+		float LastedFrameColorBFile, float LastedFloatFrameXFile, float LastedFloatFrameYFile, float LastedFloatFrameZFile,
+		float LastedRotateXValueFile, float LastedRotateYValueFile, float LastedRotateZValueFile, float LastedColorObjectRFile,
+		float LastedColorObjectGFile, float LastedColorObjectBFile, float LastedPositionObjectXFile, float LastedPositionObjectYFile,
+		float LastedPositionObjectZFile, float CameraSpeedFile, const char* filePathPointerFile);
+
 	virtual ~UserInterface();
 	bool inputColorR() const;
 	bool inputColorG() const;
@@ -96,6 +103,9 @@ public:
 	static char filePath3[150];
 	static char filePath4[150];
 	static char filePath5[150];
+	static const char* filepath1ConstChar;
+	static const char* filepath2ConstChar;
+
 	protected:
 		int lastedFilePath;
 		float* size1 = nullptr;

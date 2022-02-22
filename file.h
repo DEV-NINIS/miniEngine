@@ -20,9 +20,12 @@ namespace writing
 		save();
 		virtual ~save();
 		std::string setFilePath(GLFWwindow* window);
-		void setFileContent(const char* filetexture, float colorObjectR, float ColorObjectG, float ColorObjectB, float ValuePositionObjectX,
-			float ValuePositionObjectY, float ValuePositionObjectZ, float ValueTransformX, float ValueTransformY, float ValueTransformZ,
-			float ValueColorFrameR, float ValueColorFrameG, float ValueColorFrameB, float ValueCameraSpeed, float ValueFOV, std::string filepath);
+		void setFileContent(const char* filetexture, float colorObjectR, float ColorObjectG,
+			float ColorObjectB, float ValuePositionObjectX,
+			float ValuePositionObjectY, float ValuePositionObjectZ, float ValueTransformX, 
+			float ValueTransformY, float ValueTransformZ,
+			float ValueColorFrameR, float ValueColorFrameG, float ValueColorFrameB, 
+			float ValueCameraSpeed, float ValueFOV, std::string filepath);
 	protected:
 		const char* fileContent;
 	};
@@ -42,11 +45,25 @@ namespace reading
 		std::string selectPath(GLFWwindow* window);
 		void setValueFile(std::string filePath);
 		void MoveInFile(std::ifstream flux);
+		// getting values
 		const char* getfiletextureFile() const;
 		float getcolorObjectFileR() const;
 		float getcolorObjectFileG() const;
 		float getcolorObjectFileB() const;
-		float get
+		float getLastedScaleXFile() const;
+		float getLastedScaleYFile() const;
+		float getLastedScaleZFile() const;
+		float getValuePositionObjectFileX() const;
+		float getValuePositionObjectFileY() const;
+		float getValuePositionObjectFileZ() const;
+		float getValueTransformXFile() const;
+		float getValueTransformYFile() const;
+		float getValueTransformZFile() const;
+		float getValueColorFrameRFile() const;
+		float getValueColorFrameGFile() const;
+		float getValueColorFrameBFile() const;
+		float getValueCameraSpeedFile() const;
+		float getValueFOVFile() const;
 	protected:
 		float colorObjectFileR;
 		float ColorObjectFileG;
@@ -62,6 +79,9 @@ namespace reading
 		float ValueColorFrameBFile;
 		float ValueCameraSpeedFile;
 		float ValueFOVFile;
+		float LastedScaleXFile;
+		float LastedScaleYFile;
+		float LastedScaleZFile;
 		const char* filetextureFile;
 		std::string fileContent;
 		float NumberMove;

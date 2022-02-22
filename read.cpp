@@ -31,6 +31,7 @@ read::read() {
 	 ValueFOVFile = 0;
 	 filetextureFile;
 	 fileContent; NumberMove = 0;
+	 LastedScaleXFile = 0; LastedScaleYFile = 0; LastedScaleZFile = 0;
 }
 read::~read() {}
 
@@ -68,6 +69,10 @@ void read::setValueFile(std::string filepath) {
 	std::string* ValueColorFrameBFileTemp = nullptr; ValueColorFrameBFileTemp = new std::string;
 	std::string* ValueCameraSpeedFileTemp = nullptr; ValueCameraSpeedFileTemp = new std::string;
 	std::string* ValueFOVfileTemp = nullptr; ValueFOVfileTemp = new std::string;
+	std::string* LastedScaleXFileTemp = nullptr; LastedScaleXFileTemp = new std::string;
+	std::string* LastedScaleYFileTemp = nullptr; LastedScaleYFileTemp = new std::string;
+	std::string* LastedScaleZFileTemp = nullptr; LastedScaleZFileTemp = new std::string;
+
 
 	std::ifstream flux(filepath.c_str()); 
 	flux.seekg(0, std::ios::beg);	
@@ -133,6 +138,18 @@ void read::setValueFile(std::string filepath) {
 	NumberMove += ValueFOVfileTemp->size() + 1;
 	flux.seekg(NumberMove, std::ios::beg);
 
+	flux >> *LastedScaleXFileTemp; LastedScaleXFile = std::stof(*LastedScaleXFileTemp);
+	NumberMove += LastedScaleXFileTemp->size() + 1;
+	flux.seekg(NumberMove, std::ios::beg);
+
+	flux >> *LastedScaleYFileTemp; LastedScaleYFile = std::stof(*LastedScaleYFileTemp);
+	NumberMove += LastedScaleYFileTemp->size() + 1;
+	flux.seekg(NumberMove, std::ios::beg);
+
+	flux >> *LastedScaleZFileTemp; LastedScaleZFile = std::stof(*LastedScaleZFileTemp);
+	NumberMove += LastedScaleZFileTemp->size() + 1;
+	flux.seekg(NumberMove, std::ios::beg);
+
 	std::cout << filetextureFile << std::endl;
 	std::cout << colorObjectFileR << std::endl;
 	std::cout << ColorObjectFileG << std::endl;
@@ -155,5 +172,26 @@ void read::setValueFile(std::string filepath) {
 	delete ValuePositionObjectFileZTemp; delete ValueColorFrameRFileTemp;
 	delete ValueColorFrameGFileTemp; delete ValueColorFrameBFileTemp;
 	delete ValueCameraSpeedFileTemp; delete ValueFOVfileTemp;
+	delete LastedScaleXFileTemp; delete LastedScaleYFileTemp;
+	delete LastedScaleZFileTemp;
 	
 }
+// getting values 
+const char* read::getfiletextureFile() const { return filetextureFile; }
+float read::getcolorObjectFileR() const { return colorObjectFileR; }
+float read::getcolorObjectFileG() const { return ColorObjectFileG; }
+float read::getcolorObjectFileB() const { return ColorObjectFileB; }
+float read::getValuePositionObjectFileX() const { return ValuePositionObjectFileX; }
+float read::getValuePositionObjectFileY() const { return ValuePositionObjectFileY; }
+float read::getValuePositionObjectFileZ() const { return ValuePositionObjectFileZ; }
+float read::getValueTransformXFile() const { return ValueTransformXFile; }
+float read::getValueTransformYFile() const { return ValueTransformYFile; }
+float read::getValueTransformZFile() const { return ValueTransformZFile; }
+float read::getValueColorFrameRFile() const { return ValueColorFrameRFile; }
+float read::getValueColorFrameGFile() const { return ValueColorFrameGFile; }
+float read::getValueColorFrameBFile() const { return ValueColorFrameBFile; }
+float read::getValueCameraSpeedFile() const { return ValueCameraSpeedFile; }
+float read::getValueFOVFile() const { return ValueFOVFile; }
+float read::getLastedScaleXFile() const { return LastedScaleXFile; }
+float read::getLastedScaleYFile() const { return LastedScaleYFile; }
+float read::getLastedScaleZFile() const { return LastedScaleZFile; }

@@ -58,9 +58,9 @@ int main() {
 	int* resY = new int; *resY = 1440; float resX2 = 2560;
 	int* resX = new int; *resX = 2560; float resY2 = 1440;
 	GLFWwindow* window = glfwCreateWindow(*resX, *resY, "Engine by @dev_ninis", NULL, NULL);
-	if (window == NULL) { 
-		std::cout << "failed to initialise glad " << std::endl; 
-		return -1; 
+	if (window == NULL) {
+		std::cout << "failed to initialise glad " << std::endl;
+		return -1;
 	}
 	glfwMakeContextCurrent(window);
 	// set glad
@@ -127,7 +127,7 @@ int main() {
 		deltatime = currentFrame - lastedFrame;
 		lastedFrame = currentFrame;
 		processInput(window);
-		glClearColor(Interface->getColorR(), Interface->getColorG(), Interface->getColorB() , 1.0f);
+		glClearColor(Interface->getColorR(), Interface->getColorG(), Interface->getColorB(), 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		camera.processInputCamera(window, deltatime, Interface->getCmerraSpeed());
 		Cube->useShaderCube();
@@ -146,12 +146,24 @@ int main() {
 			if (ImGui::BeginMenu("file")) {
 				if (ImGui::MenuItem("Open")) {
 					Read.setValueFile(Read.selectPath(window));
+					Interface = nullptr;
+					Interface = new UserInterface(window, Read.getValueColorFrameRFile(), Read.getValueColorFrameGFile(), Read.getValueColorFrameBFile(),
+						Read.getLastedScaleXFile(), Read.getLastedScaleYFile(), Read.getLastedScaleZFile(), Read.getValueTransformXFile(),
+						Read.getValueTransformYFile(), Read.getValueTransformZFile(), Read.getcolorObjectFileR(),
+						Read.getcolorObjectFileG(), Read.getcolorObjectFileB(), Read.getValuePositionObjectFileX(), Read.getValuePositionObjectFileY(),
+						Read.getValuePositionObjectFileZ(), Read.getValueCameraSpeedFile(), Read.getfiletextureFile());
+					Cube->setTexture1(Interface->filepath1ConstChar);
+					matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
+					matrixAnimation->setScaleValueX(Cube->getshaderCube());
+					matrixAnimation->setScaleValueY(Cube->getshaderCube());
+					matrixAnimation->setScaleValueZ(Cube->getshaderCube());
+					matrixAnimation->frameMatrix(Cube->getshaderCube());
 				}
 				if (ImGui::MenuItem("Save")) {
 
 				}
 				if (ImGui::MenuItem("Save as")) {
-				
+
 				}
 				if (ImGui::MenuItem("Wiew Source Code ")) {
 					ShellExecuteA(NULL, "open", "https://github.com/DEV-NINIS/miniEngine", NULL, NULL, SW_SHOWDEFAULT);
@@ -489,7 +501,7 @@ int main() {
 	}
 	Interface->~UserInterface();
 	Cube->~cube();
-	delete Cube; 
+	delete Cube;
 	delete IndicatorScaleDemanding; delete IndicatorScaleDemandingX;
 	delete IndicatorScaleDemandingY; delete IndicatorScaleDemandingZ;
 	delete IndicatorDemandingRotate; delete IndicatorDemandingRotateLeft;

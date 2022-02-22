@@ -13,6 +13,9 @@ char UserInterface::filePath2[] = { 0 };
 char UserInterface::filePath3[] = { 0 };
 char UserInterface::filePath4[] = { 0 };
 char UserInterface::filePath5[] = { 0 };
+const char* UserInterface::filepath1ConstChar = 0;
+const char* UserInterface::filepath2ConstChar = 0;
+
 UserInterface::UserInterface(GLFWwindow* window)  {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -28,7 +31,7 @@ UserInterface::UserInterface(GLFWwindow* window)  {
 	style->WindowTitleAlign = ImVec2(0.5, 0.5);
 	style->ButtonTextAlign = ImVec2(0.5, 0.5);
 	style->WindowMinSize = ImVec2(901, 430);
-	style->FramePadding = ImVec2(10, 9);
+	style->FramePadding = ImVec2(5, 6);
 	style->WindowMenuButtonPosition = ImGuiDir();
 	style->Colors[ImGuiCol_TitleBg] = ImColor(79, 86, 98, 255);
 	style->Colors[ImGuiCol_TitleBgActive] = ImColor(79, 86, 98, 255);
@@ -60,11 +63,27 @@ UserInterface::UserInterface(GLFWwindow* window)  {
 	LastedPositionObjectX = 0.0f; LastedPositionObjectY = 0.0f; LastedPositionObjectZ = 0.0f;
 	filePathPointer.push_back(new char); *filePathPointer[0] = '0';
 	filePathPointer.push_back(new char); *filePathPointer[1] = '0';
-	filePathPointer.push_back(new char); *filePathPointer[2] = '0';
-	filePathPointer.push_back(new char); *filePathPointer[3] = '0';
-	filePathPointer.push_back(new char); *filePathPointer[4] = '0';
 	percentTexture = 0.5f;
 	CameraSpeed = 10.0f;
+}
+UserInterface::UserInterface(GLFWwindow* window, float LastedFrameColorRFile, float LastedFrameColorGFile,
+float LastedFrameColorBFile, float LastedFloatFrameXFile, float LastedFloatFrameYFile, float LastedFloatFrameZFile,
+float LastedRotateXValueFile, float LastedRotateYValueFile, float LastedRotateZValueFile, float LastedColorObjectRFile,
+float LastedColorObjectGFile, float LastedColorObjectBFile, float LastedPositionObjectXFile, float LastedPositionObjectYFile,
+float LastedPositionObjectZFile, float CameraSpeedFile, const char* filePathPointerFile)
+{
+	LastedFrameColorR = LastedFrameColorRFile; LastedFrameColorG = LastedFrameColorGFile; LastedFrameColorB = LastedFrameColorBFile;
+	LastedFloatFrame = 1.0f; LastedFloatFrameX = LastedFloatFrameXFile; LastedFloatFrameY = LastedFloatFrameYFile; LastedFloatFrameZ = LastedFloatFrameZFile;
+	LastedRotateXValue = LastedRotateXValueFile; LastedRotateYValue = LastedRotateYValueFile; LastedRotateZValue = LastedRotateZValueFile;
+	LastedColorObjectR = LastedColorObjectRFile; LastedColorObjectG = LastedColorObjectGFile; LastedColorObjectB = LastedColorObjectBFile;
+	LastedPositionObjectX = LastedPositionObjectXFile; LastedPositionObjectY = LastedPositionObjectYFile; LastedPositionObjectZ = LastedPositionObjectZFile;
+	percentTexture = 0.5f; CameraSpeed = CameraSpeedFile; FOV = 55.0f;
+	lastedFilePath = -1;
+	filepath1ConstChar = filePathPointerFile;
+	filepath2ConstChar = filePathPointerFile;
+
+	filePathPointer.push_back(new char); *filePathPointer[0] = '0';
+	filePathPointer.push_back(new char); *filePathPointer[1] = '0';
 }
 UserInterface::~UserInterface() {
 	ImGui_ImplOpenGL3_Shutdown();
