@@ -8,7 +8,7 @@
 
 float cube::vertecies[] ={
 
-		-0.5f, -0.5f, -0.5f,  0.2f, 0.6f, 0.9f, 0.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f,  0.8f, 0.6f, 0.9f, 0.0f, 0.0f,
 		 0.5f, -0.5f, -0.5f,  0.9f, 0.6f, 0.2f, 1.0f, 0.0f,
 		 0.5f,  0.5f, -0.5f,  0.5f, 0.6f, 0.9f,1.0f, 1.0f,
 		 0.5f,  0.5f, -0.5f,  0.7f, 0.6f, 0.8f,1.0f, 1.0f,
@@ -193,10 +193,12 @@ void cube::drawElements() {
 void cube::setTexture1(char* filePath) {
 	glGenTextures(1, &tex[0]);
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
 	stbi_set_flip_vertically_on_load(true);
 	int width, height, nrChanels;
 	unsigned char* data = 0;
@@ -225,8 +227,8 @@ void cube::setTexture1(char* filePath) {
 void cube::setTexture2(char* filePath) {
 	glGenTextures(1, &tex[1]);
 	glBindTexture(GL_TEXTURE_2D, tex[1]);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	stbi_set_flip_vertically_on_load(true);
@@ -254,7 +256,9 @@ void cube::setTexture2(char* filePath) {
 	glUseProgram(programShader);
 	glUniform1i(glGetUniformLocation(programShader, "Texture2"), 1);
 }
+
 void cube::useShaderCube() { glUseProgram(programShader); }
 GLuint& cube::getshaderCube() { return programShader; }
 std::vector<int*> cube::getLoaderTexture() { return LoaderTexture; }
+std::vector<const char*> cube::getfinalPathTexture() { return finalPathTexture; }
 int cube::getLoaderValueIndicator() { return indicatorLoaderValue; }

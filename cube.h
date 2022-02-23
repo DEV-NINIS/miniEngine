@@ -23,6 +23,10 @@ public:
 	GLuint& getshaderCube();
 	std::vector<int*> getLoaderTexture();
 	int getLoaderValueIndicator();
+
+	// get Value for save
+	std::vector<const char*> getfinalPathTexture();
+
 protected:
 	static float vertecies[];
 	static unsigned int index[];

@@ -86,7 +86,12 @@ public:
 	float getPositionObjectZ() const;
 	// value camera
 	float getCmerraSpeed() const;
+	// getting values for scale 
+	float getScaleCubeX() const;
+	float getScaleCubeY() const;
+	float getScaleCubeZ() const;
 
+	// gettting values for save
 	void setSettingFrame();
 	bool inputDemandingChangeColorFrame();
 	bool ButtonForSetAnimation();

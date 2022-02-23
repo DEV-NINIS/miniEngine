@@ -45,6 +45,24 @@ void processInput(GLFWwindow* window) {
 		glfwSetWindowShouldClose(window, true);
 	}
 }
+char* unconstchar(const char* s) {
+	if (!s)
+		return NULL;
+	int i;
+	char* res = NULL;
+	res = (char*)malloc(strlen(s) + 1);
+	if (!res) {
+		fprintf(stderr, "Memory Allocation Failed! Exiting...\n");
+		exit(EXIT_FAILURE);
+	}
+	else {
+		for (i = 0; s[i] != '\0'; i++) {
+			res[i] = s[i];
+		}
+		res[i] = '\0';
+		return res;
+	}
+}
 int main() {
 	// set parametters of OpenGL
 	glfwInit();
@@ -110,7 +128,7 @@ int main() {
 	glmAnimation3D* matrixAnimation; matrixAnimation = new glmAnimation3D(window);
 	// initialise imgui
 	UserInterface* Interface = nullptr; Interface = new UserInterface(window); // in the builder of this class they create a imgui context is because in argument they have GLFWwindow* ...
-	//
+	std::string formatFile; formatFile = ".dev_ninis";
 	Camera camera; writing::save Save; reading::read Read;
 	int* IndicatorFilepath = nullptr; IndicatorFilepath = new int; *IndicatorFilepath = Interface->getIndicatorTextureFilePath();
 	Cube->setShader();
@@ -142,28 +160,41 @@ int main() {
 
 
 		ImGui::Begin("Engine");
+
+		// menubar
 		if (ImGui::BeginMainMenuBar()) {
 			if (ImGui::BeginMenu("file")) {
 				if (ImGui::MenuItem("Open")) {
 					Read.setValueFile(Read.selectPath(window));
-					Interface = nullptr;
+
 					Interface = new UserInterface(window, Read.getValueColorFrameRFile(), Read.getValueColorFrameGFile(), Read.getValueColorFrameBFile(),
 						Read.getLastedScaleXFile(), Read.getLastedScaleYFile(), Read.getLastedScaleZFile(), Read.getValueTransformXFile(),
 						Read.getValueTransformYFile(), Read.getValueTransformZFile(), Read.getcolorObjectFileR(),
 						Read.getcolorObjectFileG(), Read.getcolorObjectFileB(), Read.getValuePositionObjectFileX(), Read.getValuePositionObjectFileY(),
 						Read.getValuePositionObjectFileZ(), Read.getValueCameraSpeedFile(), Read.getfiletextureFile());
-					Cube->setTexture1(Interface->filepath1ConstChar);
-					matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
-					matrixAnimation->setScaleValueX(Cube->getshaderCube());
-					matrixAnimation->setScaleValueY(Cube->getshaderCube());
-					matrixAnimation->setScaleValueZ(Cube->getshaderCube());
 					matrixAnimation->frameMatrix(Cube->getshaderCube());
+					Cube->setParametterTexture();
+					Cube->setTexture1(unconstchar(Read.getfiletextureFile()));
+					Cube->setTexture2(unconstchar(Read.getfiletextureFile()));
+					matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
+					matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
+					matrixAnimation->setColorObject(Cube->getshaderCube(), Interface->getColorObjectR(), Interface->getColorObjectG(), Interface->getColorObjectB());
+					matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
 				}
 				if (ImGui::MenuItem("Save")) {
-
+					Save.setFileContent(Cube->getfinalPathTexture()[0], Interface->getColorObjectR(),
+						Interface->getColorObjectG(), Interface->getColorObjectB(), Interface->getPositionObjectX(), Interface->getPositionObjectY()
+						, Interface->getPositionObjectZ(), Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ()
+						, Interface->getColorR(), Interface->getColorG(), Interface->getColorB(), Interface->getCmerraSpeed(), Interface->getFOV_Value()
+						, Interface->getScaleCubeX(), Interface->getScaleCubeY(), Interface->getScaleCubeZ(), Read.getLastedFilepath());
 				}
 				if (ImGui::MenuItem("Save as")) {
-
+					
+					Save.setFileContent(Cube->getfinalPathTexture()[0], Interface->getColorObjectR(),
+						Interface->getColorObjectG(), Interface->getColorObjectB(), Interface->getPositionObjectX(), Interface->getPositionObjectY()
+						, Interface->getPositionObjectZ(), Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ()
+						, Interface->getColorR(), Interface->getColorG(), Interface->getColorB(), Interface->getCmerraSpeed(), Interface->getFOV_Value()
+						, Interface->getScaleCubeX(), Interface->getScaleCubeY(), Interface->getScaleCubeZ(), Save.setFilePath(window) + formatFile);
 				}
 				if (ImGui::MenuItem("Wiew Source Code ")) {
 					ShellExecuteA(NULL, "open", "https://github.com/DEV-NINIS/miniEngine", NULL, NULL, SW_SHOWDEFAULT);
@@ -172,6 +203,10 @@ int main() {
 			}
 			ImGui::EndMainMenuBar();
 		}
+		// end menubar
+
+
+
 		ImGui::Checkbox(" draw ", &drawingCube);
 		// echelle du cube
 		if (Interface->inputDemandingScaleCube() == true) {

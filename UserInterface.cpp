@@ -79,9 +79,9 @@ float LastedPositionObjectZFile, float CameraSpeedFile, const char* filePathPoin
 	LastedPositionObjectX = LastedPositionObjectXFile; LastedPositionObjectY = LastedPositionObjectYFile; LastedPositionObjectZ = LastedPositionObjectZFile;
 	percentTexture = 0.5f; CameraSpeed = CameraSpeedFile; FOV = 55.0f;
 	lastedFilePath = -1;
+	size1 = new float;
 	filepath1ConstChar = filePathPointerFile;
 	filepath2ConstChar = filePathPointerFile;
-
 	filePathPointer.push_back(new char); *filePathPointer[0] = '0';
 	filePathPointer.push_back(new char); *filePathPointer[1] = '0';
 }
@@ -103,7 +103,7 @@ bool UserInterface::inputDemandingAnimation() const {
 	else { return false; }
 }
 bool UserInterface::inputDemandingCamera() const {
-	if (ImGui::Button("Camera", ImVec2(200, 30)) == true) {
+	if (ImGui::Button( "Camera", ImVec2(200, 30)) == true) {
 		return true;
 	}
 	else { return false; }
@@ -419,3 +419,6 @@ float UserInterface::getPositionObjectY() const { return LastedPositionObjectY; 
 float UserInterface::getPositionObjectZ() const { return LastedPositionObjectZ; }
 float UserInterface::getpercentTexture() const { return percentTexture; }
 float UserInterface::getCmerraSpeed() const { return CameraSpeed; }
+float UserInterface::getScaleCubeX() const { return LastedFloatFrameX; }
+float UserInterface::getScaleCubeY() const { return LastedFloatFrameY; }
+float UserInterface::getScaleCubeZ() const { return LastedFloatFrameZ; }

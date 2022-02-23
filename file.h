@@ -25,9 +25,12 @@ namespace writing
 			float ValuePositionObjectY, float ValuePositionObjectZ, float ValueTransformX, 
 			float ValueTransformY, float ValueTransformZ,
 			float ValueColorFrameR, float ValueColorFrameG, float ValueColorFrameB, 
-			float ValueCameraSpeed, float ValueFOV, std::string filepath);
+			float ValueCameraSpeed, float ValueFOV, float LastedScaleXFile,
+			float LastedScaleYFile, float LastedScaleZFile, std::string filepath);
+		std::string getLastedFile();
 	protected:
 		const char* fileContent;
+		std::string lastedFile;
 	};
 	#endif 
 }
@@ -46,7 +49,7 @@ namespace reading
 		void setValueFile(std::string filePath);
 		void MoveInFile(std::ifstream flux);
 		// getting values
-		const char* getfiletextureFile() const;
+		const char* getfiletextureFile();
 		float getcolorObjectFileR() const;
 		float getcolorObjectFileG() const;
 		float getcolorObjectFileB() const;
@@ -64,6 +67,7 @@ namespace reading
 		float getValueColorFrameBFile() const;
 		float getValueCameraSpeedFile() const;
 		float getValueFOVFile() const;
+		std::string getLastedFilepath();
 	protected:
 		float colorObjectFileR;
 		float ColorObjectFileG;
@@ -85,9 +89,19 @@ namespace reading
 		const char* filetextureFile;
 		std::string fileContent;
 		float NumberMove;
-	};
-	#endif 
+		std::string fileTexTemp; std::string colorObjectFileRTemp;
+		std::string colorObjectFileGTemp; std::string colorObjectFileBTemp;
+		std::string ValuePositionObjectFileXTemp; std::string ValuePositionObjectFileYTemp;
+		std::string ValuePositionObjectFileZTemp; std::string ValueTransformObjectTempX;
+		std::string ValueTransformObjectTempY; std::string ValueTransformObjectTempZ;
+		std::string ValueColorFrameRFileTemp; std::string ValueColorFrameGFileTemp;
+		std::string ValueColorFrameBFileTemp; std::string ValueCameraSpeedFileTemp;
+		std::string ValueFOVfileTemp; std::string LastedScaleXFileTemp;
+		std::string LastedScaleYFileTemp; std::string LastedScaleZFileTemp;
 
+		std::string LastedFilepath;
+	};
+#endif 
 }
 
 
