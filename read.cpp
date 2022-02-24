@@ -45,7 +45,27 @@ read::read() {
 }
 read::~read() {}
 
+char* read::unconstchar2(const char* s) {
+	if (!s)
+		return NULL;
+	int i;
+	char* res = NULL;
+	res = (char*)malloc(strlen(s) + 1);
+	if (!res) {
+		fprintf(stderr, "Memory Allocation Failed! Exiting...\n");
+		exit(EXIT_FAILURE);
+	}
+	else {
+		for (i = 0; s[i] != '\0'; i++) {
+			res[i] = s[i];
+		}
+		res[i] = '\0';
+		return res;
+	}
+}
 std::string read::selectPath(GLFWwindow* window) {
+	const char* fileFormat = ".dev_ninis";
+	std::string fileFormat2[9];
 	OPENFILENAMEA ofn;
 	CHAR File[200] = { 0 };
 	ZeroMemory(&ofn, sizeof(OPENFILENAME));
@@ -56,12 +76,18 @@ std::string read::selectPath(GLFWwindow* window) {
 	ofn.nFilterIndex = 1;
 	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 	if (GetOpenFileNameA(&ofn) == true) {
-		LastedFilepath = ofn.lpstrFile;
-		return ofn.lpstrFile;
+		for (int i(0); i < 9; i++) {
+			fileFormat2[i] = ofn.lpstrFile[i];
+		}
+		if (fileFormat = static_cast<const char*>(fileFormat2->c_str())) {
+			LastedFilepath = ofn.lpstrFile;
+			return ofn.lpstrFile;
+		}
+		else {
+			return std::string();
+		}
 	}
 	return std::string();
-
-
 }
 void read::MoveInFile(std::ifstream flux) {
 
@@ -69,81 +95,83 @@ void read::MoveInFile(std::ifstream flux) {
 void read::setValueFile(std::string filepath) {
 
 
-	std::ifstream flux(filepath.c_str()); 
-	flux.seekg(0, std::ios::beg);	
-	// on se deplace au debut du fichier 
+	if (filepath != std::string()) {
+		std::ifstream flux(filepath.c_str());
+		flux.seekg(0, std::ios::beg);
+		// on se deplace au debut du fichier 
 
-	flux >> fileTexTemp; filetextureFile = static_cast<const char*>(fileTexTemp.c_str()); // cin in string and convert to const char for file texture
-	NumberMove += fileTexTemp.size() + 1;
-	flux.seekg(NumberMove, std::ios::beg);
+		flux >> fileTexTemp; filetextureFile = static_cast<const char*>(fileTexTemp.c_str()); // cin in string and convert to const char for file texture
+		NumberMove += fileTexTemp.size() + 1;
+		flux.seekg(NumberMove, std::ios::beg);
 
-	flux >> colorObjectFileRTemp; colorObjectFileR = std::stof(colorObjectFileRTemp);
-	NumberMove += colorObjectFileRTemp.size() + 1;
-	flux.seekg(NumberMove, std::ios::beg);
+		flux >> colorObjectFileRTemp; colorObjectFileR = std::stof(colorObjectFileRTemp);
+		NumberMove += colorObjectFileRTemp.size() + 1;
+		flux.seekg(NumberMove, std::ios::beg);
 
-	flux >> colorObjectFileGTemp; ColorObjectFileG = std::stof(colorObjectFileGTemp);
-	NumberMove += colorObjectFileGTemp.size() + 1;
-	flux.seekg(NumberMove, std::ios::beg);
+		flux >> colorObjectFileGTemp; ColorObjectFileG = std::stof(colorObjectFileGTemp);
+		NumberMove += colorObjectFileGTemp.size() + 1;
+		flux.seekg(NumberMove, std::ios::beg);
 
-	flux >> colorObjectFileBTemp; ColorObjectFileB = std::stof(colorObjectFileBTemp);
-	NumberMove += colorObjectFileBTemp.size() + 1;
-	flux.seekg(NumberMove, std::ios::beg);
+		flux >> colorObjectFileBTemp; ColorObjectFileB = std::stof(colorObjectFileBTemp);
+		NumberMove += colorObjectFileBTemp.size() + 1;
+		flux.seekg(NumberMove, std::ios::beg);
 
-	flux >> ValuePositionObjectFileXTemp; ValuePositionObjectFileX = std::stof(ValuePositionObjectFileXTemp);
-	NumberMove += ValuePositionObjectFileXTemp.size() + 1;
-	flux.seekg(NumberMove, std::ios::beg);
+		flux >> ValuePositionObjectFileXTemp; ValuePositionObjectFileX = std::stof(ValuePositionObjectFileXTemp);
+		NumberMove += ValuePositionObjectFileXTemp.size() + 1;
+		flux.seekg(NumberMove, std::ios::beg);
 
-	flux >> ValuePositionObjectFileYTemp; ValuePositionObjectFileY = std::stof(ValuePositionObjectFileYTemp);
-	NumberMove += ValuePositionObjectFileYTemp.size() + 1;
-	flux.seekg(NumberMove, std::ios::beg);
+		flux >> ValuePositionObjectFileYTemp; ValuePositionObjectFileY = std::stof(ValuePositionObjectFileYTemp);
+		NumberMove += ValuePositionObjectFileYTemp.size() + 1;
+		flux.seekg(NumberMove, std::ios::beg);
 
-	flux >> ValuePositionObjectFileZTemp; ValuePositionObjectFileZ = std::stof(ValuePositionObjectFileZTemp);
-	NumberMove += ValuePositionObjectFileZTemp.size() + 1;
-	flux.seekg(NumberMove, std::ios::beg);
+		flux >> ValuePositionObjectFileZTemp; ValuePositionObjectFileZ = std::stof(ValuePositionObjectFileZTemp);
+		NumberMove += ValuePositionObjectFileZTemp.size() + 1;
+		flux.seekg(NumberMove, std::ios::beg);
 
-	flux >> ValueTransformObjectTempX; ValueTransformXFile = std::stof(ValueTransformObjectTempX);
-	NumberMove += ValueTransformObjectTempX.size() + 1;
-	flux.seekg(NumberMove, std::ios::beg);
+		flux >> ValueTransformObjectTempX; ValueTransformXFile = std::stof(ValueTransformObjectTempX);
+		NumberMove += ValueTransformObjectTempX.size() + 1;
+		flux.seekg(NumberMove, std::ios::beg);
 
-	flux >> ValueTransformObjectTempY; ValueTransformYFile = std::stof(ValueTransformObjectTempY);
-	NumberMove += ValueTransformObjectTempY.size() + 1;
-	flux.seekg(NumberMove, std::ios::beg);
+		flux >> ValueTransformObjectTempY; ValueTransformYFile = std::stof(ValueTransformObjectTempY);
+		NumberMove += ValueTransformObjectTempY.size() + 1;
+		flux.seekg(NumberMove, std::ios::beg);
 
-	flux >> ValueTransformObjectTempZ; ValueTransformZFile = std::stof(ValueTransformObjectTempZ);
-	NumberMove += ValueTransformObjectTempZ.size() + 1;
-	flux.seekg(NumberMove, std::ios::beg);
+		flux >> ValueTransformObjectTempZ; ValueTransformZFile = std::stof(ValueTransformObjectTempZ);
+		NumberMove += ValueTransformObjectTempZ.size() + 1;
+		flux.seekg(NumberMove, std::ios::beg);
 
-	flux >> ValueColorFrameRFileTemp; ValueColorFrameRFile = std::stof(ValueColorFrameRFileTemp);
-	NumberMove += ValueColorFrameRFileTemp.size() + 1;
-	flux.seekg(NumberMove, std::ios::beg);
+		flux >> ValueColorFrameRFileTemp; ValueColorFrameRFile = std::stof(ValueColorFrameRFileTemp);
+		NumberMove += ValueColorFrameRFileTemp.size() + 1;
+		flux.seekg(NumberMove, std::ios::beg);
 
-	flux >> ValueColorFrameGFileTemp; ValueColorFrameGFile = std::stof(ValueColorFrameGFileTemp);
-	NumberMove += ValueColorFrameGFileTemp.size() + 1;
-	flux.seekg(NumberMove, std::ios::beg);
+		flux >> ValueColorFrameGFileTemp; ValueColorFrameGFile = std::stof(ValueColorFrameGFileTemp);
+		NumberMove += ValueColorFrameGFileTemp.size() + 1;
+		flux.seekg(NumberMove, std::ios::beg);
 
-	flux >> ValueColorFrameBFileTemp; ValueColorFrameBFile = std::stof(ValueColorFrameBFileTemp);
-	NumberMove += ValueColorFrameBFileTemp.size() + 1;
-	flux.seekg(NumberMove, std::ios::beg);
+		flux >> ValueColorFrameBFileTemp; ValueColorFrameBFile = std::stof(ValueColorFrameBFileTemp);
+		NumberMove += ValueColorFrameBFileTemp.size() + 1;
+		flux.seekg(NumberMove, std::ios::beg);
 
-	flux >> ValueCameraSpeedFileTemp; ValueCameraSpeedFile = std::stof(ValueCameraSpeedFileTemp);
-	NumberMove += ValueCameraSpeedFileTemp.size() + 1;
-	flux.seekg(NumberMove, std::ios::beg);
+		flux >> ValueCameraSpeedFileTemp; ValueCameraSpeedFile = std::stof(ValueCameraSpeedFileTemp);
+		NumberMove += ValueCameraSpeedFileTemp.size() + 1;
+		flux.seekg(NumberMove, std::ios::beg);
 
-	flux >> ValueFOVfileTemp; ValueFOVFile = std::stof(ValueFOVfileTemp);
-	NumberMove += ValueFOVfileTemp.size() + 1;
-	flux.seekg(NumberMove, std::ios::beg);
+		flux >> ValueFOVfileTemp; ValueFOVFile = std::stof(ValueFOVfileTemp);
+		NumberMove += ValueFOVfileTemp.size() + 1;
+		flux.seekg(NumberMove, std::ios::beg);
 
-	flux >> LastedScaleXFileTemp; LastedScaleXFile = std::stof(LastedScaleXFileTemp);
-	NumberMove += LastedScaleXFileTemp.size() + 1;
-	flux.seekg(NumberMove, std::ios::beg);
+		flux >> LastedScaleXFileTemp; LastedScaleXFile = std::stof(LastedScaleXFileTemp);
+		NumberMove += LastedScaleXFileTemp.size() + 1;
+		flux.seekg(NumberMove, std::ios::beg);
 
-	flux >> LastedScaleYFileTemp; LastedScaleYFile = std::stof(LastedScaleYFileTemp);
-	NumberMove += LastedScaleYFileTemp.size() + 1;
-	flux.seekg(NumberMove, std::ios::beg);
+		flux >> LastedScaleYFileTemp; LastedScaleYFile = std::stof(LastedScaleYFileTemp);
+		NumberMove += LastedScaleYFileTemp.size() + 1;
+		flux.seekg(NumberMove, std::ios::beg);
 
-	flux >> LastedScaleZFileTemp; LastedScaleZFile = std::stof(LastedScaleZFileTemp);
-	NumberMove += LastedScaleZFileTemp.size() + 1;
-	flux.seekg(NumberMove, std::ios::beg);
+		flux >> LastedScaleZFileTemp; LastedScaleZFile = std::stof(LastedScaleZFileTemp);
+		NumberMove += LastedScaleZFileTemp.size() + 1;
+		flux.seekg(NumberMove, std::ios::beg);
+	}
 	
 }
 // getting values 

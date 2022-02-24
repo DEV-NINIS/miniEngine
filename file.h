@@ -48,6 +48,7 @@ namespace reading
 		std::string selectPath(GLFWwindow* window);
 		void setValueFile(std::string filePath);
 		void MoveInFile(std::ifstream flux);
+		char* unconstchar2(const char* s);
 		// getting values
 		const char* getfiletextureFile();
 		float getcolorObjectFileR() const;
