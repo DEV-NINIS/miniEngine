@@ -77,17 +77,18 @@ std::string read::selectPath(GLFWwindow* window) {
 	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 	if (GetOpenFileNameA(&ofn) == true) {
 		for (int i(0); i < 9; i++) {
-			fileFormat2[i] = ofn.lpstrFile[i];
+			fileFormat2[sizeof(ofn.lpstrFile)- sizeof(CHAR) * i] = ofn.lpstrFile[sizeof(ofn.lpstrFile) - sizeof(CHAR) * i];
 		}
-		if (fileFormat = static_cast<const char*>(fileFormat2->c_str())) {
+		if (fileFormat = static_cast<const char*>(ofn.lpstrFile)) {
 			LastedFilepath = ofn.lpstrFile;
 			return ofn.lpstrFile;
 		}
 		else {
-			return std::string();
+			std::string abc; abc = "le logiciel ne prend pas en charge ce type de format";
+			MessageBoxA(0, abc.c_str(), "ERROR : FILE", 0);
+			return "0";
 		}
 	}
-	return std::string();
 }
 void read::MoveInFile(std::ifstream flux) {
 
@@ -95,7 +96,7 @@ void read::MoveInFile(std::ifstream flux) {
 void read::setValueFile(std::string filepath) {
 
 
-	if (filepath != std::string()) {
+	if (filepath != "0") {
 		std::ifstream flux(filepath.c_str());
 		flux.seekg(0, std::ios::beg);
 		// on se deplace au debut du fichier 

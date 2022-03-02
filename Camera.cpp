@@ -12,8 +12,8 @@ Camera::Camera() {
 }
 Camera::~Camera() {}
 
-void Camera::processInputCamera(GLFWwindow* window, float deltaTime) {
-	cameraSpeed = 9.5 * deltaTime;
+void Camera::processInputCamera(GLFWwindow* window, float deltaTime, float CameraSpeedValue) {
+	cameraSpeed = CameraSpeedValue * deltaTime;
 	if (glfwGetKey(window, GLFW_KEY_D) == true) {
 		camPos += camFront * cameraSpeed;
 	}
