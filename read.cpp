@@ -83,20 +83,23 @@ std::string read::selectPath(GLFWwindow* window) {
 			LastedFilepath = ofn.lpstrFile;
 			return ofn.lpstrFile;
 		}
-		else {
-			std::string abc; abc = "le logiciel ne prend pas en charge ce type de format";
-			MessageBoxA(0, abc.c_str(), "ERROR : FILE", 0);
-			return "0";
-		}
 	}
 }
 void read::MoveInFile(std::ifstream flux) {
 
 }
 void read::setValueFile(std::string filepath) {
-
-
-	if (filepath != "0") {
+	bool indicatorSignalReadFile = true;
+	std::string fileformat; fileformat = ".dev_ninis";
+	for (int i(0); i < 9; i++) {
+		if (fileformat[i] != filepath.size() - 9 + i) {
+			indicatorSignalReadFile = false;
+			std::string abc; abc = "le logiciel ne prend pas en charge ce type de format";
+			MessageBoxA(0, abc.c_str(), "ERROR : FILE", 0);
+			break;
+		}
+	}
+	if (indicatorSignalReadFile == true) {
 		std::ifstream flux(filepath.c_str());
 		flux.seekg(0, std::ios::beg);
 		// on se deplace au debut du fichier 
@@ -173,9 +176,8 @@ void read::setValueFile(std::string filepath) {
 		NumberMove += LastedScaleZFileTemp.size() + 1;
 		flux.seekg(NumberMove, std::ios::beg);
 	}
-	
 }
-// getting values 
+		// getting values 
 const char* read::getfiletextureFile() { return filetextureFile; }
 float read::getcolorObjectFileR() const { return colorObjectFileR; }
 float read::getcolorObjectFileG() const { return ColorObjectFileG; }

@@ -51,6 +51,14 @@ UserInterface::UserInterface(GLFWwindow* window)  {
 	style->Colors[ImGuiCol_FrameBgActive] = ImColor(60, 56, 47, 255);
 	style->Colors[ImGuiCol_FrameBgHovered] = ImColor(60, 56, 47, 255);
 	style->SelectableTextAlign = ImVec2(0.1, 0.6);
+	style->PopupBorderSize = 5;
+	style->PopupRounding = 5;
+	style->ChildRounding = 5;
+	style->FrameRounding = 5;
+	style->GrabRounding = 5;
+	style->WindowRounding = 5;
+	style->TabRounding = 5;
+	style->MouseCursorScale = 50;
 
 	
 	LastedFrameColorR = 0.2f; LastedFrameColorG = 0.5f; LastedFrameColorB = 0.7f; 

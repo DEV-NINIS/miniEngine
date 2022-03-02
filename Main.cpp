@@ -158,7 +158,6 @@ int main() {
 		Interface->setSettingFrame();
 		matrixAnimation->setPercentTexture(Cube->getshaderCube(), Interface->getpercentTexture());
 		ImGui::Begin("Engine");
-
 		ImGui::Columns(2);
 		ImGui::SetColumnOffset(1, 930/2);
 
