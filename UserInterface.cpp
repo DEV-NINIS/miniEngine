@@ -23,7 +23,7 @@ UserInterface::UserInterface(GLFWwindow* window)  {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	io.Fonts->AddFontFromFileTTF("resources/textFont/Merriweather-Black.ttf", 17);
+	io.Fonts->AddFontFromFileTTF("resources/textFont/Merriweather-Regular.ttf", 17);
 	ImGui::StyleColorsDark();
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 460");
@@ -77,9 +77,10 @@ UserInterface::UserInterface(GLFWwindow* window)  {
 	style->ChildRounding = 5;
 	style->FrameRounding = 5;
 	style->GrabRounding = 5;
-	style->WindowRounding = 5;
+	style->WindowRounding = 0;
 	style->TabRounding = 5;
 	style->MouseCursorScale = 50;
+	style->IndentSpacing = 5;
 	
 	LastedFrameColorR = 0.2f; LastedFrameColorG = 0.5f; LastedFrameColorB = 0.7f; 
 	LastedFloatFrame = 1.0f; LastedFloatFrameX = 1.0f; LastedFloatFrameY = 1.0f; LastedFloatFrameZ = 1.0f; 
@@ -144,13 +145,13 @@ void UserInterface::setSettingFrame() {
 	ImGui::NewFrame();
 }
 bool UserInterface::inputDemandSelectFolderForTex1() const {
-	if (ImGui::Button(ICON_FA_UPLOAD "  select folder for texture 1", ImVec2(200, 30))) {
+	if (ImGui::Button(ICON_FA_UPLOAD "  select folder for texture 1", ImVec2(220, 30))) {
 		return true;
 	}
 	else { return false; }
 }
 bool UserInterface::inputDemandSelectFolderForTex2() const {
-	if (ImGui::Button(ICON_FA_UPLOAD "  select folder for texture 2", ImVec2(200, 30))) {
+	if (ImGui::Button(ICON_FA_UPLOAD "  select folder for texture 2", ImVec2(220, 30))) {
 		return true;
 	}
 	else { return false; }

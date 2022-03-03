@@ -41,7 +41,7 @@ read::read() {
 	 ValueCameraSpeedFileTemp; ValueFOVfileTemp; LastedScaleXFileTemp; 
 	 LastedScaleYFileTemp; LastedScaleZFileTemp;
 
-	 LastedFilepath;
+	 LastedFilepath = "0";
 }
 read::~read() {}
 
@@ -85,6 +85,8 @@ std::string read::selectPath(GLFWwindow* window) {
 		}
 	}
 	else {
+		const char* message = "le logiciel ne prend pas en charge ce type de format";
+		MessageBoxA(0, message, "ERROR : FILE", 0);
 		return LastedFilepath;
 	}
 }
@@ -95,7 +97,7 @@ void read::setValueFile(std::string filepath) {
 	bool indicatorSignalReadFile = true;
 	std::string fileformat; fileformat = ".dev_ninis";
 	
-	if (indicatorSignalReadFile == true && filepath!= "") {
+	if (indicatorSignalReadFile == true && filepath!= "0") {
 		std::ifstream flux(filepath.c_str());
 		flux.seekg(0, std::ios::beg);
 		// on se deplace au debut du fichier 
