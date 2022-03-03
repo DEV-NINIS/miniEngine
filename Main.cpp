@@ -87,10 +87,12 @@ int main() {
 		return -1;
 	}
 	// 
-	glViewport(0, 0, *resX, *resY);
+	glViewport(2560/4, 0, *resX, *resY);
 	float FOV = 55.0f; float RotateValue = -55.0f;
 	delete resX; delete resY;
 	bool drawingCube = true;
+	char* filePathTex1; filePathTex1 = new char;
+	char* filePathTex2; filePathTex2 = new char;
 	int indicatorNumberTexVector = 0;
 	int* IndicatorDemandCamera = nullptr; IndicatorDemandCamera = new int; *IndicatorDemandCamera = 0;
 	int* IndicatorDemandChangeCameraSpeed = nullptr; IndicatorDemandChangeCameraSpeed = new int; *IndicatorDemandChangeCameraSpeed = 0;
@@ -123,6 +125,7 @@ int main() {
 	int* IndicatorScaleDemandingX = nullptr; IndicatorScaleDemandingX = new int; *IndicatorScaleDemandingX = 0;
 	int* IndicatorScaleDemandingY = nullptr; IndicatorScaleDemandingY = new int; *IndicatorScaleDemandingY = 0;
 	int* IndicatorScaleDemandingZ = nullptr; IndicatorScaleDemandingZ = new int; *IndicatorScaleDemandingZ = 0;
+	int indicatorFolderTexture1 = 0; int indicatorFolderTexture2 = 0;
 	const char* filePath;
 	cube* Cube; Cube = new cube(window);
 	glmAnimation3D* matrixAnimation; matrixAnimation = new glmAnimation3D(window);
@@ -156,10 +159,11 @@ int main() {
 		matrixAnimation->setTransformValue();
 		matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
 		Interface->setSettingFrame();
+		Interface->interfacebeginCanvas();
 		matrixAnimation->setPercentTexture(Cube->getshaderCube(), Interface->getpercentTexture());
 		ImGui::Begin("Engine");
 		ImGui::Columns(2);
-		ImGui::SetColumnOffset(1, 930/2);
+		ImGui::SetColumnOffset(1, 2560/4/2);
 
 		{
 			//Left side
@@ -208,7 +212,6 @@ int main() {
 
 
 
-			ImGui::Checkbox(" draw ", &drawingCube);
 			// echelle du cube
 			if (Interface->inputDemandingScaleCube() == true) {
 				*IndicatorScaleDemanding = *IndicatorScaleDemanding + 1;
@@ -440,13 +443,24 @@ int main() {
 				*IndicatorDemandingTexture = *IndicatorDemandingTexture + 1;
 			}
 			if (*IndicatorDemandingTexture == 1) {
-				Interface->inputFileTexture1(Cube->getLoaderTexture());
-				Interface->inputFileTexture2(Cube->getLoaderTexture());
-				ImGui::Text("enter the path where is your texture.");
+				if (Interface->inputDemandSelectFolderForTex1() == true) {
+					indicatorFolderTexture1 = 1;
+					filePathTex1 = unconstchar(static_cast<const char*>(Read.selectPath(window).c_str()));
+				}
+				if (indicatorFolderTexture1 == 1) {
+					Interface->inputFileTexture1(filePathTex1);
+				}
+				if (Interface->inputDemandSelectFolderForTex2() == true) {
+					indicatorFolderTexture2 = 1;
+					filePathTex2 = unconstchar(static_cast<const char*>(Read.selectPath(window).c_str()));
+				}
+				if (indicatorFolderTexture2 == 1) {
+					Interface->inputFileTexture2(filePathTex2);
+				}
 				Interface->setPercentTexture();
 				if (Interface->confirmFilePath() == true) {
-					Cube->setTexture1(Interface->filePath1);
-					Cube->setTexture2(Interface->filePath2);
+					Cube->setTexture1(filePathTex1);
+					Cube->setTexture2(filePathTex2);
 				}
 				matrixAnimation->setPercentTexture(Cube->getshaderCube(), Interface->getpercentTexture());
 				Cube->setParametterTexture();
@@ -534,6 +548,7 @@ int main() {
 		else if (*IndicatorDemandingChangeFOV > 1) {
 			*IndicatorDemandingChangeFOV = 0;
 		}
+		ImGui::Checkbox(" draw ", &drawingCube);
 		matrixAnimation->setLookAtMatrixCamera(camera.getcamPos(), camera.getcamPos() - camera.getcamFront(), camera.getcamUp());
 		ImGui::End();
 		glEnable(GL_DEPTH_TEST);

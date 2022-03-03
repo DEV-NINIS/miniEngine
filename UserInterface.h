@@ -42,10 +42,13 @@ public:
 	bool inputDemandingRotateAroundZ() const;
 	bool inputDemandingRotateRight() const;
 	bool inputDemandingRotateLeft() const;
-	bool inputDemandingChangeFOV() const; 
+	bool inputDemandingChangeFOV() const;
+	bool inputDemandSelectFolderForTex1() const;
+	bool inputDemandSelectFolderForTex2() const;
 	bool confirmFilePath() const;
-	void inputFileTexture1(std::vector<int*> successLoaderTexture);
-	void inputFileTexture2(std::vector<int*> successLoaderTexture);
+	void inputFileTexture1(char* filePathTex1);
+	void inputFileTexture2(char* filePathTex2);
+	void interfacebeginCanvas();
 	float setRotateAroundXValue();
 	float setRotateAroundYValue();
 	float setRotateAroundZValue();
