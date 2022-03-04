@@ -486,6 +486,7 @@ int main() {
 			*IndicatorSetColorFrameDemanding = *IndicatorSetColorFrameDemanding + 1;
 		}
 		if (*IndicatorSetColorFrameDemanding == 1) {
+
 			if (Interface->inputColorR() == true) {
 				*IndicatorDemandingColorR = *IndicatorDemandingColorR + 1;
 			}
@@ -495,6 +496,7 @@ int main() {
 			else if (*IndicatorDemandingColorR > 1) {
 				*IndicatorDemandingColorR = 0;
 			}
+
 			if (Interface->inputColorG() == true) {
 				*IndicatorDemandingColorG = *IndicatorDemandingColorG + 1;
 			}
@@ -504,14 +506,18 @@ int main() {
 			else if (*IndicatorDemandingColorG > 1) {
 				*IndicatorDemandingColorG = 0;
 			}
+
 			if (Interface->inputColorB() == true) {
 				*IndicatorDemandingColorB = *IndicatorDemandingColorB + 1;
 			}
 			if (*IndicatorDemandingColorB == 1) {
 				Interface->setColorB();
 			}
+			else if (*IndicatorDemandingColorB > 1) {
+				*IndicatorDemandingColorB = 0;
+			}
 		}
-		else if (*IndicatorSetColorFrameDemanding >= 2)
+		else if (*IndicatorSetColorFrameDemanding > 1)
 		{
 			*IndicatorSetColorFrameDemanding = 0;
 		}

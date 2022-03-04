@@ -73,6 +73,10 @@ UserInterface::UserInterface(GLFWwindow* window)  {
 	style->Colors[ImGuiCol_FrameBgHovered] = ImColor(60, 56, 47, 255);
 	style->SelectableTextAlign = ImVec2(0.1, 0.1);
 	style->PopupBorderSize = 5;
+	style->FrameBorderSize = 2.5;
+	style->ChildBorderSize = 2.5;
+	style->TabBorderSize = 2.5;
+	style->WindowBorderSize = 2.5;
 	style->PopupRounding = 5;
 	style->ChildRounding = 5;
 	style->FrameRounding = 5;
