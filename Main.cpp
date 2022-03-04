@@ -64,6 +64,9 @@ char* unconstchar(const char* s) {
 	}
 }
 int main() {
+	HWND hWnd = GetConsoleWindow();
+	ShowWindow(hWnd, SW_HIDE);
+	FreeConsole();
 	// set parametters of OpenGL
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4.6);
@@ -86,8 +89,9 @@ int main() {
 		std::cout << " failed to initialise glad " << std::endl;
 		return -1;
 	}
+	
 	// 
-	glViewport(2560/4, 0, *resX, *resY);
+	glViewport(2560/4.5, 0, *resX, *resY);
 	float FOV = 55.0f; float RotateValue = -55.0f;
 	delete resX; delete resY;
 	bool drawingCube = true;
@@ -477,9 +481,6 @@ int main() {
 		// menubar
 		
 		// settings 
-		if (drawingCube == true) {
-			Cube->drawElements();
-		}
 		// colors
 		if (Interface->inputDemandingChangeColorFrame() == true) {
 			*IndicatorSetColorFrameDemanding = *IndicatorSetColorFrameDemanding + 1;
@@ -549,6 +550,9 @@ int main() {
 			*IndicatorDemandingChangeFOV = 0;
 		}
 		ImGui::Checkbox(" draw ", &drawingCube);
+		if (drawingCube == true) {
+			matrixAnimation->drawAllObject(Cube->getshaderCube(), Cube->getVertexArray());
+		}
 		matrixAnimation->setLookAtMatrixCamera(camera.getcamPos(), camera.getcamPos() - camera.getcamFront(), camera.getcamUp());
 		ImGui::End();
 		glEnable(GL_DEPTH_TEST);
