@@ -78,7 +78,15 @@ int main() {
 	//
 	int* resY = new int; *resY = 1440; float resX2 = 2560;
 	int* resX = new int; *resX = 2560; float resY2 = 1440;
-	GLFWwindow* window = glfwCreateWindow(*resX, *resY, "Engine by @dev_ninis", NULL, NULL);
+	GLFWmonitor* MyMonitor = glfwGetPrimaryMonitor(); // The primary monitor.. Later Occulus?..
+	
+	const GLFWvidmode* mode = glfwGetVideoMode(MyMonitor);
+	*resX = mode->width;
+	*resY = mode->height;
+	GLFWwindow* window = glfwCreateWindow(glfwGetVideoMode(glfwGetPrimaryMonitor())->width,
+		glfwGetVideoMode(glfwGetPrimaryMonitor())->height, "DevNinisEngineMotion",
+		glfwGetPrimaryMonitor(), nullptr);
+	
 	if (window == NULL) {
 		std::cout << "failed to initialise glad " << std::endl;
 		return -1;
@@ -170,11 +178,7 @@ int main() {
 			ImGui::Separator();
 			Interface->setScaleCube();
 			matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
-				ImGui::Separator();
-
-			
-			// demand x
-			
+				ImGui::Separator();			
 				Interface->setLastedmatrix();
 				matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
 				matrixAnimation->setScaleValueX(Cube->getshaderCube());
@@ -194,22 +198,21 @@ int main() {
 				ImGui::Separator();
 		}
 		if (ImGui::CollapsingHeader("positions")) {
-			
+				ImGui::Spacing();
 					Interface->setPositionObjectX();
+					ImGui::Separator();
 					matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
-				
-				
 					Interface->setPositionObjectY();
+					ImGui::Separator();
 					matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
-				
 					Interface->setPositionObjectZ();
+					ImGui::Separator();
 					matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
-				
-				matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
+					matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
 		}
-		ImGui::Columns(2);
-		ImGui::SetColumnOffset(1, 2560/4/2);
-		ImGui::Spacing();
+
+		
+		
 
 		{
 			//Left side
@@ -343,47 +346,6 @@ int main() {
 				*IndicatorDemandingAnimation = 0;
 			}
 			ImGui::Spacing();
-			if (Interface->inputDemandingChangeColorObject() == true) {
-				*IndicatorDemandingChangeColorCube = *IndicatorDemandingChangeColorCube + 1;
-			}
-			if (*IndicatorDemandingChangeColorCube == 1) {
-				// colors
-				if (Interface->inputColorR() == true) {
-					*IndicatorDemandingChangeColorCubeR = *IndicatorDemandingChangeColorCubeR + 1;
-				}
-				if (*IndicatorDemandingChangeColorCubeR == 1) {
-					//fonction 
-					Interface->setColorObjectR();
-				}
-				else if (*IndicatorDemandingChangeColorCubeR > 1) {
-					*IndicatorDemandingChangeColorCubeR = 0;
-				}
-				if (Interface->inputColorG() == true) {
-					*IndicatorDemandingChangeColorCubeG = *IndicatorDemandingChangeColorCubeG + 1;
-				}
-				if (*IndicatorDemandingChangeColorCubeG == 1) {
-					// fonction
-					Interface->setColorObjectG();
-				}
-				else if (*IndicatorDemandingChangeColorCubeG > 1) {
-					*IndicatorDemandingChangeColorCubeG = 0;
-				}
-				if (Interface->inputColorB() == true) {
-					*IndicatorDemandingChangeColorCubeB = *IndicatorDemandingChangeColorCubeB + 1;
-				}
-				if (*IndicatorDemandingChangeColorCubeB == 1) {
-					// fonction 
-					Interface->setColorObjectB();
-				}
-				else if (*IndicatorDemandingChangeColorCubeB > 1) {
-					*IndicatorDemandingChangeColorCubeB = 0;
-				}
-				matrixAnimation->setColorObject(Cube->getshaderCube(), Interface->getColorObjectR(), Interface->getColorObjectG(), Interface->getColorObjectB());
-			}
-			else if (*IndicatorDemandingChangeColorCube > 1) {
-				*IndicatorDemandingChangeColorCube = 0;
-			}
-			ImGui::Spacing();
 			// texture
 			if (Interface->inputDemandingTexture1() == true) {
 				*IndicatorDemandingTexture = *IndicatorDemandingTexture + 1;
@@ -414,56 +376,14 @@ int main() {
 			else if (*IndicatorDemandingTexture > 1) {
 				*IndicatorDemandingTexture = 0;
 			}
-
-			
 		}
-		ImGui::NextColumn();
-		ImGui::SetColumnOffset(1, 2560 / 4 / 2);
+		
 		ImGui::Spacing();
 
 		// menubar
 		
 		// settings 
 		// colors
-		if (Interface->inputDemandingChangeColorFrame() == true) {
-			*IndicatorSetColorFrameDemanding = *IndicatorSetColorFrameDemanding + 1;
-		}
-		if (*IndicatorSetColorFrameDemanding == 1) {
-
-			if (Interface->inputColorR() == true) {
-				*IndicatorDemandingColorR = *IndicatorDemandingColorR + 1;
-			}
-			if (*IndicatorDemandingColorR == 1) {
-				Interface->setColorR();
-			}
-			else if (*IndicatorDemandingColorR > 1) {
-				*IndicatorDemandingColorR = 0;
-			}
-
-			if (Interface->inputColorG() == true) {
-				*IndicatorDemandingColorG = *IndicatorDemandingColorG + 1;
-			}
-			if (*IndicatorDemandingColorG == 1) {
-				Interface->setColorG();
-			}
-			else if (*IndicatorDemandingColorG > 1) {
-				*IndicatorDemandingColorG = 0;
-			}
-
-			if (Interface->inputColorB() == true) {
-				*IndicatorDemandingColorB = *IndicatorDemandingColorB + 1;
-			}
-			if (*IndicatorDemandingColorB == 1) {
-				Interface->setColorB();
-			}
-			else if (*IndicatorDemandingColorB > 1) {
-				*IndicatorDemandingColorB = 0;
-			}
-		}
-		else if (*IndicatorSetColorFrameDemanding > 1)
-		{
-			*IndicatorSetColorFrameDemanding = 0;
-		}
 		ImGui::Spacing();
 		// camera
 		if (Interface->inputDemandingCamera() == true) {
@@ -505,6 +425,33 @@ int main() {
 			matrixAnimation->drawAllObject(Cube->getshaderCube(), Cube->getVertexArray());
 		}
 		matrixAnimation->setLookAtMatrixCamera(camera.getcamPos(), camera.getcamPos() - camera.getcamFront(), camera.getcamUp());
+		ImGui::Columns(2);
+		ImGui::SetColumnOffset(1, 2560 / 4 / 2);
+		ImGui::Spacing();
+		if (ImGui::CollapsingHeader("Color Object")) {
+			ImGui::Spacing();
+			Interface->setColorObjectR();
+			ImGui::Spacing();
+			Interface->setColorObjectG();
+			ImGui::Spacing();
+			Interface->setColorObjectB();
+			ImGui::Spacing();
+			matrixAnimation->setColorObject(Cube->getshaderCube(), Interface->getColorObjectR(), Interface->getColorObjectG(), Interface->getColorObjectB());
+		}
+		ImGui::NextColumn();
+		ImGui::Spacing();
+		float indicator2 = 0;
+		if (ImGui::CollapsingHeader("Color Frame")) {
+			float rr[3];
+			ImGui::Spacing();
+			Interface->setColorR();
+			ImGui::Spacing();
+			Interface->setColorG();
+			ImGui::Spacing();
+			Interface->setColorB();
+			ImGui::Spacing();
+			ImGui::ColorEdit3("color", rr);
+		}
 		ImGui::End();
 		glEnable(GL_DEPTH_TEST);
 		Interface->endFrame();
