@@ -22,7 +22,8 @@ const char* UserInterface::filepath2ConstChar = 0;
 UserInterface::UserInterface(GLFWwindow* window)  {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGuiIO& io = ImGui::GetIO();
+	(void)io;
 	io.Fonts->AddFontFromFileTTF("resources/textFont/Merriweather-Regular.ttf", 17);
 	ImGui::StyleColorsDark();
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -73,10 +74,10 @@ UserInterface::UserInterface(GLFWwindow* window)  {
 	style->Colors[ImGuiCol_FrameBgHovered] = ImColor(60, 56, 47, 255);
 	style->SelectableTextAlign = ImVec2(0.1, 0.1);
 	style->PopupBorderSize = 5;
-	style->FrameBorderSize = 2.5;
-	style->ChildBorderSize = 2.5;
-	style->TabBorderSize = 2.5;
-	style->WindowBorderSize = 2.5;
+	style->FrameBorderSize = 3.0;
+	style->ChildBorderSize = 3.0;
+	style->TabBorderSize = 3.0;
+	style->WindowBorderSize = 3.0;
 	style->PopupRounding = 5;
 	style->ChildRounding = 5;
 	style->FrameRounding = 5;
@@ -197,7 +198,6 @@ bool UserInterface::inputDemandingRotate() const {
 	else { return false; }
 }
 bool UserInterface::inputDemandingScaleCube() const {
-	ImGui::Text("@Dev_ninis Frame : ", ImGui::GetFrameHeight());
 	if (ImGui::Button("Size Object", ImVec2(300, 40))) {
 		return true;
 	}
@@ -245,13 +245,11 @@ bool UserInterface::inputDemandingScaleCubeZ() const {
 	else { return false; }
 }
 float UserInterface::setScaleCube() {
-	ImGui::SliderFloat("size", &*size1, 0, 5.0f);
-	LastedFloatFrame = *size1;
-	return *size1;
-	delete size1;
+	ImGui::SliderFloat("size all", &LastedFloatFrame, 0.0, 10.0);
+	return LastedFloatFrame;
 }
 float UserInterface::setScaleCubeX() {
-	ImGui::SliderFloat("sizeX", &LastedFloatFrameX, 0, 5.0f);
+	ImGui::SliderFloat("sizeX", &LastedFloatFrameX, 0.0f, 10.0f);
 	if (LastedFloatFrameX > -401602080) {
 		LastedFloatFrameX = 1.0f;
 		return LastedFloatFrameX;
@@ -289,10 +287,10 @@ float UserInterface::setRotateAroundZValue() {
 	else { return 0.0f; }
 }
 void UserInterface::setCameraSpeed() {
-	ImGui::SliderFloat("valueCameraSpeed", &CameraSpeed, 0.0f, 100.0f);
+	ImGui::SliderFloat("valueCameraSpeed", &CameraSpeed, 0, 100);
 }
 float UserInterface::setScaleCubeZ() {
-	ImGui::SliderFloat("sizeZ", &LastedFloatFrameZ, -5.0f, 5.0f);
+	ImGui::SliderFloat("sizeZ", &LastedFloatFrameZ, 0, 10);
 	if (LastedFloatFrameZ > -401602080) {
 		LastedFloatFrameZ = 1.0f;
 		return LastedFloatFrameZ;
