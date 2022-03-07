@@ -1,10 +1,12 @@
-#include "cube.h"
+#include "object.h"
 #include "UserInterface.h"
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stbi_image.h"
+
+using namespace basicObject;
 
 float cube::vertecies[] ={
 
@@ -185,11 +187,7 @@ void cube::setParametterTexture() {
 		glBindTexture(GL_TEXTURE_2D, tex[1]);
 	}
 }
-void cube::drawElements() {
-	glBindVertexArray(VAOcube);
-	glDrawArrays(GL_TRIANGLES, 0, 180);
-	glBindVertexArray(0);
-}
+
 void cube::setTexture1(char* filePath) {
 	glGenTextures(1, &tex[0]);
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
@@ -259,6 +257,7 @@ void cube::setTexture2(char* filePath) {
 
 void cube::useShaderCube() { glUseProgram(programShader); }
 GLuint& cube::getshaderCube() { return programShader; }
+GLuint cube::getVertexArray() const { return VAOcube; }
 std::vector<int*> cube::getLoaderTexture() { return LoaderTexture; }
 std::vector<const char*> cube::getfinalPathTexture() { return finalPathTexture; }
 int cube::getLoaderValueIndicator() { return indicatorLoaderValue; }

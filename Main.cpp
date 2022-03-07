@@ -7,11 +7,12 @@
 #include <glad/glad.h>  // Initialize with gladLoadGL()
 #else
 #include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
-#endif
+#endif 
 
 #include <iostream>
 #include <string>
-#include "cube.h"
+#include "object.h"
+#include "Render.h"
 #include "stbi_image.h"
 #include "file.h"
 #include "imgui/imgui.h"
@@ -31,6 +32,10 @@
 #include <fileapi.h>
 #include <commdlg.h>
 #include <filesystem> // C++17 standard header file name
+
+
+
+bool HOTreaload = false;
 //												_____
 //               /\         |\		|	 |	   |
 //				/  \		| \		|	 |	   |
@@ -39,7 +44,9 @@
 //			 /		  \		|	 \	|	 |			 |
 //			/		   \	|	  \	|	 |		_____|
 //
+void abc() {
 
+}
 void processInput(GLFWwindow* window) {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
@@ -79,27 +86,44 @@ int main() {
 	int* resY = new int; *resY = 1440; float resX2 = 2560;
 	int* resX = new int; *resX = 2560; float resY2 = 1440;
 	GLFWmonitor* MyMonitor = glfwGetPrimaryMonitor(); // The primary monitor.. Later Occulus?..
-	
+
 	const GLFWvidmode* mode = glfwGetVideoMode(MyMonitor);
 	*resX = mode->width;
 	*resY = mode->height;
+#ifdef HOT_REALOAD
 	GLFWwindow* window = glfwCreateWindow(glfwGetVideoMode(glfwGetPrimaryMonitor())->width,
 		glfwGetVideoMode(glfwGetPrimaryMonitor())->height, "DevNinisEngineMotion",
 		glfwGetPrimaryMonitor(), nullptr);
+#endif // HOT_REALOAD
+#ifndef HOT_REALOAD
+	GLFWwindow* window = glfwCreateWindow(glfwGetVideoMode(glfwGetPrimaryMonitor())->width,
+		glfwGetVideoMode(glfwGetPrimaryMonitor())->height, "DevNinisEngineMotion",
+		nullptr, nullptr);
+#endif
 	
 	if (window == NULL) {
-		std::cout << "failed to initialise glad " << std::endl;
+		MessageBoxA(0, static_cast<const char*>("failed to initialise glad"), "ERROR", 0);
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
 	// set glad
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-		std::cout << " failed to initialise glad " << std::endl;
+		MessageBoxA(0, static_cast<const char*>("failed to initialise glad"), "ERROR", 0);
 		return -1;
 	}
 	
 	// 
-	glViewport(2560/4.5, 0, *resX, *resY);
+#ifndef HOT_REALOAD
+
+	glViewport(*resX / 4.5, 0, *resX, *resY);
+
+#endif // HOT_REALOAD
+#ifdef HOT_REALOAD
+
+	glViewport(0, 0, *resX, *resY);
+
+#endif // HOT_REALOAD
+
 	float FOV = 55.0f; float RotateValue = -55.0f;
 	delete resX; delete resY;
 	bool drawingCube = true;
@@ -108,22 +132,7 @@ int main() {
 	int indicatorNumberTexVector = 0;
 	int* IndicatorDemandCamera = nullptr; IndicatorDemandCamera = new int; *IndicatorDemandCamera = 0;
 	int* IndicatorDemandChangeCameraSpeed = nullptr; IndicatorDemandChangeCameraSpeed = new int; *IndicatorDemandChangeCameraSpeed = 0;
-	int* IndicatorChgangePositionCube = nullptr; IndicatorChgangePositionCube = new int; *IndicatorChgangePositionCube = 0;
-	int* IndicatorChgangePositionCubeX = nullptr; IndicatorChgangePositionCubeX = new int; *IndicatorChgangePositionCubeX = 0;
-	int* IndicatorChgangePositionCubeY = nullptr; IndicatorChgangePositionCubeY = new int; *IndicatorChgangePositionCubeY = 0;
-	int* IndicatorChgangePositionCubeZ = nullptr; IndicatorChgangePositionCubeZ = new int; *IndicatorChgangePositionCubeZ = 0;
-	int* IndicatorDemandingChangeCubePosition = nullptr; IndicatorDemandingChangeCubePosition = new int; *IndicatorDemandingChangeCubePosition = 0;
-	int* IndicatorDemandingChangeCubePositionX = nullptr; IndicatorDemandingChangeCubePositionX = new int; *IndicatorDemandingChangeCubePositionX = 0;
-	int* IndicatorDemandingChangeCubePositionY = nullptr; IndicatorDemandingChangeCubePositionY = new int; *IndicatorDemandingChangeCubePositionY = 0;
-	int* IndicatorDemandingChangeCubePositionZ = nullptr; IndicatorDemandingChangeCubePositionZ = new int; *IndicatorDemandingChangeCubePositionZ = 0;
-	int* IndicatorDemandingChangeColorCube = nullptr; IndicatorDemandingChangeColorCube = new int; *IndicatorDemandingChangeColorCube = 0;
-	int* IndicatorDemandingChangeColorCubeR = nullptr; IndicatorDemandingChangeColorCubeR = new int; *IndicatorDemandingChangeColorCubeR = 0;
-	int* IndicatorDemandingChangeColorCubeG = nullptr; IndicatorDemandingChangeColorCubeG = new int; *IndicatorDemandingChangeColorCubeG = 0;
-	int* IndicatorDemandingChangeColorCubeB = nullptr; IndicatorDemandingChangeColorCubeB = new int; *IndicatorDemandingChangeColorCubeB = 0;
 	int* IndicatorDemandingChangeFOV = nullptr; IndicatorDemandingChangeFOV = new int; *IndicatorDemandingChangeFOV = 0;
-	int* IndicatorDemandingColorR = nullptr; IndicatorDemandingColorR = new int; *IndicatorDemandingColorR = 0;
-	int* IndicatorDemandingColorG = nullptr; IndicatorDemandingColorG = new int; *IndicatorDemandingColorG = 0;
-	int* IndicatorDemandingColorB = nullptr; IndicatorDemandingColorB = new int; *IndicatorDemandingColorB = 0;
 	int* IndicatorDemandingTexture = nullptr; IndicatorDemandingTexture = new int; *IndicatorDemandingTexture = 0;
 	int* IndicatorDemandingRotateAroundX = nullptr; IndicatorDemandingRotateAroundX = new int; *IndicatorDemandingRotateAroundX = 0;
 	int* IndicatorDemandingRotateAroundY = nullptr; IndicatorDemandingRotateAroundY = new int; *IndicatorDemandingRotateAroundY = 0;
@@ -132,19 +141,19 @@ int main() {
 	int* IndicatorDemandingRotateRight = nullptr; IndicatorDemandingRotateRight = new int; *IndicatorDemandingRotateRight = 0;
 	int* IndicatorDemandingRotateLeft = nullptr; IndicatorDemandingRotateLeft = new int; *IndicatorDemandingRotateLeft = 0;
 	int* IndicatorDemandingAnimation = nullptr; IndicatorDemandingAnimation = new int; *IndicatorDemandingAnimation = 0;
-	int* IndicatorSetColorFrameDemanding = nullptr; IndicatorSetColorFrameDemanding = new int; *IndicatorSetColorFrameDemanding = 0;
-	int* IndicatorScaleDemanding = nullptr; IndicatorScaleDemanding = new int; *IndicatorScaleDemanding = 0;
-	int* IndicatorScaleDemandingX = nullptr; IndicatorScaleDemandingX = new int; *IndicatorScaleDemandingX = 0;
-	int* IndicatorScaleDemandingY = nullptr; IndicatorScaleDemandingY = new int; *IndicatorScaleDemandingY = 0;
-	int* IndicatorScaleDemandingZ = nullptr; IndicatorScaleDemandingZ = new int; *IndicatorScaleDemandingZ = 0;
 	int indicatorFolderTexture1 = 0; int indicatorFolderTexture2 = 0;
 	const char* filePath;
-	cube* Cube; Cube = new cube(window);
+	basicObject::cube* Cube; Cube = new basicObject::cube(window);
 	glmAnimation3D* matrixAnimation; matrixAnimation = new glmAnimation3D(window);
 	// initialise imgui
 	UserInterface* Interface = nullptr; Interface = new UserInterface(window); // in the builder of this class they create a imgui context is because in argument they have GLFWwindow* ...
+#ifndef HOT_REALOAD
+	Interface->setStyleSettingFrame(window);
+#endif // !HOT_REALOAD
+
 	std::string formatFile; formatFile = ".dev_ninis";
 	Camera camera; writing::save Save; reading::read Read;
+	Render rendering(window);
 	int* IndicatorFilepath = nullptr; IndicatorFilepath = new int; *IndicatorFilepath = Interface->getIndicatorTextureFilePath();
 	Cube->setShader();
 	Cube->setBuffer();
@@ -156,6 +165,8 @@ int main() {
 	TCHAR nBufferLength = 102; char lpFileName[2]; char* lpFilePart = nullptr; lpFilePart = &filePathBuffer[1];
 	while (!glfwWindowShouldClose(window)) // render
 	{
+
+
 		currentFrame = glfwGetTime();
 		deltatime = currentFrame - lastedFrame;
 		lastedFrame = currentFrame;
@@ -169,53 +180,70 @@ int main() {
 		matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
 		matrixAnimation->setMatrixPerspectiveProjection(FOV, resX2, resY2);
 		matrixAnimation->setTransformValue();
+		matrixAnimation->frameMatrix(Cube->getshaderCube());
 		matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
+#ifndef HOT_REALOAD
+
 		Interface->setSettingFrame();
 		Interface->interfacebeginCanvas();
+
+#endif // HOT_REALOAD
 		matrixAnimation->setPercentTexture(Cube->getshaderCube(), Interface->getpercentTexture());
+#ifndef HOT_REALOAD
 		ImGui::Begin("Engine");
+		if (ImGui::Button("PLAY", ImVec2(2560/4.5, 60.0f))) {
+			HOTreaload = true;
+		}
 		if (ImGui::CollapsingHeader("size")) {
 			ImGui::Separator();
 			Interface->setScaleCube();
 			matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
-				ImGui::Separator();			
-				Interface->setLastedmatrix();
-				matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
-				matrixAnimation->setScaleValueX(Cube->getshaderCube());
-				matrixAnimation->frameMatrix(Cube->getshaderCube());
-				ImGui::Separator();
-				Interface->setLastedmatrix();
-				matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
-				matrixAnimation->setScaleValueY(Cube->getshaderCube());
-				matrixAnimation->frameMatrix(Cube->getshaderCube());
-				ImGui::Separator();
+			ImGui::Separator();
+			Interface->setLastedmatrix();
+			matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
+			matrixAnimation->setScaleValueX(Cube->getshaderCube());
+			matrixAnimation->frameMatrix(Cube->getshaderCube());
+			ImGui::Separator();
+			Interface->setLastedmatrix();
+			matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
+			matrixAnimation->setScaleValueY(Cube->getshaderCube());
+			matrixAnimation->frameMatrix(Cube->getshaderCube());
+			ImGui::Separator();
 
-					
-				Interface->setLastedmatrix();
-				matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
-				matrixAnimation->setScaleValueZ(Cube->getshaderCube());
-				matrixAnimation->frameMatrix(Cube->getshaderCube());
-				ImGui::Separator();
+
+			Interface->setLastedmatrix();
+			matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
+			matrixAnimation->setScaleValueZ(Cube->getshaderCube());
+			matrixAnimation->frameMatrix(Cube->getshaderCube());
+			ImGui::Separator();
 		}
 		if (ImGui::CollapsingHeader("positions")) {
-				ImGui::Spacing();
-					Interface->setPositionObjectX();
-					ImGui::Separator();
-					matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
-					Interface->setPositionObjectY();
-					ImGui::Separator();
-					matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
-					Interface->setPositionObjectZ();
-					ImGui::Separator();
-					matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
-					matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
+			ImGui::Spacing();
+			Interface->setPositionObjectX();
+			ImGui::Separator();
+			matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
+			Interface->setPositionObjectY();
+			ImGui::Separator();
+			matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
+			Interface->setPositionObjectZ();
+			ImGui::Separator();
+			matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
+			matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
 		}
+#endif // !HOT_REALOAD
+
+#ifdef HOT_REALOAD
+
+		matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
+#endif
+		
 
 		
 		
 
-		{
 			//Left side
+#ifndef HOT_REALOAD
+
 			if (ImGui::BeginMainMenuBar()) {
 				if (ImGui::BeginMenu("file")) {
 					if (ImGui::MenuItem("Open")) {
@@ -258,7 +286,8 @@ int main() {
 					ImGui::EndMenu();
 				}
 				ImGui::EndMainMenuBar();
-			}
+#endif
+
 			// end menubar
 
 			
@@ -268,120 +297,130 @@ int main() {
 			//
 			
 			// position cube
-			ImGui::Spacing();
-			
-			ImGui::Spacing();
-			// Animation
-			if (Interface->ButtonForSetAnimation() == true) {
-				*IndicatorDemandingAnimation = *IndicatorDemandingAnimation + 1;
-			}
-			if (*IndicatorDemandingAnimation == 1) {
-				if (Interface->inputDemandingRotate() == true) {
-					*IndicatorDemandingRotate = *IndicatorDemandingRotate + 1;
-				}
-				if (*IndicatorDemandingRotate == 1) {
-					// x
-					if (Interface->inputDemandingRotateAroundX() == true) {
-						*IndicatorDemandingRotateAroundX = *IndicatorDemandingRotateAroundX + 1;
-					}
-					if (*IndicatorDemandingRotateAroundX == 1) {
-						Interface->setRotateAroundXValue();
-						matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
+#ifndef HOT_REALOAD
+				ImGui::Spacing();
 
+				ImGui::Spacing();
+				// Animation
+				if (Interface->ButtonForSetAnimation() == true) {
+					*IndicatorDemandingAnimation = *IndicatorDemandingAnimation + 1;
+			}
+				if (*IndicatorDemandingAnimation == 1) {
+					if (Interface->inputDemandingRotate() == true) {
+						*IndicatorDemandingRotate = *IndicatorDemandingRotate + 1;
 					}
-					else if (*IndicatorDemandingRotateAroundX > 1) {
-						*IndicatorDemandingRotateAroundX = 0;
-					}
-					// y
-					if (Interface->inputDemandingRotateAroundY() == true) {
-						*IndicatorDemandingRotateAroundY = *IndicatorDemandingRotateAroundY + 1;
-					}
-					if (*IndicatorDemandingRotateAroundY == 1) {
-						Interface->setRotateAroundYValue();
-						matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
+					if (*IndicatorDemandingRotate == 1) {
+						// x
+						if (Interface->inputDemandingRotateAroundX() == true) {
+							*IndicatorDemandingRotateAroundX = *IndicatorDemandingRotateAroundX + 1;
+						}
+						if (*IndicatorDemandingRotateAroundX == 1) {
+							Interface->setRotateAroundXValue();
+							matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
 
-					}
-					else if (*IndicatorDemandingRotateAroundY > 1) {
-						*IndicatorDemandingRotateAroundY = 0;
-					}
-					// z
-					if (Interface->inputDemandingRotateAroundZ() == true) {
-						*IndicatorDemandingRotateAroundZ = *IndicatorDemandingRotateAroundZ + 1;
-					}
-					if (*IndicatorDemandingRotateAroundZ == 1) {
-						Interface->setRotateAroundZValue();
-						matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
+						}
+						else if (*IndicatorDemandingRotateAroundX > 1) {
+							*IndicatorDemandingRotateAroundX = 0;
+						}
+						// y
+						if (Interface->inputDemandingRotateAroundY() == true) {
+							*IndicatorDemandingRotateAroundY = *IndicatorDemandingRotateAroundY + 1;
+						}
+						if (*IndicatorDemandingRotateAroundY == 1) {
+							Interface->setRotateAroundYValue();
+							matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
 
+						}
+						else if (*IndicatorDemandingRotateAroundY > 1) {
+							*IndicatorDemandingRotateAroundY = 0;
+						}
+						// z
+						if (Interface->inputDemandingRotateAroundZ() == true) {
+							*IndicatorDemandingRotateAroundZ = *IndicatorDemandingRotateAroundZ + 1;
+						}
+						if (*IndicatorDemandingRotateAroundZ == 1) {
+							Interface->setRotateAroundZValue();
+							matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
+
+						}
+						else if (*IndicatorDemandingRotateAroundZ > 1) {
+							*IndicatorDemandingRotateAroundZ = 0;
+						}
+						// rotate right or left
+						if (Interface->inputDemandingRotateRight() == true) {
+							*IndicatorDemandingRotateRight = *IndicatorDemandingRotateRight + 1;
+						}
+						if (*IndicatorDemandingRotateRight == 1) {
+							// fonction
+							RotateValue += 1;
+						}
+						else if (*IndicatorDemandingRotateRight > 1) {
+							*IndicatorDemandingRotateRight = 0;
+						}
+						if (Interface->inputDemandingRotateLeft() == true) {
+							*IndicatorDemandingRotateLeft = *IndicatorDemandingRotateLeft + 1;
+						}
+						if (*IndicatorDemandingRotateLeft == 1) {
+							// fonction
+							RotateValue -= 1;
+						}
+						else if (*IndicatorDemandingRotateLeft > 1) {
+							*IndicatorDemandingRotateLeft = 0;
+						}
 					}
-					else if (*IndicatorDemandingRotateAroundZ > 1) {
-						*IndicatorDemandingRotateAroundZ = 0;
-					}
-					// rotate right or left
-					if (Interface->inputDemandingRotateRight() == true) {
-						*IndicatorDemandingRotateRight = *IndicatorDemandingRotateRight + 1;
-					}
-					if (*IndicatorDemandingRotateRight == 1) {
-						// fonction
-						RotateValue += 1;
-					}
-					else if (*IndicatorDemandingRotateRight > 1) {
-						*IndicatorDemandingRotateRight = 0;
-					}
-					if (Interface->inputDemandingRotateLeft() == true) {
-						*IndicatorDemandingRotateLeft = *IndicatorDemandingRotateLeft + 1;
-					}
-					if (*IndicatorDemandingRotateLeft == 1) {
-						// fonction
-						RotateValue -= 1;
-					}
-					else if (*IndicatorDemandingRotateLeft > 1) {
-						*IndicatorDemandingRotateLeft = 0;
+					else if (*IndicatorDemandingRotate > 1) {
+						*IndicatorDemandingRotate = 0;
 					}
 				}
-				else if (*IndicatorDemandingRotate > 1) {
-					*IndicatorDemandingRotate = 0;
+				else if (*IndicatorDemandingAnimation > 1) {
+					*IndicatorDemandingAnimation = 0;
 				}
-			}
-			else if (*IndicatorDemandingAnimation > 1) {
-				*IndicatorDemandingAnimation = 0;
-			}
-			ImGui::Spacing();
-			// texture
-			if (Interface->inputDemandingTexture1() == true) {
-				*IndicatorDemandingTexture = *IndicatorDemandingTexture + 1;
-			}
-			if (*IndicatorDemandingTexture == 1) {
-				if (Interface->inputDemandSelectFolderForTex1() == true) {
-					indicatorFolderTexture1 = 1;
-					filePathTex1 = unconstchar(static_cast<const char*>(Read.selectPath(window).c_str()));
+				ImGui::Spacing();
+				// texture
+				if (Interface->inputDemandingTexture1() == true) {
+					*IndicatorDemandingTexture = *IndicatorDemandingTexture + 1;
 				}
-				if (indicatorFolderTexture1 == 1) {
-					Interface->inputFileTexture1(filePathTex1);
+				if (*IndicatorDemandingTexture == 1) {
+					if (Interface->inputDemandSelectFolderForTex1() == true) {
+						indicatorFolderTexture1 = 1;
+						filePathTex1 = unconstchar(static_cast<const char*>(Read.selectPath(window).c_str()));
+					}
+					if (indicatorFolderTexture1 == 1) {
+						Interface->inputFileTexture1(filePathTex1);
+					}
+					if (Interface->inputDemandSelectFolderForTex2() == true) {
+						indicatorFolderTexture2 = 1;
+						filePathTex2 = unconstchar(static_cast<const char*>(Read.selectPath(window).c_str()));
+					}
+					if (indicatorFolderTexture2 == 1) {
+						Interface->inputFileTexture2(filePathTex2);
+					}
+					Interface->setPercentTexture();
+					if (Interface->confirmFilePath() == true) {
+						Cube->setTexture1(filePathTex1);
+						Cube->setTexture2(filePathTex2);
+					}
+					matrixAnimation->setPercentTexture(Cube->getshaderCube(), Interface->getpercentTexture());
+					Cube->setParametterTexture();
 				}
-				if (Interface->inputDemandSelectFolderForTex2() == true) {
-					indicatorFolderTexture2 = 1;
-					filePathTex2 = unconstchar(static_cast<const char*>(Read.selectPath(window).c_str()));
+				else if (*IndicatorDemandingTexture > 1) {
+					*IndicatorDemandingTexture = 0;
 				}
-				if (indicatorFolderTexture2 == 1) {
-					Interface->inputFileTexture2(filePathTex2);
-				}
-				Interface->setPercentTexture();
-				if (Interface->confirmFilePath() == true) {
-					Cube->setTexture1(filePathTex1);
-					Cube->setTexture2(filePathTex2);
-				}
-				matrixAnimation->setPercentTexture(Cube->getshaderCube(), Interface->getpercentTexture());
-				Cube->setParametterTexture();
-			}
-			else if (*IndicatorDemandingTexture > 1) {
-				*IndicatorDemandingTexture = 0;
-			}
 		}
-		
+#endif // !HOT_REALOAD
+
+			
+#ifdef HOT_REALOAD
+		matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
+		RotateValue += 1;
+
+#endif // HOT_REALOAD
+
+#ifndef HOT_REALOAD
 		ImGui::Spacing();
 
 		// menubar
-		
+
 		// settings 
 		// colors
 		ImGui::Spacing();
@@ -422,7 +461,8 @@ int main() {
 		}
 		ImGui::Checkbox(" draw ", &drawingCube);
 		if (drawingCube == true) {
-			matrixAnimation->drawAllObject(Cube->getshaderCube(), Cube->getVertexArray());
+			rendering.drawElements();
+			matrixAnimation->frameMatrix(Cube->getshaderCube());
 		}
 		matrixAnimation->setLookAtMatrixCamera(camera.getcamPos(), camera.getcamPos() - camera.getcamFront(), camera.getcamUp());
 		ImGui::Columns(2);
@@ -452,28 +492,28 @@ int main() {
 			ImGui::Spacing();
 			ImGui::ColorEdit3("color", rr);
 		}
+		
 		ImGui::End();
-		glEnable(GL_DEPTH_TEST);
 		Interface->endFrame();
+#endif // !HOT_REALOAD
+#ifdef HOT_REALOAD
+		matrixAnimation->frameMatrix(Cube->getshaderCube());
+#endif // HOT_REALOAD
+
+		glEnable(GL_DEPTH_TEST);
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+#ifndef HOT_REALOAD
 	Interface->~UserInterface();
+#endif // !HOT_REALOAD
 	Cube->~cube();
 	delete Cube;
-	delete IndicatorScaleDemanding; delete IndicatorScaleDemandingX;
-	delete IndicatorScaleDemandingY; delete IndicatorScaleDemandingZ;
 	delete IndicatorDemandingRotate; delete IndicatorDemandingRotateLeft;
 	delete IndicatorDemandingRotateRight; delete IndicatorDemandingAnimation;
-	delete IndicatorSetColorFrameDemanding; delete IndicatorDemandingRotateAroundZ;
+	delete IndicatorDemandingRotateAroundZ;
 	delete IndicatorDemandingRotateAroundX; delete IndicatorDemandingRotateAroundY;
-	delete IndicatorDemandingTexture; delete IndicatorDemandingColorB;
-	delete IndicatorDemandingColorG; delete IndicatorDemandingColorR; delete IndicatorDemandingChangeFOV;
-	delete IndicatorDemandingChangeColorCube; delete IndicatorDemandingChangeColorCubeR;
-	delete IndicatorDemandingChangeColorCubeG; delete IndicatorDemandingChangeColorCubeB;
-	delete IndicatorDemandingChangeCubePosition; delete IndicatorDemandingChangeCubePositionX;
-	delete IndicatorDemandingChangeCubePositionY; delete IndicatorDemandingChangeCubePositionZ;
-	delete IndicatorChgangePositionCube; delete IndicatorChgangePositionCubeX;
-	delete IndicatorChgangePositionCubeY; delete IndicatorChgangePositionCubeZ;
+	delete IndicatorDemandingTexture;  delete IndicatorDemandingChangeFOV;
+
 	delete IndicatorDemandCamera; delete IndicatorDemandChangeCameraSpeed;
 }

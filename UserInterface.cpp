@@ -20,72 +20,6 @@ const char* UserInterface::filepath1ConstChar = 0;
 const char* UserInterface::filepath2ConstChar = 0;
 
 UserInterface::UserInterface(GLFWwindow* window)  {
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO();
-	(void)io;
-	io.Fonts->AddFontFromFileTTF("resources/textFont/Merriweather-Regular.ttf", 17);
-	ImGui::StyleColorsDark();
-	ImGui_ImplGlfw_InitForOpenGL(window, true);
-	ImGui_ImplOpenGL3_Init("#version 460");
-	ImVec4* color = ImGui::GetStyle().Colors;
-	color[ImGuiCol_WindowBg] = ImColor(50, 56, 57, 255);
-	ImGuiStyle* style = &ImGui::GetStyle();
-	io.IniFilename = nullptr;
-
-	static const ImWchar icons_ranges[] = { 0xf000, 0xf3ff, 0 };
-	ImFontConfig icons_config;
-
-	ImFontConfig CustomFont;
-	CustomFont.FontDataOwnedByAtlas = false;
-
-
-	icons_config.MergeMode = true;
-	icons_config.PixelSnapH = true;
-	icons_config.OversampleH = 2.5;
-	icons_config.OversampleV = 2.5;
-
-	io.Fonts->AddFontFromMemoryCompressedTTF(font_awesome_data, font_awesome_size, 19.0f, &icons_config, icons_ranges);
-	io.Fonts->AddFontDefault();
-
-
-	style->WindowBorderSize = 0;
-	style->WindowTitleAlign = ImVec2(0.5, 0.5);
-	style->ButtonTextAlign = ImVec2(0.5, 0.5);
-	style->WindowMinSize = ImVec2(2560/4.5, 430);
-	style->FramePadding = ImVec2(2, 2);
-	style->WindowMenuButtonPosition = ImGuiDir();
-	style->Colors[ImGuiCol_TitleBg] = ImColor(79, 86, 98, 255);
-	style->Colors[ImGuiCol_TitleBgActive] = ImColor(79, 86, 98, 255);
-	style->Colors[ImGuiCol_TitleBgCollapsed] = ImColor(79, 86, 98, 130);
-
-	style->Colors[ImGuiCol_Button] = ImColor(79, 86, 98, 255);
-	style->Colors[ImGuiCol_ButtonActive] = ImColor(79, 86, 98, 255);
-	style->Colors[ImGuiCol_ButtonHovered] = ImColor(187, 180, 150, 255);
-
-	style->Colors[ImGuiCol_Separator] = ImColor(70, 70, 70, 255);
-	style->Colors[ImGuiCol_SeparatorActive] = ImColor(76, 76, 76, 255);
-	style->Colors[ImGuiCol_SeparatorHovered] = ImColor(76, 76, 76, 255);
-
-	style->Colors[ImGuiCol_MenuBarBg] = ImColor(50, 56, 57, 255);
-
-	style->Colors[ImGuiCol_FrameBg] = ImColor(60, 56, 47, 255);
-	style->Colors[ImGuiCol_FrameBgActive] = ImColor(60, 56, 47, 255);
-	style->Colors[ImGuiCol_FrameBgHovered] = ImColor(60, 56, 47, 255);
-	style->SelectableTextAlign = ImVec2(0.1, 0.1);
-	style->PopupBorderSize = 5;
-	style->FrameBorderSize = 3.0;
-	style->ChildBorderSize = 3.0;
-	style->TabBorderSize = 3.0;
-	style->WindowBorderSize = 3.0;
-	style->PopupRounding = 5;
-	style->ChildRounding = 5;
-	style->FrameRounding = 5;
-	style->GrabRounding = 5;
-	style->WindowRounding = 0;
-	style->TabRounding = 5;
-	style->MouseCursorScale = 50;
-	style->IndentSpacing = 5;
 	
 	LastedFrameColorR = 0.2f; LastedFrameColorG = 0.5f; LastedFrameColorB = 0.7f; 
 	LastedFloatFrame = 1.0f; LastedFloatFrameX = 1.0f; LastedFloatFrameY = 1.0f; LastedFloatFrameZ = 1.0f; 
@@ -102,6 +36,9 @@ UserInterface::UserInterface(GLFWwindow* window)  {
 
 	
 
+
+}
+UserInterface::UserInterface(GLFWwindow* window, int randomNumberJustForSurcharge) {
 
 }
 UserInterface::UserInterface(GLFWwindow* window, float LastedFrameColorRFile, float LastedFrameColorGFile,
@@ -143,7 +80,74 @@ void UserInterface::interfacebeginCanvas() {
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 	ImGui::PopStyleVar(3);
 }
+void UserInterface::setStyleSettingFrame(GLFWwindow* window) {
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	(void)io;
+	io.Fonts->AddFontFromFileTTF("resources/textFont/Merriweather-Regular.ttf", 17);
+	ImGui::StyleColorsDark();
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init("#version 460");
+	ImVec4* color = ImGui::GetStyle().Colors;
+	color[ImGuiCol_WindowBg] = ImColor(50, 56, 57, 255);
+	ImGuiStyle* style = &ImGui::GetStyle();
+	io.IniFilename = nullptr;
 
+	static const ImWchar icons_ranges[] = { 0xf000, 0xf3ff, 0 };
+	ImFontConfig icons_config;
+
+	ImFontConfig CustomFont;
+	CustomFont.FontDataOwnedByAtlas = false;
+
+
+	icons_config.MergeMode = true;
+	icons_config.PixelSnapH = true;
+	icons_config.OversampleH = 2.5;
+	icons_config.OversampleV = 2.5;
+
+	io.Fonts->AddFontFromMemoryCompressedTTF(font_awesome_data, font_awesome_size, 19.0f, &icons_config, icons_ranges);
+	io.Fonts->AddFontDefault();
+
+
+	style->WindowBorderSize = 0;
+	style->WindowTitleAlign = ImVec2(0.5, 0.5);
+	style->ButtonTextAlign = ImVec2(0.5, 0.5);
+	style->WindowMinSize = ImVec2(2560 / 4.5, 430);
+	style->FramePadding = ImVec2(2, 2);
+	style->WindowMenuButtonPosition = ImGuiDir();
+	style->Colors[ImGuiCol_TitleBg] = ImColor(79, 86, 98, 255);
+	style->Colors[ImGuiCol_TitleBgActive] = ImColor(79, 86, 98, 255);
+	style->Colors[ImGuiCol_TitleBgCollapsed] = ImColor(79, 86, 98, 130);
+
+	style->Colors[ImGuiCol_Button] = ImColor(79, 86, 98, 255);
+	style->Colors[ImGuiCol_ButtonActive] = ImColor(79, 86, 98, 255);
+	style->Colors[ImGuiCol_ButtonHovered] = ImColor(187, 180, 150, 255);
+
+	style->Colors[ImGuiCol_Separator] = ImColor(70, 70, 70, 255);
+	style->Colors[ImGuiCol_SeparatorActive] = ImColor(76, 76, 76, 255);
+	style->Colors[ImGuiCol_SeparatorHovered] = ImColor(76, 76, 76, 255);
+
+	style->Colors[ImGuiCol_MenuBarBg] = ImColor(50, 56, 57, 255);
+
+	style->Colors[ImGuiCol_FrameBg] = ImColor(60, 56, 47, 255);
+	style->Colors[ImGuiCol_FrameBgActive] = ImColor(60, 56, 47, 255);
+	style->Colors[ImGuiCol_FrameBgHovered] = ImColor(60, 56, 47, 255);
+	style->SelectableTextAlign = ImVec2(0.1, 0.1);
+	style->PopupBorderSize = 5;
+	style->FrameBorderSize = 3.0;
+	style->ChildBorderSize = 3.0;
+	style->TabBorderSize = 3.0;
+	style->WindowBorderSize = 3.0;
+	style->PopupRounding = 5;
+	style->ChildRounding = 5;
+	style->FrameRounding = 5;
+	style->GrabRounding = 5;
+	style->WindowRounding = 0;
+	style->TabRounding = 5;
+	style->MouseCursorScale = 50;
+	style->IndentSpacing = 5;
+}
 void UserInterface::setSettingFrame() {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
