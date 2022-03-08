@@ -201,12 +201,6 @@ bool UserInterface::inputDemandingRotate() const {
 	}
 	else { return false; }
 }
-bool UserInterface::inputDemandingScaleCube() const {
-	if (ImGui::Button("Size Object", ImVec2(300, 40))) {
-		return true;
-	}
-	else { return false; }
-}
 bool UserInterface::inputDemandingTexture1() const {
 	if (ImGui::Button("Texture", ImVec2(300, 40))) {
 		return true;
@@ -226,24 +220,6 @@ bool UserInterface::inputDemandingRotateAroundY() const {
 	else { return false; }
 }bool UserInterface::inputDemandingRotateAroundZ() const {
 	if (ImGui::Button("Rotate Z", ImVec2(65, 20))) {
-		return true;
-	}
-	else { return false; }
-}
-bool UserInterface::inputDemandingScaleCubeX() const {
-	if (ImGui::Button("size X", ImVec2(60, 40))) {
-		return true;
-	}
-	else { return false; }
-}
-bool UserInterface::inputDemandingScaleCubeY() const {
-	if (ImGui::Button("size Y", ImVec2(60, 40))) {
-		return true;
-	}
-	else { return false; }
-}
-bool UserInterface::inputDemandingScaleCubeZ() const {
-	if (ImGui::Button("size Z", ImVec2(60, 40))) {
 		return true;
 	}
 	else { return false; }
@@ -327,63 +303,8 @@ bool UserInterface::confirmFilePath() const {
 	}
 	else { return false; }
 }
-bool UserInterface::inputColorR() const {
-	if (ImGui::Button("R:", ImVec2(20, 20))) {
-		return true;
-	}
-	else { return false; }
-}
-bool UserInterface::inputColorG() const {
-	if (ImGui::Button("G:", ImVec2(20, 20))) {
-		return true;
-	}
-	else { return false; }
-}
-bool UserInterface::inputColorB() const {
-	if (ImGui::Button("B:", ImVec2(20, 20))) {
-		return true;
-	}
-	else { return false; }
-}
-bool UserInterface::inputColorA() const {
-	if (ImGui::Button("A:", ImVec2(20, 20))) {
-		return true;
-	}
-	else { return false; }
-}
 bool UserInterface::inputDemandingChangeFOV() const {
 	if (ImGui::Button("FOV", ImVec2(200, 30))) {
-		return true;
-	}
-	else { return false; }
-}
-bool UserInterface::inputDemandingChangeColorObject() const {
-	if (ImGui::Button("Color Object", ImVec2(300, 40))) {
-		return true;
-	}
-	else { return false; }
-}
-// position object
-bool UserInterface::inputDemandingPositionObject() const {
-	if (ImGui::Button("Position Object", ImVec2(300, 40))) {
-		return true;
-	}
-	else { return false; }
-}
-bool UserInterface::inputDemandingPositionObjectX() const {
-	if (ImGui::Button("position X Object", ImVec2(125, 20))) {
-		return true;
-	}
-	else { return false; }
-}
-bool UserInterface::inputDemandingPositionObjectY() const {
-	if (ImGui::Button("position Y Object", ImVec2(125, 20))) {
-		return true;
-	}
-	else { return false; }
-}
-bool UserInterface::inputDemandingPositionObjectZ() const {
-	if (ImGui::Button("position Z Object", ImVec2(125, 20))) {
 		return true;
 	}
 	else { return false; }

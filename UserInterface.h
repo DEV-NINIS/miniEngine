@@ -12,6 +12,7 @@ class UserInterface
 public:
 	// 2 constructors
 	UserInterface(GLFWwindow* window);
+	UserInterface(GLFWwindow* window, int randomBumberJustForSurcharge);
 	UserInterface(GLFWwindow* window, float LastedFrameColorRFile, float LastedFrameColorGFile,
 		float LastedFrameColorBFile, float LastedFloatFrameXFile, float LastedFloatFrameYFile, float LastedFloatFrameZFile,
 		float LastedRotateXValueFile, float LastedRotateYValueFile, float LastedRotateZValueFile, float LastedColorObjectRFile,
@@ -19,23 +20,12 @@ public:
 		float LastedPositionObjectZFile, float CameraSpeedFile, const char* filePathPointerFile);
 
 	virtual ~UserInterface();
-	bool inputColorR() const;
-	bool inputColorG() const;
-	bool inputColorB() const;
-	bool inputColorA() const;
-	bool inputDemandingScaleCube() const;
-	bool inputDemandingScaleCubeX() const;
-	bool inputDemandingScaleCubeY() const;
-	bool inputDemandingScaleCubeZ() const;
-	bool inputDemandingPositionObject() const;
-	bool inputDemandingPositionObjectX() const;
-	bool inputDemandingPositionObjectY() const;
-	bool inputDemandingPositionObjectZ() const;
+	void setStyleSettingFrame(GLFWwindow* window);
+	
 	bool inputDemandCameraSpeed() const;
 	bool inputDemandingCamera() const;
 	bool inputDemandingAnimation() const;
 	bool inputDemandingRotate() const;
-	bool inputDemandingChangeColorObject() const;
 	bool inputDemandingTexture1() const;
 	bool inputDemandingRotateAroundX() const;
 	bool inputDemandingRotateAroundY() const;

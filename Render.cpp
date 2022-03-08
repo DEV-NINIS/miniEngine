@@ -4,15 +4,17 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "object.h"
+#include "imgui/imgui_impl_opengl3.h"
 
-Render::Render(GLFWwindow* window)  : Mesh(window) {
-	std::cout << fragmentShaderCODE << std::endl;
+Render::Render(GLFWwindow* window)   {
+
 }
 Render::~Render() {
 
 }
-void Render::drawElements() {
-	glBindVertexArray(VAOcube);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
-	glBindVertexArray(0);
+void Render::drawElements(basicObject::cube* Cube) {
+	Cube->drawThisObject();
 }

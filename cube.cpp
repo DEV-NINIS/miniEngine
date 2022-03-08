@@ -124,7 +124,11 @@ cube::~cube() {
 	glDeleteBuffers(1, &VBOcube);
 	glDeleteBuffers(1, &EBOcube);
 }
-
+void cube::drawThisObject() {
+	glBindVertexArray(VAOcube);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glBindVertexArray(0);
+}
 void cube::setBuffer() {
 	// vao
 	glGenVertexArrays(1, &VAOcube);

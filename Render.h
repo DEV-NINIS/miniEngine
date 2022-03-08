@@ -1,19 +1,20 @@
 
 #include "object.h"
 #include <iostream>
+#include "object.h"
 #include <vector>
 
 #ifndef DEF_RENDER
 #define DEF_RENDER
-class Render: public objectUser::Mesh
+class Render
 {
 
 public:
 	Render(GLFWwindow* window);
 	virtual ~Render();
-	void drawElements();
+	virtual void drawElements(basicObject::cube* Cube);
 private:
-
+	basicObject::cube* Cube;
 };
 #endif 
 

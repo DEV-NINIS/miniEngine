@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 #include "UserInterface.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -21,6 +22,7 @@ namespace basicObject {
 		void setTexture1(char* filePath); // the variable numberValueVectorPathTexture correspponding to vector value : filePath[numberValueVectorPathTexture]
 		void setTexture2(char* filePath); // the variable numberValueVectorPathTexture correspponding to vector value : filePath[numberValueVectorPathTexture]
 		void useShaderCube();
+		void drawThisObject();
 		GLuint getVertexArray() const;
 		GLuint& getshaderCube();
 		std::vector<int*> getLoaderTexture();
@@ -52,12 +54,25 @@ namespace basicObject {
 namespace objectUser {
 #ifndef DEF_MESH
 #define DEF_MESH
-	class Mesh: public basicObject::cube{
+	class Mesh {
 		public:
 			Mesh(GLFWwindow* window);
+			void CompileShaderObject();
+			void setBufferObject();
+			void OpenShader(std::string filePathVertex, std::string filePathFragment);
 			virtual ~Mesh();
 	    private:
-
+			const char* fragmentShaderCODE;
+			const char* vertexShaderCODE;
+			static float verteciesObject[];
+			static unsigned int indexObject[];
+			GLuint objectVAO;
+			GLuint objectVBO;
+			GLuint objectEBO;
+			GLuint shaderProgram;
+			GLuint shaderFrag;
+			GLuint shaderVertex;
+			
 	};
 #endif
 }
