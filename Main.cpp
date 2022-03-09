@@ -1,13 +1,7 @@
-#define IMGUI_IMPL_OPENGL_LOADER_GLAD
-#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
-#include <GL/gl3w.h>  // Initialize with gl3wInit()
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
-#include <GL/glew.h>  // Initialize with glewInit()
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
-#include <glad/glad.h>  // Initialize with gladLoadGL()
-#else
-#include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
-#endif 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+// Initialize with gl3wInit()
+
 
 #include <iostream>
 #include <string>
@@ -21,7 +15,6 @@
 #include "imgui/imgui_impl_opengl3.h"
 #include "glmAnimation3D.h"
 #include "Camera.h"
-#include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -35,7 +28,7 @@
 
 
 
-bool HOTreaload = false;
+static bool HOTreload = false;
 //												_____
 //               /\         |\		|	 |	   |
 //				/  \		| \		|	 |	   |
@@ -96,36 +89,32 @@ int main() {
 		glfwGetPrimaryMonitor(), nullptr);
 #endif // HOT_REALOAD
 #ifndef HOT_REALOAD
-	GLFWwindow* window = glfwCreateWindow(glfwGetVideoMode(glfwGetPrimaryMonitor())->width,
+	std::vector<GLFWwindow*> window; window.push_back(glfwCreateWindow(glfwGetVideoMode(glfwGetPrimaryMonitor())->width,
 		glfwGetVideoMode(glfwGetPrimaryMonitor())->height, "DevNinisEngineMotion",
-		nullptr, nullptr);
+		nullptr, nullptr));
 #endif
-	
-	if (window == NULL) {
+
+	if (window[0] == NULL) {
 		MessageBoxA(0, static_cast<const char*>("failed to initialise glad"), "ERROR", 0);
 		return -1;
 	}
-	glfwMakeContextCurrent(window);
+	glfwMakeContextCurrent(window[0]);
 	// set glad
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 		MessageBoxA(0, static_cast<const char*>("failed to initialise glad"), "ERROR", 0);
 		return -1;
 	}
-	
+
 	// 
-#ifndef HOT_REALOAD
 
-	glViewport(*resX / 4.5, 0, *resX, *resY);
 
-#endif // HOT_REALOAD
-#ifdef HOT_REALOAD
+	else {
 
-	glViewport(0, 0, *resX, *resY);
+		glViewport(*resX / 4.5, 0, *resX, *resY);
 
-#endif // HOT_REALOAD
+	}
 
 	float FOV = 55.0f; float RotateValue = -55.0f;
-	delete resX; delete resY;
 	bool drawingCube = true;
 	char* filePathTex1; filePathTex1 = new char;
 	char* filePathTex2; filePathTex2 = new char;
@@ -143,17 +132,16 @@ int main() {
 	int* IndicatorDemandingAnimation = nullptr; IndicatorDemandingAnimation = new int; *IndicatorDemandingAnimation = 0;
 	int indicatorFolderTexture1 = 0; int indicatorFolderTexture2 = 0;
 	const char* filePath;
-	basicObject::cube* Cube; Cube = new basicObject::cube(window);
-	glmAnimation3D* matrixAnimation; matrixAnimation = new glmAnimation3D(window);
+	basicObject::cube* Cube; Cube = new basicObject::cube(window[0]);
+	glmAnimation3D* matrixAnimation; matrixAnimation = new glmAnimation3D(window[0]);
 	// initialise imgui
-	UserInterface* Interface = nullptr; Interface = new UserInterface(window); // in the builder of this class they create a imgui context is because in argument they have GLFWwindow* ...
-#ifndef HOT_REALOAD
-	Interface->setStyleSettingFrame(window);
-#endif // !HOT_REALOAD
-
+	UserInterface* Interface = nullptr; Interface = new UserInterface(window[0]); // in the builder of this class they create a imgui context is because in argument they have GLFWwindow* ...
+	if (HOTreload == false) {
+		Interface->setStyleSettingFrame(window[0]);
+	}
 	std::string formatFile; formatFile = ".dev_ninis";
 	Camera camera; writing::save Save; reading::read Read;
-	Render rendering(window);
+	Render rendering(window[0]); objectUser::Mesh mesh(window[0]);
 	int* IndicatorFilepath = nullptr; IndicatorFilepath = new int; *IndicatorFilepath = Interface->getIndicatorTextureFilePath();
 	Cube->setShader();
 	Cube->setBuffer();
@@ -163,17 +151,20 @@ int main() {
 	float deltatime = 0, currentFrame = 0, lastedFrame = 0;
 	TCHAR filepath = 100; char filePathBuffer[100]; filePathBuffer[100];
 	TCHAR nBufferLength = 102; char lpFileName[2]; char* lpFilePart = nullptr; lpFilePart = &filePathBuffer[1];
-	while (!glfwWindowShouldClose(window)) // render
+	std::string a = "VertexShaderObject.glsl"; std::string b = "FragmentShaderObject.glsl";
+	while (!glfwWindowShouldClose(window[0])) // render
 	{
 
 
 		currentFrame = glfwGetTime();
 		deltatime = currentFrame - lastedFrame;
 		lastedFrame = currentFrame;
-		processInput(window);
+		processInput(window[0]);
 		glClearColor(Interface->getColorR(), Interface->getColorG(), Interface->getColorB(), 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		camera.processInputCamera(window, deltatime, Interface->getCmerraSpeed());
+		for (int i(0); i < window.size(); i++) {
+			camera.processInputCamera(window[i], deltatime, Interface->getCmerraSpeed());
+		}
 		Cube->useShaderCube();
 		matrixAnimation->initialiseMatrix();
 		matrixAnimation->setLookAtMatrixCamera(camera.getcamPos(), camera.getcamFront(), camera.getcamUp());
@@ -182,74 +173,76 @@ int main() {
 		matrixAnimation->setTransformValue();
 		matrixAnimation->frameMatrix(Cube->getshaderCube());
 		matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
-#ifndef HOT_REALOAD
-
-		Interface->setSettingFrame();
-		Interface->interfacebeginCanvas();
-
-#endif // HOT_REALOAD
+		if (HOTreload == false) {
+			Interface->setSettingFrame();
+			Interface->interfacebeginCanvas();
+		}
 		matrixAnimation->setPercentTexture(Cube->getshaderCube(), Interface->getpercentTexture());
-#ifndef HOT_REALOAD
-		ImGui::Begin("Engine");
-		if (ImGui::Button("PLAY", ImVec2(2560/4.5, 60.0f))) {
-			HOTreaload = true;
+
+		if (HOTreload == false) {
+			ImGui::Begin("Engine");
+			if (ImGui::Button("PLAY", ImVec2(2560 / 4.5, 60.0f))) {
+				HOTreload = true;
+				window.push_back(glfwCreateWindow(glfwGetVideoMode(glfwGetPrimaryMonitor())->width,
+					glfwGetVideoMode(glfwGetPrimaryMonitor())->height, "DevNinisEngineMotion",
+					glfwGetPrimaryMonitor(), nullptr));
+				glViewport(0, 0, *resX, *resY);
+				
+			}
+			if (ImGui::CollapsingHeader("size")) {
+				ImGui::Separator();
+				Interface->setScaleCube();
+				matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
+				ImGui::Separator();
+				Interface->setLastedmatrix();
+				matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
+				matrixAnimation->setScaleValueX(Cube->getshaderCube());
+				matrixAnimation->frameMatrix(Cube->getshaderCube());
+				ImGui::Separator();
+				Interface->setLastedmatrix();
+				matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
+				matrixAnimation->setScaleValueY(Cube->getshaderCube());
+				matrixAnimation->frameMatrix(Cube->getshaderCube());
+				ImGui::Separator();
+
+
+				Interface->setLastedmatrix();
+				matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
+				matrixAnimation->setScaleValueZ(Cube->getshaderCube());
+				matrixAnimation->frameMatrix(Cube->getshaderCube());
+				ImGui::Separator();
+			}
+			if (ImGui::CollapsingHeader("positions")) {
+				ImGui::Spacing();
+				Interface->setPositionObjectX();
+				ImGui::Separator();
+				matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
+				Interface->setPositionObjectY();
+				ImGui::Separator();
+				matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
+				Interface->setPositionObjectZ();
+				ImGui::Separator();
+				matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
+				matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
+			}
 		}
-		if (ImGui::CollapsingHeader("size")) {
-			ImGui::Separator();
-			Interface->setScaleCube();
-			matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
-			ImGui::Separator();
-			Interface->setLastedmatrix();
-			matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
-			matrixAnimation->setScaleValueX(Cube->getshaderCube());
-			matrixAnimation->frameMatrix(Cube->getshaderCube());
-			ImGui::Separator();
-			Interface->setLastedmatrix();
-			matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
-			matrixAnimation->setScaleValueY(Cube->getshaderCube());
-			matrixAnimation->frameMatrix(Cube->getshaderCube());
-			ImGui::Separator();
 
-
-			Interface->setLastedmatrix();
+		if (HOTreload == true) {
 			matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
-			matrixAnimation->setScaleValueZ(Cube->getshaderCube());
-			matrixAnimation->frameMatrix(Cube->getshaderCube());
-			ImGui::Separator();
 		}
-		if (ImGui::CollapsingHeader("positions")) {
-			ImGui::Spacing();
-			Interface->setPositionObjectX();
-			ImGui::Separator();
-			matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
-			Interface->setPositionObjectY();
-			ImGui::Separator();
-			matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
-			Interface->setPositionObjectZ();
-			ImGui::Separator();
-			matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
-			matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
-		}
-#endif // !HOT_REALOAD
 
-#ifdef HOT_REALOAD
 
-		matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
-#endif
-		
 
-		
-		
 
-			//Left side
-#ifndef HOT_REALOAD
 
+		//Left side
+		if (HOTreload == false) {
 			if (ImGui::BeginMainMenuBar()) {
 				if (ImGui::BeginMenu("file")) {
 					if (ImGui::MenuItem("Open")) {
-						Read.setValueFile(Read.selectPath(window));
+						Read.setValueFile(Read.selectPath(window[0]));
 
-						Interface = new UserInterface(window, Read.getValueColorFrameRFile(), Read.getValueColorFrameGFile(), Read.getValueColorFrameBFile(),
+						Interface = new UserInterface(window[0], Read.getValueColorFrameRFile(), Read.getValueColorFrameGFile(), Read.getValueColorFrameBFile(),
 							Read.getLastedScaleXFile(), Read.getLastedScaleYFile(), Read.getLastedScaleZFile(), Read.getValueTransformXFile(),
 							Read.getValueTransformYFile(), Read.getValueTransformZFile(), Read.getcolorObjectFileR(),
 							Read.getcolorObjectFileG(), Read.getcolorObjectFileB(), Read.getValuePositionObjectFileX(), Read.getValuePositionObjectFileY(),
@@ -278,7 +271,7 @@ int main() {
 							Interface->getColorObjectG(), Interface->getColorObjectB(), Interface->getPositionObjectX(), Interface->getPositionObjectY()
 							, Interface->getPositionObjectZ(), Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ()
 							, Interface->getColorR(), Interface->getColorG(), Interface->getColorB(), Interface->getCmerraSpeed(), Interface->getFOV_Value()
-							, Interface->getScaleCubeX(), Interface->getScaleCubeY(), Interface->getScaleCubeZ(), Save.setFilePath(window) + formatFile);
+							, Interface->getScaleCubeX(), Interface->getScaleCubeY(), Interface->getScaleCubeZ(), Save.setFilePath(window[0]) + formatFile);
 					}
 					if (ImGui::MenuItem("Wiew Source Code ")) {
 						ShellExecuteA(NULL, "open", "https://github.com/DEV-NINIS/miniEngine", NULL, NULL, SW_SHOWDEFAULT);
@@ -286,25 +279,24 @@ int main() {
 					ImGui::EndMenu();
 				}
 				ImGui::EndMainMenuBar();
-#endif
-
+			}
 			// end menubar
 
-			
+
 
 			// echelle du cube
-			
+
 			//
-			
+
 			// position cube
-#ifndef HOT_REALOAD
+			if (HOTreload == false) {
 				ImGui::Spacing();
 
 				ImGui::Spacing();
 				// Animation
 				if (Interface->ButtonForSetAnimation() == true) {
 					*IndicatorDemandingAnimation = *IndicatorDemandingAnimation + 1;
-			}
+				}
 				if (*IndicatorDemandingAnimation == 1) {
 					if (Interface->inputDemandingRotate() == true) {
 						*IndicatorDemandingRotate = *IndicatorDemandingRotate + 1;
@@ -383,14 +375,14 @@ int main() {
 				if (*IndicatorDemandingTexture == 1) {
 					if (Interface->inputDemandSelectFolderForTex1() == true) {
 						indicatorFolderTexture1 = 1;
-						filePathTex1 = unconstchar(static_cast<const char*>(Read.selectPath(window).c_str()));
+						filePathTex1 = unconstchar(static_cast<const char*>(Read.selectPath(window[0]).c_str()));
 					}
 					if (indicatorFolderTexture1 == 1) {
 						Interface->inputFileTexture1(filePathTex1);
 					}
 					if (Interface->inputDemandSelectFolderForTex2() == true) {
 						indicatorFolderTexture2 = 1;
-						filePathTex2 = unconstchar(static_cast<const char*>(Read.selectPath(window).c_str()));
+						filePathTex2 = unconstchar(static_cast<const char*>(Read.selectPath(window[0]).c_str()));
 					}
 					if (indicatorFolderTexture2 == 1) {
 						Interface->inputFileTexture2(filePathTex2);
@@ -406,108 +398,105 @@ int main() {
 				else if (*IndicatorDemandingTexture > 1) {
 					*IndicatorDemandingTexture = 0;
 				}
-		}
-#endif // !HOT_REALOAD
-
-			
-#ifdef HOT_REALOAD
-		matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
-		RotateValue += 1;
-
-#endif // HOT_REALOAD
-
-#ifndef HOT_REALOAD
-		ImGui::Spacing();
-
-		// menubar
-
-		// settings 
-		// colors
-		ImGui::Spacing();
-		// camera
-		if (Interface->inputDemandingCamera() == true) {
-			*IndicatorDemandCamera = *IndicatorDemandCamera + 1;
-		}
-		if (*IndicatorDemandCamera == 1) {
-			// FONCTION
-			if (Interface->inputDemandCameraSpeed() == true) {
-				*IndicatorDemandChangeCameraSpeed = *IndicatorDemandChangeCameraSpeed + 1;
 			}
-			if (*IndicatorDemandChangeCameraSpeed == 1) {
-				Interface->setCameraSpeed();
+		}
+
+		if (HOTreload == true) {
+			matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
+			RotateValue += 1;
+
+		}
+		if (HOTreload == false) {
+			ImGui::Spacing();
+
+			// menubar
+
+			// settings 
+			// colors
+			ImGui::Spacing();
+			// camera
+			if (Interface->inputDemandingCamera() == true) {
+				*IndicatorDemandCamera = *IndicatorDemandCamera + 1;
 			}
-			else if (*IndicatorDemandChangeCameraSpeed > 1) {
-				*IndicatorDemandChangeCameraSpeed = 0;
+			if (*IndicatorDemandCamera == 1) {
+				// FONCTION
+				if (Interface->inputDemandCameraSpeed() == true) {
+					*IndicatorDemandChangeCameraSpeed = *IndicatorDemandChangeCameraSpeed + 1;
+				}
+				if (*IndicatorDemandChangeCameraSpeed == 1) {
+					Interface->setCameraSpeed();
+				}
+				else if (*IndicatorDemandChangeCameraSpeed > 1) {
+					*IndicatorDemandChangeCameraSpeed = 0;
+				}
+				ImGui::Text("press E to forward");
+				ImGui::Text("press D to move back");
+				ImGui::Text("press S to move right");
+				ImGui::Text("press F to move left");
 			}
-			ImGui::Text("press E to forward");
-			ImGui::Text("press D to move back");
-			ImGui::Text("press S to move right");
-			ImGui::Text("press F to move left");
+			else if (*IndicatorDemandCamera > 1) {
+				*IndicatorDemandCamera = 0;
+			}
+			ImGui::Spacing();
+			// FOV
+			if (Interface->inputDemandingChangeFOV() == true) {
+				*IndicatorDemandingChangeFOV = *IndicatorDemandingChangeFOV + 1;
+			}
+			if (*IndicatorDemandingChangeFOV == 1) {
+				Interface->setChangeFOV();
+				FOV = Interface->getFOV_Value();
+			}
+			else if (*IndicatorDemandingChangeFOV > 1) {
+				*IndicatorDemandingChangeFOV = 0;
+			}
+			ImGui::Checkbox(" draw ", &drawingCube);
+			if (drawingCube == true) {
+				matrixAnimation->frameMatrix(Cube->getshaderCube());
+				rendering.drawElements(Cube);
+			}
+			matrixAnimation->setLookAtMatrixCamera(camera.getcamPos(), camera.getcamPos() - camera.getcamFront(), camera.getcamUp());
+			ImGui::Columns(2);
+			ImGui::SetColumnOffset(1, 2560 / 4 / 2);
+			ImGui::Spacing();
+			if (ImGui::CollapsingHeader("Color Object")) {
+				ImGui::Spacing();
+				Interface->setColorObjectR();
+				ImGui::Spacing();
+				Interface->setColorObjectG();
+				ImGui::Spacing();
+				Interface->setColorObjectB();
+				ImGui::Spacing();
+				matrixAnimation->setColorObject(Cube->getshaderCube(), Interface->getColorObjectR(), Interface->getColorObjectG(), Interface->getColorObjectB());
+			}
+			ImGui::NextColumn();
+			ImGui::Spacing();
+			float indicator2 = 0;
+			if (ImGui::CollapsingHeader("Color Frame")) {
+				float rr[3];
+				ImGui::Spacing();
+				Interface->setColorR();
+				ImGui::Spacing();
+				Interface->setColorG();
+				ImGui::Spacing();
+				Interface->setColorB();
+				ImGui::Spacing();
+				ImGui::ColorEdit3("color", rr);
+			}
+
+			ImGui::End();
+			Interface->endFrame();
 		}
-		else if (*IndicatorDemandCamera > 1) {
-			*IndicatorDemandCamera = 0;
-		}
-		ImGui::Spacing();
-		// FOV
-		if (Interface->inputDemandingChangeFOV() == true) {
-			*IndicatorDemandingChangeFOV = *IndicatorDemandingChangeFOV + 1;
-		}
-		if (*IndicatorDemandingChangeFOV == 1) {
-			Interface->setChangeFOV();
-			FOV = Interface->getFOV_Value();
-		}
-		else if (*IndicatorDemandingChangeFOV > 1) {
-			*IndicatorDemandingChangeFOV = 0;
-		}
-		ImGui::Checkbox(" draw ", &drawingCube);
-		if (drawingCube == true) {
-			rendering.drawElements();
+		if (HOTreload == true) {
 			matrixAnimation->frameMatrix(Cube->getshaderCube());
+			rendering.drawElements(Cube);
 		}
-		matrixAnimation->setLookAtMatrixCamera(camera.getcamPos(), camera.getcamPos() - camera.getcamFront(), camera.getcamUp());
-		ImGui::Columns(2);
-		ImGui::SetColumnOffset(1, 2560 / 4 / 2);
-		ImGui::Spacing();
-		if (ImGui::CollapsingHeader("Color Object")) {
-			ImGui::Spacing();
-			Interface->setColorObjectR();
-			ImGui::Spacing();
-			Interface->setColorObjectG();
-			ImGui::Spacing();
-			Interface->setColorObjectB();
-			ImGui::Spacing();
-			matrixAnimation->setColorObject(Cube->getshaderCube(), Interface->getColorObjectR(), Interface->getColorObjectG(), Interface->getColorObjectB());
-		}
-		ImGui::NextColumn();
-		ImGui::Spacing();
-		float indicator2 = 0;
-		if (ImGui::CollapsingHeader("Color Frame")) {
-			float rr[3];
-			ImGui::Spacing();
-			Interface->setColorR();
-			ImGui::Spacing();
-			Interface->setColorG();
-			ImGui::Spacing();
-			Interface->setColorB();
-			ImGui::Spacing();
-			ImGui::ColorEdit3("color", rr);
-		}
-		
-		ImGui::End();
-		Interface->endFrame();
-#endif // !HOT_REALOAD
-#ifdef HOT_REALOAD
-		matrixAnimation->frameMatrix(Cube->getshaderCube());
-#endif // HOT_REALOAD
-
 		glEnable(GL_DEPTH_TEST);
-		glfwSwapBuffers(window);
+		glfwSwapBuffers(window[0]);
 		glfwPollEvents();
 	}
-#ifndef HOT_REALOAD
-	Interface->~UserInterface();
-#endif // !HOT_REALOAD
-	Cube->~cube();
+	if (HOTreload == false)
+		Interface->~UserInterface();
+Cube->~cube();
 	delete Cube;
 	delete IndicatorDemandingRotate; delete IndicatorDemandingRotateLeft;
 	delete IndicatorDemandingRotateRight; delete IndicatorDemandingAnimation;
