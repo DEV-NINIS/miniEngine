@@ -12,6 +12,26 @@
 #include "imgui/imgui_internal.h"
 #include "UserInterface.h"
 
+
+std::vector<glm::vec3> CubeVertecices = {
+		glm::vec3(0.6, 1.0, 0.3),
+		glm::vec3(0.6, 1.0, 0.9),
+		glm::vec3(0.3, 1.0, 0.4),
+		glm::vec3(0.6, 0.1, 0.9),
+		glm::vec3(0.2, 0.3, 0.2),
+		glm::vec3(0.7, 1.0, 0.9),
+		glm::vec3(0.6, 1.0, 0.3),
+		glm::vec3(0.6, 1.0, 0.9),
+		glm::vec3(0.3, 1.0, 0.4),
+		glm::vec3(0.6, 0.1, 0.9),
+		glm::vec3(0.2, 0.3, 0.2),
+		glm::vec3(0.7, 1.0, 0.9),glm::vec3(0.6, 1.0, 0.3),
+		glm::vec3(0.6, 1.0, 0.9),
+		glm::vec3(0.3, 1.0, 0.4),
+		glm::vec3(0.6, 0.1, 0.9),
+		glm::vec3(0.2, 0.3, 0.2),
+
+};
 glmAnimation3D::glmAnimation3D(GLFWwindow* window) {
 	projectionPerspective; view; model; transform; size; size2; Scale2; LastedFloatFrameX = 1.0f;
 	LastedFloatFrameY = 1.0f; LastedFloatFrameZ = 1.0f;
