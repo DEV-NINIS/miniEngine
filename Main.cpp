@@ -25,7 +25,8 @@
 #include <fileapi.h>
 #include <commdlg.h>
 #include <filesystem> // C++17 standard header file name
-
+#define COLOR_FRAME 1
+#define COLOR_OBJECT 2
 
 
 static bool HOTreload = false;
@@ -41,7 +42,7 @@ void abc() {
 
 }
 void processInput(GLFWwindow* window) {
-	
+
 }
 char* unconstchar(const char* s) {
 	if (!s)
@@ -89,7 +90,7 @@ int main() {
 #ifndef HOT_REALOAD
 	std::vector<GLFWwindow*> window; window.push_back(glfwCreateWindow(glfwGetVideoMode(glfwGetPrimaryMonitor())->width,
 		glfwGetVideoMode(glfwGetPrimaryMonitor())->height, "DevNinisEngineMotion",
-		glfwGetPrimaryMonitor(), nullptr));
+		nullptr, nullptr));
 #endif
 
 	if (window[0] == NULL) {
@@ -108,7 +109,7 @@ int main() {
 
 	else {
 
-		glViewport(*resX / 4.5, 0, *resX, *resY);
+		glViewport(*resX / 4.25, 0, *resX, *resY);
 
 	}
 
@@ -130,20 +131,21 @@ int main() {
 	int* IndicatorDemandingAnimation = nullptr; IndicatorDemandingAnimation = new int; *IndicatorDemandingAnimation = 0;
 	int indicatorFolderTexture1 = 0; int indicatorFolderTexture2 = 0;
 	const char* filePath;
-	basicObject::cube* Cube; Cube = new basicObject::cube(window[0]);
 	glmAnimation3D* matrixAnimation; matrixAnimation = new glmAnimation3D(window[0]);
 	// initialise imgui
 	UserInterface* Interface = nullptr; Interface = new UserInterface(window[0]); // in the builder of this class they create a imgui context is because in argument they have GLFWwindow* ...
 	if (HOTreload == false) {
 		Interface->setStyleSettingFrame(window[0]);
 	}
+	basicObject::cube* Cube; Cube = new basicObject::cube(window[0]);
 	std::string formatFile; formatFile = ".dev_ninis";
 	Camera camera; writing::save Save; reading::read Read;
 	Render rendering(window[0]); objectUser::Mesh mesh(window[0]);
 	int* IndicatorFilepath = nullptr; IndicatorFilepath = new int; *IndicatorFilepath = Interface->getIndicatorTextureFilePath();
-	Cube->setShader();
-	Cube->setBuffer();
-	Cube->setTexture1(Interface->filePathPointer[0]);
+	mesh.CompileShaderMesh();
+	mesh.setBufferMesh();
+	mesh.setTexture1(unconstchar("C:/Users/anise/source/repos/littleEngine/x64/img"));
+	mesh.setTexture2(unconstchar("C:/Users/anise/source/repos/littleEngine/x64/img"));
 	Interface->LastedFloatFrame = 1;
 	float valueXColor = 0.2f; float ValueYcolor = 0.6f; float ValueZColor = 0.9f; float ValueWColor = 0.1f;
 	float deltatime = 0, currentFrame = 0, lastedFrame = 0;
@@ -151,28 +153,25 @@ int main() {
 	TCHAR nBufferLength = 102; char lpFileName[2]; char* lpFilePart = nullptr; lpFilePart = &filePathBuffer[1];
 	std::string a = "VertexShaderObject.glsl"; std::string b = "FragmentShaderObject.glsl";
 	int numberMesh = 1;
-	float rrere[] = {
-		10, 10, 1, 2, 3
-	};
 	while (!glfwWindowShouldClose(window[0])) // render
 	{
 		currentFrame = glfwGetTime();
 		deltatime = currentFrame - lastedFrame;
 		lastedFrame = currentFrame;
 		processInput(window[0]);
-		glClearColor(Interface->getColorR(), Interface->getColorG(), Interface->getColorB(), 1.0f);
+		glClearColor(Interface->lastedColorFrame[0], Interface->lastedColorFrame[1], Interface->lastedColorFrame[2], 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		mesh.useShaderObject();
 		for (int i(0); i < window.size(); i++) {
 			camera.processInputCamera(window[i], deltatime, Interface->getCmerraSpeed());
 		}
-		Cube->useShaderCube();
 		matrixAnimation->initialiseMatrix();
 		matrixAnimation->setLookAtMatrixCamera(camera.getcamPos(), camera.getcamFront(), camera.getcamUp());
 		matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
 		matrixAnimation->setMatrixPerspectiveProjection(FOV, resX2, resY2);
 		matrixAnimation->setTransformValue();
-		matrixAnimation->frameMatrix(Cube->getshaderCube());
-		matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
+		matrixAnimation->frameMatrix(mesh.getShaderObject());
+		matrixAnimation->setScaleValue(mesh.getShaderObject(), Interface->LastedFloatFrame);
 		if (glfwGetKey(window[0], GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 			HOTreload = false;
 			glViewport(*resX / 4.5, 0, *resX, *resY);
@@ -182,55 +181,55 @@ int main() {
 			Interface->setSettingFrame();
 			Interface->interfacebeginCanvas();
 		}
-		matrixAnimation->setPercentTexture(Cube->getshaderCube(), Interface->getpercentTexture());
+		matrixAnimation->setPercentTexture(mesh.getShaderObject(), Interface->getpercentTexture());
 
 		if (HOTreload == false) {
 			ImGui::Begin("Engine");
 			if (ImGui::Button("PLAY", ImVec2(2560 / 4.5, 60.0f))) {
 				HOTreload = true;
 				glViewport(0, 0, *resX, *resY);
-				
+
 			}
 			if (ImGui::CollapsingHeader("size")) {
 				ImGui::Separator();
 				Interface->setScaleCube();
-				matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
+				matrixAnimation->setScaleValue(mesh.getShaderObject(), Interface->LastedFloatFrame);
 				ImGui::Separator();
 				Interface->setLastedmatrix();
-				matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
-				matrixAnimation->setScaleValueX(Cube->getshaderCube());
-				matrixAnimation->frameMatrix(Cube->getshaderCube());
+				matrixAnimation->setScaleValue(mesh.getShaderObject(), Interface->LastedFloatFrame);
+				matrixAnimation->setScaleValueX(mesh.getShaderObject());
+				matrixAnimation->frameMatrix(mesh.getShaderObject());
 				ImGui::Separator();
 				Interface->setLastedmatrix();
-				matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
-				matrixAnimation->setScaleValueY(Cube->getshaderCube());
-				matrixAnimation->frameMatrix(Cube->getshaderCube());
+				matrixAnimation->setScaleValue(mesh.getShaderObject(), Interface->LastedFloatFrame);
+				matrixAnimation->setScaleValueY(mesh.getShaderObject());
+				matrixAnimation->frameMatrix(mesh.getShaderObject());
 				ImGui::Separator();
 
 
 				Interface->setLastedmatrix();
-				matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
-				matrixAnimation->setScaleValueZ(Cube->getshaderCube());
-				matrixAnimation->frameMatrix(Cube->getshaderCube());
+				matrixAnimation->setScaleValue(mesh.getShaderObject(), Interface->LastedFloatFrame);
+				matrixAnimation->setScaleValueZ(mesh.getShaderObject());
+				matrixAnimation->frameMatrix(mesh.getShaderObject());
 				ImGui::Separator();
 			}
 			if (ImGui::CollapsingHeader("positions")) {
 				ImGui::Spacing();
 				Interface->setPositionObjectX();
 				ImGui::Separator();
-				matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
+				matrixAnimation->setPositionObject(mesh.getShaderObject(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
 				Interface->setPositionObjectY();
 				ImGui::Separator();
-				matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
+				matrixAnimation->setPositionObject(mesh.getShaderObject(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
 				Interface->setPositionObjectZ();
 				ImGui::Separator();
-				matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
-				matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
+				matrixAnimation->setPositionObject(mesh.getShaderObject(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
+				matrixAnimation->setPositionObject(mesh.getShaderObject(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
 			}
 		}
 
 		if (HOTreload == true) {
-			matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
+			matrixAnimation->setScaleValue(mesh.getShaderObject(), Interface->LastedFloatFrame);
 		}
 
 
@@ -239,6 +238,7 @@ int main() {
 
 		//Left side
 		if (HOTreload == false) {
+
 			if (ImGui::BeginMainMenuBar()) {
 				if (ImGui::BeginMenu("file")) {
 					if (ImGui::MenuItem("Open")) {
@@ -249,30 +249,28 @@ int main() {
 							Read.getValueTransformYFile(), Read.getValueTransformZFile(), Read.getcolorObjectFileR(),
 							Read.getcolorObjectFileG(), Read.getcolorObjectFileB(), Read.getValuePositionObjectFileX(), Read.getValuePositionObjectFileY(),
 							Read.getValuePositionObjectFileZ(), Read.getValueCameraSpeedFile(), Read.getfiletextureFile());
-						matrixAnimation->frameMatrix(Cube->getshaderCube());
-						Cube->setTexture1(Interface->filePathPointer[0]);
-						Cube->setTexture2(Interface->filePathPointer[0]);
-						matrixAnimation->setPercentTexture(Cube->getshaderCube(), Interface->getpercentTexture());
-						matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
-						matrixAnimation->setPositionObject(Cube->getshaderCube(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
-						matrixAnimation->setColorObject(Cube->getshaderCube(), Interface->getColorObjectR(), Interface->getColorObjectG(), Interface->getColorObjectB());
+						matrixAnimation->frameMatrix(mesh.getShaderObject());
+						mesh.setTexture1(Interface->filePathPointer[0]);
+						mesh.setTexture2(Interface->filePathPointer[0]);
+						matrixAnimation->setPercentTexture(mesh.getShaderObject(), Interface->getpercentTexture());
+						matrixAnimation->setScaleValue(mesh.getShaderObject(), Interface->LastedFloatFrame);
+						matrixAnimation->setPositionObject(mesh.getShaderObject(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
+						matrixAnimation->setColorObject(mesh.getShaderObject(), Interface->LastedColorObject[0], Interface->LastedColorObject[1], Interface->LastedColorObject[2]);
 						matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
 					}
 					ImGui::Spacing();
 					if (ImGui::MenuItem("Save")) {
-						Save.setFileContent(Cube->getfinalPathTexture()[0], Interface->getColorObjectR(),
-							Interface->getColorObjectG(), Interface->getColorObjectB(), Interface->getPositionObjectX(), Interface->getPositionObjectY()
+						Save.setFileContent(mesh.getPathTexture()[0], Interface->LastedColorObject[0], Interface->LastedColorObject[1], Interface->LastedColorObject[2], Interface->getPositionObjectX(), Interface->getPositionObjectY()
 							, Interface->getPositionObjectZ(), Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ()
-							, Interface->getColorR(), Interface->getColorG(), Interface->getColorB(), Interface->getCmerraSpeed(), Interface->getFOV_Value()
+							, Interface->lastedColorFrame[0], Interface->lastedColorFrame[1], Interface->lastedColorFrame[2], Interface->getCmerraSpeed(), Interface->getFOV_Value()
 							, Interface->getScaleCubeX(), Interface->getScaleCubeY(), Interface->getScaleCubeZ(), Read.getLastedFilepath());
 					}
 					ImGui::Spacing();
 					if (ImGui::MenuItem("Save as")) {
 
-						Save.setFileContent(Cube->getfinalPathTexture()[0], Interface->getColorObjectR(),
-							Interface->getColorObjectG(), Interface->getColorObjectB(), Interface->getPositionObjectX(), Interface->getPositionObjectY()
+						Save.setFileContent(mesh.getPathTexture()[0], Interface->LastedColorObject[0], Interface->LastedColorObject[1], Interface->LastedColorObject[2], Interface->getPositionObjectX(), Interface->getPositionObjectY()
 							, Interface->getPositionObjectZ(), Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ()
-							, Interface->getColorR(), Interface->getColorG(), Interface->getColorB(), Interface->getCmerraSpeed(), Interface->getFOV_Value()
+							, Interface->lastedColorFrame[0], Interface->lastedColorFrame[1], Interface->lastedColorFrame[2], Interface->getCmerraSpeed(), Interface->getFOV_Value()
 							, Interface->getScaleCubeX(), Interface->getScaleCubeY(), Interface->getScaleCubeZ(), Save.setFilePath(window[0]) + formatFile);
 					}
 					if (ImGui::MenuItem("Wiew Source Code ")) {
@@ -280,6 +278,13 @@ int main() {
 					}
 					ImGui::EndMenu();
 				}
+				if (ImGui::BeginMenu("import")) {
+					if (ImGui::MenuItem("Mesh (.obj file)")) {
+
+					}
+					ImGui::EndMenu();
+				}
+
 				ImGui::EndMainMenuBar();
 			}
 			// end menubar
@@ -391,11 +396,11 @@ int main() {
 					}
 					Interface->setPercentTexture();
 					if (Interface->confirmFilePath() == true) {
-						Cube->setTexture1(filePathTex1);
-						Cube->setTexture2(filePathTex2);
+						mesh.setTexture1(filePathTex1);
+						mesh.setTexture2(filePathTex2);
 					}
-					matrixAnimation->setPercentTexture(Cube->getshaderCube(), Interface->getpercentTexture());
-					Cube->setParametterTexture();
+					matrixAnimation->setPercentTexture(mesh.getShaderObject(), Interface->getpercentTexture());
+					mesh.activeTexture();
 				}
 				else if (*IndicatorDemandingTexture > 1) {
 					*IndicatorDemandingTexture = 0;
@@ -453,9 +458,9 @@ int main() {
 			}
 			ImGui::Checkbox(" draw ", &drawingCube);
 			if (drawingCube == true) {
-				matrixAnimation->frameMatrix(Cube->getshaderCube());
-				Cube->setParametterTexture();
-				rendering.drawElements(Cube, numberMesh);
+				matrixAnimation->frameMatrix(mesh.getShaderObject());
+				mesh.activeTexture();
+				rendering.drawElements(mesh, numberMesh);
 			}
 			matrixAnimation->setLookAtMatrixCamera(camera.getcamPos(), camera.getcamPos() - camera.getcamFront(), camera.getcamUp());
 			ImGui::Columns(2);
@@ -469,8 +474,8 @@ int main() {
 				ImGui::Spacing();
 				Interface->setColorObjectB();
 				ImGui::Spacing();
-				matrixAnimation->setColorObject(Cube->getshaderCube(), Interface->getColorObjectR(), Interface->getColorObjectG(), Interface->getColorObjectB());
-				Interface->setColorEditor();
+				matrixAnimation->setColorObject(mesh.getShaderObject(), Interface->LastedColorObject[0], Interface->LastedColorObject[1], Interface->LastedColorObject[2]);
+				Interface->setColorEditorObject(COLOR_OBJECT);
 			}
 			ImGui::NextColumn();
 			ImGui::Spacing();
@@ -483,22 +488,25 @@ int main() {
 				ImGui::Spacing();
 				Interface->setColorB();
 				ImGui::Spacing();
+				Interface->setColorEditorFrame(COLOR_FRAME);
 			}
 
 			ImGui::End();
 			Interface->endFrame();
 		}
 		if (HOTreload == true) {
-			matrixAnimation->frameMatrix(Cube->getshaderCube());
-			rendering.drawElements(Cube, numberMesh);
+			matrixAnimation->frameMatrix(mesh.getShaderObject());
+			rendering.drawElements(mesh, numberMesh);
 		}
 		glEnable(GL_DEPTH_TEST);
 		glfwSwapBuffers(window[0]);
 		glfwPollEvents();
 	}
-	if (HOTreload == false)
+	if (HOTreload == false) {
 		Interface->~UserInterface();
-Cube->~cube();
+	}
+	Cube->~cube();
+	mesh.~Mesh();
 	delete Cube;
 	delete IndicatorDemandingRotate; delete IndicatorDemandingRotateLeft;
 	delete IndicatorDemandingRotateRight; delete IndicatorDemandingAnimation;
