@@ -57,8 +57,14 @@ namespace objectUser {
 	class Mesh {
 		public:
 			Mesh(GLFWwindow* window);
-			void CompileShaderObject();
-			void setBufferObject();
+			void CompileShaderMesh();
+			void setBufferMesh();
+			float variableSize1(float variable);
+			void setTexture1(char* filePath);
+			void setTexture2(char* filePath);
+			void drawMesh();
+			unsigned int variableSize(unsigned int variable);
+
 			void OpenShader(std::string filePathVertex, std::string filePathFragment);
 			virtual ~Mesh();
 	    private:
@@ -72,7 +78,9 @@ namespace objectUser {
 			GLuint shaderProgram;
 			GLuint shaderFrag;
 			GLuint shaderVertex;
-			
+			GLuint texture1;
+			GLuint texture2;
+			std::vector<int> LoaderTextureSUCCESS;
 	};
 #endif
 }

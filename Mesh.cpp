@@ -8,17 +8,63 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
-
+#define LOADER_TEXTURE_SUCCESS 1
+#define LOADER_TEXTURE_NOT_SUCCESS 0
 using namespace objectUser;
 
 float Mesh::verteciesObject[] = {
-	0
+	-0.5f, -0.5f, -0.5f,  0.8f, 0.6f, 0.9f, 0.0f, 0.0f,
+		 0.5f, -0.5f, -0.5f,  0.9f, 0.6f, 0.2f, 1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  0.5f, 0.6f, 0.9f,1.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  0.7f, 0.6f, 0.8f,1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,  0.1f, 0.6f, 0.9f,0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.3f, 0.6f, 0.1f,0.0f, 0.0f,
+
+		-0.5f, -0.5f,  0.5f,  0.2f, 0.1f, 0.9f,0.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,  0.9f, 0.6f, 0.9f,1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  0.2f, 0.2f, 0.9f,1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  0.3f, 0.6f, 0.1f,1.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,  0.2f, 0.3f, 0.9f,0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.2f, 0.6f, 0.9f,0.0f, 0.0f,
+
+		-0.5f,  0.5f,  0.5f,  0.9f, 0.1f, 0.2f,1.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  0.4f, 0.6f, 0.8f,1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.9f, 0.5f, 0.4f,0.0f, 0.4f,
+		-0.5f, -0.5f, -0.5f,  0.2f, 0.2f, 0.8f,0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.6f, 0.6f, 0.9f,0.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  0.6f, 0.5f, 0.3f,1.0f, 0.0f,
+
+		 0.5f,  0.5f,  0.5f, 0.3f, 0.9f, 0.9f, 1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f, 0.9f, 0.4f, 0.3f, 1.0f, 0.0f,
+		 0.5f, -0.5f, -0.5f, 0.1f, 0.6f, 0.9f, 0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f, 0.7f, 0.1f, 0.5f, 0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f, 0.2f, 0.4f, 0.1f, 0.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f, 0.7f, 0.9f, 0.0f, 1.0f, 0.0f,
+
+		-0.5f, -0.5f, -0.5f, 0.7f, 0.6f, 0.8f, 0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f, 0.5f, 0.4f, 0.1f, 1.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f, 0.6f, 0.6f, 0.5f, 1.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f, 0.9f, 0.3f, 0.2f, 1.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f, 0.1f, 0.9f, 0.7f, 0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f, 0.2f, 0.1f, 0.9f, 0.0f, 1.0f,
+
+		-0.5f,  0.5f, -0.5f, 0.8f, 0.8f, 0.8f, 0.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f, 0.4f, 0.7f, 0.5f, 1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f, 0.2f, 0.4f, 0.6f, 1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f, 0.3f, 0.3f, 0.6f, 1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f, 0.9f, 0.9f, 0.1f, 0.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f, 0.1f, 0.1f, 0.4f, 0.0f, 1.0f
 };
 unsigned int Mesh::indexObject[] {
 	0
 };
 
 Mesh::Mesh(GLFWwindow* window) {
+	// textures
+	LoaderTextureSUCCESS.push_back(0);
+	LoaderTextureSUCCESS.push_back(0);
+	texture1; texture2;
+	// buffers
 	objectVAO; objectVBO; objectEBO;
 	// shaders
 	shaderProgram; shaderFrag; shaderVertex;
@@ -49,28 +95,102 @@ Mesh::Mesh(GLFWwindow* window) {
 
 	fragmentShaderCODE = "#version 460 core\n"
 		"in vec3 color;\n"
+		"in vec2 Texcoords;\n"
 		"out vec4 frag_Color;\n"
+		"uniform float PercentTexture;\n"
+		"uniform sampler2D texture1;\n"
+		"uniform sampler2D Texture2;\n"
+		"uniform float PercentTexture;\n"
 		"void main() {\n"
-		"frag_Color = vec4(color, 1.0);"
+		"frag_Color = mix(texture(texture1, Texcoords), texture(texture2, Texcoords), PercentTexture) * vec4(color, 1.0);"
 		"}\n\0";
 }
 Mesh::~Mesh() {
 
 }
-void Mesh::CompileShaderObject() {
-
+float Mesh::variableSize1(float variable) {
+	float a = sizeof(variable) / sizeof(float);
+	return a;
 }
-void Mesh::setBufferObject() {
+unsigned int Mesh::variableSize(unsigned int variable) {
+	unsigned int a = variable / sizeof(unsigned int);
+	return a;
+}
+void Mesh::drawMesh() {
+	glActiveTexture(GL_TEXTURE0);
+	
+}
+void Mesh::CompileShaderMesh() {
+	shaderVertex = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(shaderVertex, 1, (const GLchar**)vertexShaderCODE, NULL);
+	glCompileShader(shaderVertex);
+
+	shaderFrag = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(shaderFrag, 1, (const GLchar**)fragmentShaderCODE, NULL);
+	glCompileShader(shaderFrag);
+
+	shaderProgram = glCreateProgram();
+	glAttachShader(shaderProgram, shaderVertex);
+	glAttachShader(shaderProgram, shaderFrag);
+	glLinkProgram(shaderProgram);
+}
+void Mesh::setTexture1(char* filePath) {
+	glGenTextures(1, &texture1);
+	glBindTexture(GL_TEXTURE_2D, texture1);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	stbi_set_flip_vertically_on_load(true);
+	int width, height, nrChanels;
+	unsigned char* data = 0;
+	data = stbi_load(static_cast<const char*>(filePath), &width, &height, &nrChanels, 0);
+	if (data) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+		stbi_image_free(data);
+		glUseProgram(shaderProgram);
+		glUniform1f(glGetAttribLocation(shaderProgram, "texture1"), 0);
+		LoaderTextureSUCCESS[0] = LOADER_TEXTURE_SUCCESS;
+	}
+	else {
+		LoaderTextureSUCCESS[0] = LOADER_TEXTURE_NOT_SUCCESS;
+	}
+}
+void Mesh::setTexture2(char* filePath) {
+	glGenTextures(1, &texture2);
+	glBindTexture(GL_TEXTURE_2D, texture2);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	stbi_set_flip_vertically_on_load(true);
+	int width, height, nrChanels;
+	unsigned char* data = 0;
+	data = stbi_load(static_cast<const char*>(filePath), &width, &height, &nrChanels, 0);
+	if (data) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+		stbi_image_free(data);
+		glUseProgram(shaderProgram);
+		glUniform1f(glGetAttribLocation(shaderProgram, "texture2"), 1);
+		LoaderTextureSUCCESS[1] = LOADER_TEXTURE_SUCCESS;
+	}
+	else {
+		LoaderTextureSUCCESS[1] = LOADER_TEXTURE_NOT_SUCCESS;
+	}
+}
+void Mesh::setBufferMesh() {
 	glGenVertexArrays(1, &objectVAO);
 	glBindVertexArray(objectVAO);
 
 	glGenBuffers(1, &objectVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, objectVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verteciesObject), verteciesObject, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(verteciesObject), verteciesObject, GL_DYNAMIC_DRAW);
 
 	glGenBuffers(1, &objectEBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, objectEBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(indexObject), indexObject, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(indexObject), indexObject, GL_DYNAMIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);

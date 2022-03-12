@@ -41,9 +41,7 @@ void abc() {
 
 }
 void processInput(GLFWwindow* window) {
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-		glfwSetWindowShouldClose(window, true);
-	}
+	
 }
 char* unconstchar(const char* s) {
 	if (!s)
@@ -91,7 +89,7 @@ int main() {
 #ifndef HOT_REALOAD
 	std::vector<GLFWwindow*> window; window.push_back(glfwCreateWindow(glfwGetVideoMode(glfwGetPrimaryMonitor())->width,
 		glfwGetVideoMode(glfwGetPrimaryMonitor())->height, "DevNinisEngineMotion",
-		nullptr, nullptr));
+		glfwGetPrimaryMonitor(), nullptr));
 #endif
 
 	if (window[0] == NULL) {
@@ -152,10 +150,12 @@ int main() {
 	TCHAR filepath = 100; char filePathBuffer[100]; filePathBuffer[100];
 	TCHAR nBufferLength = 102; char lpFileName[2]; char* lpFilePart = nullptr; lpFilePart = &filePathBuffer[1];
 	std::string a = "VertexShaderObject.glsl"; std::string b = "FragmentShaderObject.glsl";
+	int numberMesh = 1;
+	float rrere[] = {
+		10, 10, 1, 2, 3
+	};
 	while (!glfwWindowShouldClose(window[0])) // render
 	{
-
-
 		currentFrame = glfwGetTime();
 		deltatime = currentFrame - lastedFrame;
 		lastedFrame = currentFrame;
@@ -173,6 +173,11 @@ int main() {
 		matrixAnimation->setTransformValue();
 		matrixAnimation->frameMatrix(Cube->getshaderCube());
 		matrixAnimation->setScaleValue(Cube->getshaderCube(), Interface->LastedFloatFrame);
+		if (glfwGetKey(window[0], GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+			HOTreload = false;
+			glViewport(*resX / 4.5, 0, *resX, *resY);
+			Interface->setStyleSettingFrame(window[0]);
+		}
 		if (HOTreload == false) {
 			Interface->setSettingFrame();
 			Interface->interfacebeginCanvas();
@@ -183,9 +188,6 @@ int main() {
 			ImGui::Begin("Engine");
 			if (ImGui::Button("PLAY", ImVec2(2560 / 4.5, 60.0f))) {
 				HOTreload = true;
-				window.push_back(glfwCreateWindow(glfwGetVideoMode(glfwGetPrimaryMonitor())->width,
-					glfwGetVideoMode(glfwGetPrimaryMonitor())->height, "DevNinisEngineMotion",
-					glfwGetPrimaryMonitor(), nullptr));
 				glViewport(0, 0, *resX, *resY);
 				
 			}
@@ -452,7 +454,8 @@ int main() {
 			ImGui::Checkbox(" draw ", &drawingCube);
 			if (drawingCube == true) {
 				matrixAnimation->frameMatrix(Cube->getshaderCube());
-				rendering.drawElements(Cube);
+				Cube->setParametterTexture();
+				rendering.drawElements(Cube, numberMesh);
 			}
 			matrixAnimation->setLookAtMatrixCamera(camera.getcamPos(), camera.getcamPos() - camera.getcamFront(), camera.getcamUp());
 			ImGui::Columns(2);
@@ -467,12 +470,12 @@ int main() {
 				Interface->setColorObjectB();
 				ImGui::Spacing();
 				matrixAnimation->setColorObject(Cube->getshaderCube(), Interface->getColorObjectR(), Interface->getColorObjectG(), Interface->getColorObjectB());
+				Interface->setColorEditor();
 			}
 			ImGui::NextColumn();
 			ImGui::Spacing();
 			float indicator2 = 0;
 			if (ImGui::CollapsingHeader("Color Frame")) {
-				float rr[3];
 				ImGui::Spacing();
 				Interface->setColorR();
 				ImGui::Spacing();
@@ -480,7 +483,6 @@ int main() {
 				ImGui::Spacing();
 				Interface->setColorB();
 				ImGui::Spacing();
-				ImGui::ColorEdit3("color", rr);
 			}
 
 			ImGui::End();
@@ -488,7 +490,7 @@ int main() {
 		}
 		if (HOTreload == true) {
 			matrixAnimation->frameMatrix(Cube->getshaderCube());
-			rendering.drawElements(Cube);
+			rendering.drawElements(Cube, numberMesh);
 		}
 		glEnable(GL_DEPTH_TEST);
 		glfwSwapBuffers(window[0]);

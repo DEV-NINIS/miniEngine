@@ -84,6 +84,8 @@ public:
 	float getScaleCubeY() const;
 	float getScaleCubeZ() const;
 
+	void setColorEditor();
+
 	// gettting values for save
 	void setSettingFrame();
 	bool inputDemandingChangeColorFrame();
@@ -114,9 +116,7 @@ public:
 		float LastedRotateXValue;
 		float LastedRotateYValue;
 		float LastedRotateZValue;
-		float LastedColorObjectR;
-		float LastedColorObjectG;
-		float LastedColorObjectB;
+		static float LastedColorObject[2];
 		float LastedPositionObjectX;
 		float LastedPositionObjectY;
 		float LastedPositionObjectZ;

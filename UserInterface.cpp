@@ -18,6 +18,7 @@ char UserInterface::filePath4[] = { 0 };
 char UserInterface::filePath5[] = { 0 };
 const char* UserInterface::filepath1ConstChar = 0;
 const char* UserInterface::filepath2ConstChar = 0;
+float UserInterface::LastedColorObject[] = { 0 };
 
 UserInterface::UserInterface(GLFWwindow* window)  {
 	
@@ -27,7 +28,9 @@ UserInterface::UserInterface(GLFWwindow* window)  {
 	size1 = new float;
 	FOV = 55.0f;
 	lastedFilePath = -1;
-	LastedColorObjectR = 0.5f; LastedColorObjectG = 0.6f; LastedColorObjectB = 0.9f; 
+	LastedColorObject[0] = 0.1;
+		LastedColorObject[1] = 0.6;
+		LastedColorObject[2] = 0.5;
 	LastedPositionObjectX = 0.0f; LastedPositionObjectY = 0.0f; LastedPositionObjectZ = 0.0f;
 	filePathPointer.push_back(new char); *filePathPointer[0] = '0';
 	filePathPointer.push_back(new char); *filePathPointer[1] = '0';
@@ -50,7 +53,9 @@ float LastedPositionObjectZFile, float CameraSpeedFile, const char* filePathPoin
 	LastedFrameColorR = LastedFrameColorRFile; LastedFrameColorG = LastedFrameColorGFile; LastedFrameColorB = LastedFrameColorBFile;
 	LastedFloatFrame = 1.0f; LastedFloatFrameX = LastedFloatFrameXFile; LastedFloatFrameY = LastedFloatFrameYFile; LastedFloatFrameZ = LastedFloatFrameZFile;
 	LastedRotateXValue = LastedRotateXValueFile; LastedRotateYValue = LastedRotateYValueFile; LastedRotateZValue = LastedRotateZValueFile;
-	LastedColorObjectR = LastedColorObjectRFile; LastedColorObjectG = LastedColorObjectGFile; LastedColorObjectB = LastedColorObjectBFile;
+	LastedColorObject[0] = LastedColorObjectRFile;
+	LastedColorObject[1] = (LastedColorObjectGFile);
+	LastedColorObject[2] = (LastedColorObjectBFile);
 	LastedPositionObjectX = LastedPositionObjectXFile; LastedPositionObjectY = LastedPositionObjectYFile; LastedPositionObjectZ = LastedPositionObjectZFile;
 	percentTexture = 0.5f; CameraSpeed = CameraSpeedFile; FOV = 55.0f;
 	lastedFilePath = -1;
@@ -341,21 +346,21 @@ void UserInterface::inputFileTexture2(char* filePath) {
 }
 
 void UserInterface::setColorObjectR() {
-	ImGui::SliderFloat("R", &LastedColorObjectR, 0, 1);
-	if (LastedColorObjectR < -401602080) {
-		LastedColorObjectR = 0.5f;
+	ImGui::SliderFloat("R", &LastedColorObject[0], 0, 1);
+	if (LastedColorObject[0] < -401602080) {
+		LastedColorObject[0] = 0.5f;
 	}
 }
 void UserInterface::setColorObjectG() {
-	ImGui::SliderFloat("G", &LastedColorObjectG, 0, 1);
-	if (LastedColorObjectG < -401602080) {
-		LastedColorObjectG = 0.5f;
+	ImGui::SliderFloat("G", &LastedColorObject[1], 0, 1);
+	if (LastedColorObject[1] < -401602080) {
+		LastedColorObject[1] = 0.5f;
 	}
 }
 void UserInterface::setColorObjectB() {
-	ImGui::SliderFloat("B", &LastedColorObjectB, 0, 1);
-	if (LastedColorObjectB < -401602080) {
-		LastedColorObjectB = 0.5f;
+	ImGui::SliderFloat("B", &LastedColorObject[2], 0, 1);
+	if (LastedColorObject[2] < -401602080) {
+		LastedColorObject[2] = 0.5f;
 	}
 }
 // set positions 
@@ -384,6 +389,9 @@ void UserInterface::endFrame() {
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
+void UserInterface::setColorEditor() {
+	ImGui::ColorEdit3("color", LastedColorObject);
+}
 void UserInterface::setLastedmatrix() {
 	LastedFloatFrame = *size1;
 }
@@ -396,9 +404,9 @@ float UserInterface::getColorR() const { return LastedFrameColorR; }
 float UserInterface::getColorG() const { return LastedFrameColorG; }
 float UserInterface::getColorB() const { return LastedFrameColorB; }
 float UserInterface::getFOV_Value() const { return FOV; }
-float UserInterface::getColorObjectR() const { return LastedColorObjectR; }
-float UserInterface::getColorObjectG() const { return LastedColorObjectG; }
-float UserInterface::getColorObjectB() const { return LastedColorObjectB; }
+float UserInterface::getColorObjectR() const { return LastedColorObject[0]; }
+float UserInterface::getColorObjectG() const { return LastedColorObject[1]; }
+float UserInterface::getColorObjectB() const { return LastedColorObject[2]; }
 float UserInterface::getPositionObjectX() const { return LastedPositionObjectX; }
 float UserInterface::getPositionObjectY() const { return LastedPositionObjectY; }
 float UserInterface::getPositionObjectZ() const { return LastedPositionObjectZ; }
