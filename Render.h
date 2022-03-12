@@ -12,7 +12,7 @@ class Render
 public:
 	Render(GLFWwindow* window);
 	virtual ~Render();
-	virtual void drawElements(basicObject::cube* Cube);
+	virtual void drawElements(objectUser::Mesh mesh , int& numberAssets);
 private:
 	basicObject::cube* Cube;
 };

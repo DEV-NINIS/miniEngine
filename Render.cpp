@@ -15,6 +15,6 @@ Render::Render(GLFWwindow* window)   {
 Render::~Render() {
 
 }
-void Render::drawElements(basicObject::cube* Cube) {
-	Cube->drawThisObject();
+void Render::drawElements(objectUser::Mesh mesh, int& numberAssets) {
+	mesh.drawMesh();
 }

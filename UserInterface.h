@@ -44,7 +44,6 @@ public:
 	float setRotateAroundZValue();
 	float setScaleCube();
 	float setScaleCubeX();
-	float setScaleCubeY();
 	float setScaleCubeZ();
 	void setPercentTexture();
 	void setCameraSpeed();
@@ -66,13 +65,6 @@ public:
 	float& getValueRotateZ();
 	float getFOV_Value() const;
 	// 
-	// getting value color
-	float getColorR() const;
-	float getColorG() const;
-	float getColorB() const;
-	float getColorObjectR() const;
-	float getColorObjectG() const;
-	float getColorObjectB() const;
 	// getting value Position
 	float getPositionObjectX() const;
 	float getPositionObjectY() const;
@@ -84,7 +76,9 @@ public:
 	float getScaleCubeY() const;
 	float getScaleCubeZ() const;
 
-	void setColorEditor();
+	void setColorEditorFrame(int objectOrFrame);
+	void setColorEditorObject(int objectOrFrame);
+
 
 	// gettting values for save
 	void setSettingFrame();
@@ -105,18 +99,17 @@ public:
 	static char filePath5[150];
 	static const char* filepath1ConstChar;
 	static const char* filepath2ConstChar;
+	static float LastedColorObject[2];
+	static float lastedColorFrame[2];
 
 	protected:
 		int lastedFilePath;
 		float* size1 = nullptr;
 		float FOV;
-		float LastedFrameColorR;
-		float LastedFrameColorG;
-		float LastedFrameColorB;
 		float LastedRotateXValue;
 		float LastedRotateYValue;
 		float LastedRotateZValue;
-		static float LastedColorObject[2];
+		
 		float LastedPositionObjectX;
 		float LastedPositionObjectY;
 		float LastedPositionObjectZ;

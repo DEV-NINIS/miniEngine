@@ -8,8 +8,8 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
-#define LOADER_TEXTURE_SUCCESS 1
-#define LOADER_TEXTURE_NOT_SUCCESS 0
+#define LOADER_TEXTURE_SUCCESS 0
+#define LOADER_TEXTURE_NOT_SUCCESS 1
 using namespace objectUser;
 
 float Mesh::verteciesObject[] = {
@@ -64,6 +64,8 @@ Mesh::Mesh(GLFWwindow* window) {
 	LoaderTextureSUCCESS.push_back(0);
 	LoaderTextureSUCCESS.push_back(0);
 	texture1; texture2;
+	pathTexture.push_back(new char);
+	pathTexture.push_back(new char);
 	// buffers
 	objectVAO; objectVBO; objectEBO;
 	// shaders
@@ -106,7 +108,9 @@ Mesh::Mesh(GLFWwindow* window) {
 		"}\n\0";
 }
 Mesh::~Mesh() {
-
+	glDeleteVertexArrays(1, &objectVAO);
+	glDeleteBuffers(1, &objectVBO);
+	glDeleteBuffers(1, &objectEBO);
 }
 float Mesh::variableSize1(float variable) {
 	float a = sizeof(variable) / sizeof(float);
@@ -116,18 +120,39 @@ unsigned int Mesh::variableSize(unsigned int variable) {
 	unsigned int a = variable / sizeof(unsigned int);
 	return a;
 }
+void Mesh::activeTexture() {
+	if (texture1 != 0) {
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture1);
+	}
+	if (texture2 != 0) {
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texture2);
+	}
+}
 void Mesh::drawMesh() {
-	glActiveTexture(GL_TEXTURE0);
-	
+	this->activeTexture();
+	glBindVertexArray(objectVAO);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glBindVertexArray(0);
 }
 void Mesh::CompileShaderMesh() {
+	int succesCompileShaders;
 	shaderVertex = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(shaderVertex, 1, (const GLchar**)vertexShaderCODE, NULL);
 	glCompileShader(shaderVertex);
+	glGetShaderiv(shaderVertex, GL_COMPILE_STATUS, &succesCompileShaders);
+	if (succesCompileShaders == NULL) {
+		exit(EXIT_FAILURE);
+	}
 
 	shaderFrag = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(shaderFrag, 1, (const GLchar**)fragmentShaderCODE, NULL);
 	glCompileShader(shaderFrag);
+	glGetShaderiv(shaderFrag, GL_COMPILE_STATUS, &succesCompileShaders);
+	if (succesCompileShaders == NULL) {
+		exit(EXIT_FAILURE);
+	}
 
 	shaderProgram = glCreateProgram();
 	glAttachShader(shaderProgram, shaderVertex);
@@ -144,7 +169,8 @@ void Mesh::setTexture1(char* filePath) {
 	stbi_set_flip_vertically_on_load(true);
 	int width, height, nrChanels;
 	unsigned char* data = 0;
-	data = stbi_load(static_cast<const char*>(filePath), &width, &height, &nrChanels, 0);
+	pathTexture[0] = static_cast<const char*>(filePath);
+	data = stbi_load(pathTexture[0], &width, &height, &nrChanels, 0);
 	if (data) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
@@ -166,12 +192,13 @@ void Mesh::setTexture2(char* filePath) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	stbi_set_flip_vertically_on_load(true);
 	int width, height, nrChanels;
-	unsigned char* data = 0;
-	data = stbi_load(static_cast<const char*>(filePath), &width, &height, &nrChanels, 0);
-	if (data) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	unsigned char* data2 = 0;
+	pathTexture[0] = static_cast<const char*>(filePath);
+	data2 = stbi_load(pathTexture[0], &width, &height, &nrChanels, 0);
+	if (data2) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data2);
 		glGenerateMipmap(GL_TEXTURE_2D);
-		stbi_image_free(data);
+		stbi_image_free(data2);
 		glUseProgram(shaderProgram);
 		glUniform1f(glGetAttribLocation(shaderProgram, "texture2"), 1);
 		LoaderTextureSUCCESS[1] = LOADER_TEXTURE_SUCCESS;
@@ -190,7 +217,7 @@ void Mesh::setBufferMesh() {
 
 	glGenBuffers(1, &objectEBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, objectEBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(indexObject), indexObject, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexObject), indexObject, GL_DYNAMIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -209,4 +236,10 @@ void Mesh::OpenShader(std::string filePathVertex, std::string filePathFragment) 
 	while (std::getline(fluxFragment, FileContent)) {}
 	fragmentShaderCODE = static_cast<const char*>(FileContent.c_str());
 }
+
+void Mesh::useShaderObject() { glUseProgram(shaderProgram); }
+// getting
+std::vector<const char*> Mesh::getPathTexture() { return pathTexture; }
+GLuint& Mesh::getShaderObject() { return shaderProgram; }
+GLuint Mesh::getVertexArray() const { return shaderVertex; }
 

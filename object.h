@@ -57,17 +57,21 @@ namespace objectUser {
 	class Mesh {
 		public:
 			Mesh(GLFWwindow* window);
+			virtual ~Mesh();
 			void CompileShaderMesh();
 			void setBufferMesh();
 			float variableSize1(float variable);
 			void setTexture1(char* filePath);
 			void setTexture2(char* filePath);
 			void drawMesh();
+			void activeTexture();
 			unsigned int variableSize(unsigned int variable);
-
+			void useShaderObject();
+			GLuint& getShaderObject();
+			GLuint getVertexArray() const;
+			std::vector<const char*> getPathTexture();
 			void OpenShader(std::string filePathVertex, std::string filePathFragment);
-			virtual ~Mesh();
-	    private:
+	    protected:
 			const char* fragmentShaderCODE;
 			const char* vertexShaderCODE;
 			static float verteciesObject[];
@@ -78,9 +82,11 @@ namespace objectUser {
 			GLuint shaderProgram;
 			GLuint shaderFrag;
 			GLuint shaderVertex;
-			GLuint texture1;
-			GLuint texture2;
+			GLuint texture1 = 0;
+			GLuint texture2 = 0;
 			std::vector<int> LoaderTextureSUCCESS;
+			std::vector<const char*> pathTexture;
+
 	};
 #endif
 }

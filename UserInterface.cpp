@@ -11,6 +11,9 @@
 #include <iostream>
 #include <vector>
 
+#define COLOR_FRAME 1
+#define COLOR_OBJECT 2
+
 char UserInterface::filePath1[] = { 0 };
 char UserInterface::filePath2[] = { 0 };
 char UserInterface::filePath3[] = { 0 };
@@ -19,11 +22,12 @@ char UserInterface::filePath5[] = { 0 };
 const char* UserInterface::filepath1ConstChar = 0;
 const char* UserInterface::filepath2ConstChar = 0;
 float UserInterface::LastedColorObject[] = { 0 };
+float UserInterface::lastedColorFrame[] = { 0 };
 
 UserInterface::UserInterface(GLFWwindow* window)  {
 	
-	LastedFrameColorR = 0.2f; LastedFrameColorG = 0.5f; LastedFrameColorB = 0.7f; 
-	LastedFloatFrame = 1.0f; LastedFloatFrameX = 1.0f; LastedFloatFrameY = 1.0f; LastedFloatFrameZ = 1.0f; 
+	lastedColorFrame[0] = 0.2; lastedColorFrame[1] = 0.6; lastedColorFrame[2] = 0.9;
+	LastedFloatFrame = 1.0f; LastedFloatFrameX = 1.0f; LastedFloatFrameY = 1.0f; LastedFloatFrameZ = 1.0f;
 	LastedRotateXValue = 0.1f; LastedRotateYValue = 0.0f; LastedRotateZValue = 0.0f;
 	size1 = new float;
 	FOV = 55.0f;
@@ -50,7 +54,7 @@ float LastedRotateXValueFile, float LastedRotateYValueFile, float LastedRotateZV
 float LastedColorObjectGFile, float LastedColorObjectBFile, float LastedPositionObjectXFile, float LastedPositionObjectYFile,
 float LastedPositionObjectZFile, float CameraSpeedFile, const char* filePathPointerFile)
 {
-	LastedFrameColorR = LastedFrameColorRFile; LastedFrameColorG = LastedFrameColorGFile; LastedFrameColorB = LastedFrameColorBFile;
+	lastedColorFrame[0] = LastedFrameColorRFile; lastedColorFrame[1] = LastedFrameColorGFile; lastedColorFrame[2] = LastedFrameColorBFile;
 	LastedFloatFrame = 1.0f; LastedFloatFrameX = LastedFloatFrameXFile; LastedFloatFrameY = LastedFloatFrameYFile; LastedFloatFrameZ = LastedFloatFrameZFile;
 	LastedRotateXValue = LastedRotateXValueFile; LastedRotateYValue = LastedRotateYValueFile; LastedRotateZValue = LastedRotateZValueFile;
 	LastedColorObject[0] = LastedColorObjectRFile;
@@ -118,7 +122,7 @@ void UserInterface::setStyleSettingFrame(GLFWwindow* window) {
 	style->WindowBorderSize = 0;
 	style->WindowTitleAlign = ImVec2(0.5, 0.5);
 	style->ButtonTextAlign = ImVec2(0.5, 0.5);
-	style->WindowMinSize = ImVec2(2560 / 4.5, 430);
+	style->WindowMinSize = ImVec2(2560 / 4.25, 430);
 	style->FramePadding = ImVec2(2, 2);
 	style->WindowMenuButtonPosition = ImGuiDir();
 	style->Colors[ImGuiCol_TitleBg] = ImColor(79, 86, 98, 255);
@@ -315,21 +319,21 @@ bool UserInterface::inputDemandingChangeFOV() const {
 	else { return false; }
 }
 void UserInterface::setColorR() {
-	ImGui::SliderFloat("R", &LastedFrameColorR, 0, 1);
-	if (LastedFrameColorR < -401602080) {
-		LastedFrameColorR = 0.4f;
+	ImGui::SliderFloat("R (FRAME)", &lastedColorFrame[0], 0, 1);
+	if (lastedColorFrame[0] < -401602080) {
+		lastedColorFrame[0] = 0.4f;
 	}
 }
 void UserInterface::setColorG() {
-	ImGui::SliderFloat("G", &LastedFrameColorG, 0, 1);
-	if (LastedFrameColorG < -401602080) {
-		LastedFrameColorG = 0.1f;
+	ImGui::SliderFloat("G (FRAME)", &lastedColorFrame[1], 0, 1);
+	if (lastedColorFrame[1] < -401602080) {
+		lastedColorFrame[1] = 0.1f;
 	}
 }
 void UserInterface::setColorB() {
-	ImGui::SliderFloat("B", &LastedFrameColorB, 0, 1);
-	if (LastedFrameColorB < -401602080) {
-		LastedFrameColorB = 0.9f;
+	ImGui::SliderFloat("B (FRAME)", &lastedColorFrame[2], 0, 1);
+	if (lastedColorFrame[2] < -401602080) {
+		lastedColorFrame[2] = 0.9f;
 	}
 }
 void UserInterface::setChangeFOV() {
@@ -346,19 +350,19 @@ void UserInterface::inputFileTexture2(char* filePath) {
 }
 
 void UserInterface::setColorObjectR() {
-	ImGui::SliderFloat("R", &LastedColorObject[0], 0, 1);
+	ImGui::SliderFloat("R (OBJECT)", &LastedColorObject[0], 0, 1);
 	if (LastedColorObject[0] < -401602080) {
 		LastedColorObject[0] = 0.5f;
 	}
 }
 void UserInterface::setColorObjectG() {
-	ImGui::SliderFloat("G", &LastedColorObject[1], 0, 1);
+	ImGui::SliderFloat("G (OBJECT)", &LastedColorObject[1], 0, 1);
 	if (LastedColorObject[1] < -401602080) {
 		LastedColorObject[1] = 0.5f;
 	}
 }
 void UserInterface::setColorObjectB() {
-	ImGui::SliderFloat("B", &LastedColorObject[2], 0, 1);
+	ImGui::SliderFloat("B (OBJECT)", &LastedColorObject[2], 0, 1);
 	if (LastedColorObject[2] < -401602080) {
 		LastedColorObject[2] = 0.5f;
 	}
@@ -389,9 +393,10 @@ void UserInterface::endFrame() {
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
-void UserInterface::setColorEditor() {
-	ImGui::ColorEdit3("color", LastedColorObject);
-}
+// editor color
+void UserInterface::setColorEditorFrame(int objectOrFrame) { ImGui::ColorEdit3("color(frame)", lastedColorFrame); }
+void UserInterface::setColorEditorObject(int objectOrFrame) { ImGui::ColorEdit3("color(object)", LastedColorObject); }
+
 void UserInterface::setLastedmatrix() {
 	LastedFloatFrame = *size1;
 }
@@ -400,13 +405,7 @@ int UserInterface::getIndicatorTextureFilePath() { return lastedFilePath; }
 float& UserInterface::getValueRotateX() { return LastedRotateXValue; }
 float& UserInterface::getValueRotateY() { return LastedRotateYValue; }
 float& UserInterface::getValueRotateZ() { return LastedRotateZValue; }
-float UserInterface::getColorR() const { return LastedFrameColorR; }
-float UserInterface::getColorG() const { return LastedFrameColorG; }
-float UserInterface::getColorB() const { return LastedFrameColorB; }
 float UserInterface::getFOV_Value() const { return FOV; }
-float UserInterface::getColorObjectR() const { return LastedColorObject[0]; }
-float UserInterface::getColorObjectG() const { return LastedColorObject[1]; }
-float UserInterface::getColorObjectB() const { return LastedColorObject[2]; }
 float UserInterface::getPositionObjectX() const { return LastedPositionObjectX; }
 float UserInterface::getPositionObjectY() const { return LastedPositionObjectY; }
 float UserInterface::getPositionObjectZ() const { return LastedPositionObjectZ; }
