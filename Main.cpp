@@ -2,7 +2,6 @@
 #include <GLFW/glfw3.h>
 // Initialize with gl3wInit()
 
-
 #include <iostream>
 #include <string>
 #include "object.h"
@@ -83,9 +82,9 @@ int main() {
 	*resX = mode->width;
 	*resY = mode->height;
 #ifdef HOT_REALOAD
-	GLFWwindow* window = glfwCreateWindow(glfwGetVideoMode(glfwGetPrimaryMonitor())->width,
+	std::vector<GLFWwindow*> window; window.push_back(glfwCreateWindow(glfwGetVideoMode(glfwGetPrimaryMonitor())->width,
 		glfwGetVideoMode(glfwGetPrimaryMonitor())->height, "DevNinisEngineMotion",
-		glfwGetPrimaryMonitor(), nullptr);
+		nullptr, nullptr));
 #endif // HOT_REALOAD
 #ifndef HOT_REALOAD
 	std::vector<GLFWwindow*> window; window.push_back(glfwCreateWindow(glfwGetVideoMode(glfwGetPrimaryMonitor())->width,
@@ -153,6 +152,9 @@ int main() {
 	TCHAR nBufferLength = 102; char lpFileName[2]; char* lpFilePart = nullptr; lpFilePart = &filePathBuffer[1];
 	std::string a = "VertexShaderObject.glsl"; std::string b = "FragmentShaderObject.glsl";
 	int numberMesh = 1;
+	if (HOTreload == false) {
+		Interface->setSettingFrame();
+	}
 	while (!glfwWindowShouldClose(window[0])) // render
 	{
 		currentFrame = glfwGetTime();
@@ -175,11 +177,6 @@ int main() {
 		if (glfwGetKey(window[0], GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 			HOTreload = false;
 			glViewport(*resX / 4.5, 0, *resX, *resY);
-			Interface->setStyleSettingFrame(window[0]);
-		}
-		if (HOTreload == false) {
-			Interface->setSettingFrame();
-			Interface->interfacebeginCanvas();
 		}
 		matrixAnimation->setPercentTexture(mesh.getShaderObject(), Interface->getpercentTexture());
 
@@ -223,7 +220,6 @@ int main() {
 				matrixAnimation->setPositionObject(mesh.getShaderObject(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
 				Interface->setPositionObjectZ();
 				ImGui::Separator();
-				matrixAnimation->setPositionObject(mesh.getShaderObject(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
 				matrixAnimation->setPositionObject(mesh.getShaderObject(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
 			}
 		}

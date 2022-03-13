@@ -79,7 +79,6 @@ glm::mat4 glmAnimation3D::setScaleValue(GLuint& shader, float& Value) {
 	if (Value > -401602080) {
 		size2 = glm::scale(size2, glm::vec3(Value * 1.0f * this->LastedFloatFrameX, Value * 1.0f * this->LastedFloatFrameY, Value * 1.0f * this->LastedFloatFrameZ));
 		glUniformMatrix4fv(glGetUniformLocation(shader, "Scale"), 1, GL_FALSE, glm::value_ptr(size2));
-		glUniform1f(glGetUniformLocation(shader, "LastedFrame"), Value);
 	}
 	return size;
 }
@@ -94,8 +93,6 @@ float glmAnimation3D::setScaleValueX(GLuint& shader) {
 			return LastedFloatFrameX;
 		}
 		delete size2;
-		glUniform1f(glGetUniformLocation(shader, "LastedFrame"), LastedFloatFrameX);
-		glUniform1f(glGetUniformLocation(shader, "scaleX"), LastedFloatFrameX);
 }
 float glmAnimation3D::setScaleValueY(GLuint& shader) {
 	float* size3 = nullptr; size3 = new float;
@@ -108,8 +105,6 @@ float glmAnimation3D::setScaleValueY(GLuint& shader) {
 		return LastedFloatFrameY;
 	}
 	delete size3;
-	glUniform1f(glGetUniformLocation(shader, "LastedFrame"), LastedFloatFrameY);
-	glUniform1f(glGetUniformLocation(shader, "scaleY"), LastedFloatFrameY);
 }
 float glmAnimation3D::setScaleValueZ(GLuint& shader) {
 	float* size4 = nullptr; size4 = new float;
@@ -122,8 +117,6 @@ float glmAnimation3D::setScaleValueZ(GLuint& shader) {
 		return LastedFloatFrameZ;
 	}
 	delete size4;
-	glUniform1f(glGetUniformLocation(shader, "LastedFrame"), LastedFloatFrameZ);
-	glUniform1f(glGetUniformLocation(shader, "scaleZ"), LastedFloatFrameZ);
 }
 float glmAnimation3D::setColorValueFrame() {
 	float color = 0;

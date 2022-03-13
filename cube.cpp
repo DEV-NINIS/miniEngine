@@ -61,11 +61,11 @@ cube::cube(GLFWwindow* window)  {
 	// shaders
 		// frag
 	vertexShaderCODE = "#version 460 core\n"
-		"layout (location = 0) in vec3 aPos;\n"
-		"layout (location = 1) in vec3 aColor;\n"
-		"layout (location = 2) in vec2 texCoords;\n"
-		"out vec3 colorForFragmentShader;\n"
-		"out vec2 texCoordsForFrag;\n"
+		"layout (location = 0) in vec3 position;\n"
+		"layout (location = 1) in vec3 color;\n"
+		"layout (location = 2) in vec2 Texcoords;\n"
+		"out vec3 colorFrag;\n"
+		"out vec2 TexcoordsFrag;\n"
 		"uniform mat4 view;\n"
 		"uniform mat4 model;\n"
 		"uniform mat4 projection;\n"
@@ -83,18 +83,17 @@ cube::cube(GLFWwindow* window)  {
 		"else {\n"
 		"gl_Position = projection * view * model * transform * Scale * vec4(aPos.x + PositionX/20, aPos.y + PositionY/20, aPos.z + PositionZ/20, 1.0f);\n"
 		"}\n"
-		"colorForFragmentShader = aColor;\n"
-		"texCoordsForFrag = texCoords;\n"
+		"colorFrag = color;\n"
+		"TexcoordsFrag = Texcoords;\n"
 		"}\n\0";
-
 	// vertex
 	fragmentShaderCODE = "#version 460 core\n"
 
-		"in vec3 colorForFragmentShader;\n"
-		"in vec2 texCoordsForFrag;\n"
+		"in vec3 colorFrag;\n"
+		"in vec2 TexcoordsFrag;\n"
 		"out vec4 Frag_color;\n"
-		"uniform sampler2D Texture1;\n"
-		"uniform sampler2D Texture2;\n"
+		"uniform sampler2D texture1;\n"
+		"uniform sampler2D texture2;\n"
 		"uniform float PercentTexture;\n"
 		"uniform float ColorR;\n"
 		"uniform float ColorG;\n"
@@ -102,10 +101,10 @@ cube::cube(GLFWwindow* window)  {
 
 		"void main() {\n"
 		"if (ColorR == 0 && ColorG == 0 && ColorB == 0) {"
-		"Frag_color = mix(texture(Texture2, texCoordsForFrag), texture(Texture1, texCoordsForFrag), PercentTexture) * vec4(colorForFragmentShader, 1.0);\n"
+		"Frag_color = mix(texture(texture2, texCoordsForFrag), texture(texture1, texCoordsForFrag), PercentTexture) * vec4(colorForFragmentShader, 1.0);\n"
 		"}\n"
 		"else {\n"
-		"Frag_color = mix(texture(Texture2, texCoordsForFrag), texture(Texture1, texCoordsForFrag), PercentTexture) * vec4(ColorR, ColorG, ColorB, 1.0f);\n"
+		"Frag_color = mix(texture(texture2, texCoordsForFrag), texture(texture1, texCoordsForFrag), PercentTexture) * vec4(ColorR, ColorG, ColorB, 1.0f);\n"
 		"}\n"
 		"}\n\0";
 
@@ -176,20 +175,11 @@ void cube::setShader() {
 	// deleted pointer of GL_COMPILE_STATUS
 }
 void cube::setParametterTexture() {
-	if (tex[1] == 0) {
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, tex[0]);
-	}
-	if (tex[0] == 0) {
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, tex[1]);
-	}
-	else {
+	
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, tex[0]);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, tex[1]);
-	}
 }
 
 void cube::setTexture1(char* filePath) {
@@ -199,7 +189,6 @@ void cube::setTexture1(char* filePath) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
 	stbi_set_flip_vertically_on_load(true);
 	int width, height, nrChanels;
@@ -214,7 +203,7 @@ void cube::setTexture1(char* filePath) {
 		*LoaderTexture[0] = 0;
 		data = stbi_load(finalPathTexture[0], &width, &height, &nrChanels, 0);
 	}
-	if (data) {
+	if (data && filePath != nullptr) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 		stbi_image_free(data);

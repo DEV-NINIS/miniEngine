@@ -8,6 +8,14 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
+#include <Windows.h>
+#include <commdlg.h>
+#include <shellapi.h>
+#include <fileapi.h>
+#include <commdlg.h>
+#include <filesystem> // C++17 standard header file name
+
+
 #define LOADER_TEXTURE_SUCCESS 0
 #define LOADER_TEXTURE_NOT_SUCCESS 1
 using namespace objectUser;
@@ -78,13 +86,15 @@ Mesh::Mesh(GLFWwindow* window) {
 		"out vec2 TexcoordsFrag;\n"
 		"uniform mat4 view;\n"
 		"uniform mat4 model;\n"
-		"uniform mat4 Scale;\n"
 		"uniform mat4 projection;\n"
 		"uniform mat4 transform;\n"
+		"uniform float LastedFrame;\n"
+		"uniform mat4 Scale;\n"
 		"uniform float PositionX;\n"
 		"uniform float PositionY;\n"
 		"uniform float PositionZ;\n"
-		"void main () {\n"
+
+		"void main() {\n"
 		"if (PositionX == 0 && PositionY == 0 && PositionZ == 0) {\n"
 		"gl_Position = projection * view * model * transform * Scale * vec4(aPos, 1.0f);\n"
 		"}\n"
@@ -96,15 +106,24 @@ Mesh::Mesh(GLFWwindow* window) {
 		"}\n\0";
 
 	fragmentShaderCODE = "#version 460 core\n"
-		"in vec3 color;\n"
-		"in vec2 Texcoords;\n"
-		"out vec4 frag_Color;\n"
-		"uniform float PercentTexture;\n"
+
+		"in vec3 colorFrag;\n"
+		"in vec2 TexcoordsFrag;\n"
+		"out vec4 Frag_color;\n"
 		"uniform sampler2D texture1;\n"
-		"uniform sampler2D Texture2;\n"
+		"uniform sampler2D texture2;\n"
 		"uniform float PercentTexture;\n"
+		"uniform float ColorR;\n"
+		"uniform float ColorG;\n"
+		"uniform float ColorB;\n"
+
 		"void main() {\n"
-		"frag_Color = mix(texture(texture1, Texcoords), texture(texture2, Texcoords), PercentTexture) * vec4(color, 1.0);"
+		"if (ColorR == 0 && ColorG == 0 && ColorB == 0) {"
+		"Frag_color = mix(texture(texture2, texCoordsForFrag), texture(texture1, texCoordsForFrag), PercentTexture) * vec4(colorForFragmentShader, 1.0);\n"
+		"}\n"
+		"else {\n"
+		"Frag_color = mix(texture(texture2, texCoordsForFrag), texture(texture1, texCoordsForFrag), PercentTexture) * vec4(ColorR, ColorG, ColorB, 1.0f);\n"
+		"}\n"
 		"}\n\0";
 }
 Mesh::~Mesh() {
@@ -139,19 +158,21 @@ void Mesh::drawMesh() {
 void Mesh::CompileShaderMesh() {
 	int succesCompileShaders;
 	shaderVertex = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(shaderVertex, 1, (const GLchar**)vertexShaderCODE, NULL);
+	glShaderSource(shaderVertex, 1, (const GLchar**)&vertexShaderCODE, NULL);
 	glCompileShader(shaderVertex);
 	glGetShaderiv(shaderVertex, GL_COMPILE_STATUS, &succesCompileShaders);
 	if (succesCompileShaders == NULL) {
-		exit(EXIT_FAILURE);
+		
+		// l'erreur vient des shader !!!!!!!!
 	}
 
 	shaderFrag = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(shaderFrag, 1, (const GLchar**)fragmentShaderCODE, NULL);
+	glShaderSource(shaderFrag, 1, (const GLchar**)&fragmentShaderCODE, NULL);
 	glCompileShader(shaderFrag);
 	glGetShaderiv(shaderFrag, GL_COMPILE_STATUS, &succesCompileShaders);
 	if (succesCompileShaders == NULL) {
-		exit(EXIT_FAILURE);
+		
+		// l'erreur vient des shader !!!!!!!!
 	}
 
 	shaderProgram = glCreateProgram();
