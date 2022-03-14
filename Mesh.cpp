@@ -88,7 +88,6 @@ Mesh::Mesh(GLFWwindow* window) {
 		"uniform mat4 model;\n"
 		"uniform mat4 projection;\n"
 		"uniform mat4 transform;\n"
-		"uniform float LastedFrame;\n"
 		"uniform mat4 Scale;\n"
 		"uniform float PositionX;\n"
 		"uniform float PositionY;\n"
@@ -96,10 +95,10 @@ Mesh::Mesh(GLFWwindow* window) {
 
 		"void main() {\n"
 		"if (PositionX == 0 && PositionY == 0 && PositionZ == 0) {\n"
-		"gl_Position = projection * view * model * transform * Scale * vec4(aPos, 1.0f);\n"
+		"gl_Position = projection * view * model * transform * Scale * vec4(position, 1.0f);\n"
 		"}\n"
 		"else {\n"
-		"gl_Position = projection * view * model * transform * Scale * vec4(aPos.x + PositionX/20, aPos.y + PositionY/20, aPos.z + PositionZ/20, 1.0f);\n"
+		"gl_Position = projection * view * model * transform * Scale * vec4(position.x + PositionX/20, position.y + PositionY/20, position.z + PositionZ/20, 1.0f);\n"
 		"}\n"
 		"colorFrag = color;\n"
 		"TexcoordsFrag = Texcoords;\n"
@@ -118,11 +117,11 @@ Mesh::Mesh(GLFWwindow* window) {
 		"uniform float ColorB;\n"
 
 		"void main() {\n"
-		"if (ColorR == 0 && ColorG == 0 && ColorB == 0) {"
-		"Frag_color = mix(texture(texture2, texCoordsForFrag), texture(texture1, texCoordsForFrag), PercentTexture) * vec4(colorForFragmentShader, 1.0);\n"
+		"if (ColorR == 0 && ColorG == 0 && ColorB == 0) {\n"
+		"Frag_color = mix(texture(texture2, TexcoordsFrag), texture(texture1, TexcoordsFrag), PercentTexture) * vec4(colorFrag, 1.0);\n"
 		"}\n"
 		"else {\n"
-		"Frag_color = mix(texture(texture2, texCoordsForFrag), texture(texture1, texCoordsForFrag), PercentTexture) * vec4(ColorR, ColorG, ColorB, 1.0f);\n"
+		"Frag_color = mix(texture(texture2, TexcoordsFrag), texture(texture1, TexcoordsFrag), PercentTexture) * vec4(ColorR, ColorG, ColorB, 1.0f);\n"
 		"}\n"
 		"}\n\0";
 }
@@ -152,7 +151,7 @@ void Mesh::activeTexture() {
 void Mesh::drawMesh() {
 	this->activeTexture();
 	glBindVertexArray(objectVAO);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glDrawArrays(GL_TRIANGLES, 0, 180);
 	glBindVertexArray(0);
 }
 void Mesh::CompileShaderMesh() {
@@ -162,7 +161,8 @@ void Mesh::CompileShaderMesh() {
 	glCompileShader(shaderVertex);
 	glGetShaderiv(shaderVertex, GL_COMPILE_STATUS, &succesCompileShaders);
 	if (succesCompileShaders == NULL) {
-		
+		MessageBoxA(0, static_cast<const char*>("error compilation shaders"), "ERROR", 0);
+		exit(EXIT_FAILURE);
 		// l'erreur vient des shader !!!!!!!!
 	}
 
@@ -171,7 +171,8 @@ void Mesh::CompileShaderMesh() {
 	glCompileShader(shaderFrag);
 	glGetShaderiv(shaderFrag, GL_COMPILE_STATUS, &succesCompileShaders);
 	if (succesCompileShaders == NULL) {
-		
+		MessageBoxA(0, static_cast<const char*>("error compilation shaders"), "ERROR", 0);
+		exit(EXIT_FAILURE);
 		// l'erreur vient des shader !!!!!!!!
 	}
 

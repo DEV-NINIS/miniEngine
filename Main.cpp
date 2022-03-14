@@ -143,8 +143,8 @@ int main() {
 	int* IndicatorFilepath = nullptr; IndicatorFilepath = new int; *IndicatorFilepath = Interface->getIndicatorTextureFilePath();
 	mesh.CompileShaderMesh();
 	mesh.setBufferMesh();
-	mesh.setTexture1(unconstchar("C:/Users/anise/source/repos/littleEngine/x64/img"));
-	mesh.setTexture2(unconstchar("C:/Users/anise/source/repos/littleEngine/x64/img"));
+	mesh.setTexture1(unconstchar("img/containerBois.jpg"));
+	mesh.setTexture2(unconstchar("img/containerBois.jpg"));
 	Interface->LastedFloatFrame = 1;
 	float valueXColor = 0.2f; float ValueYcolor = 0.6f; float ValueZColor = 0.9f; float ValueWColor = 0.1f;
 	float deltatime = 0, currentFrame = 0, lastedFrame = 0;
@@ -154,6 +154,7 @@ int main() {
 	int numberMesh = 1;
 	if (HOTreload == false) {
 		Interface->setSettingFrame();
+		Interface->interfacebeginCanvas();
 	}
 	while (!glfwWindowShouldClose(window[0])) // render
 	{
