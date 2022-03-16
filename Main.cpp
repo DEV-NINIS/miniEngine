@@ -151,9 +151,10 @@ int main() {
 	TCHAR nBufferLength = 102; char lpFileName[2]; char* lpFilePart = nullptr; lpFilePart = &filePathBuffer[1];
 	std::string a = "VertexShaderObject.glsl"; std::string b = "FragmentShaderObject.glsl";
 	int numberMesh = 1;
-	mesh.setBufferMesh();
+	
 	while (!glfwWindowShouldClose(window)) // render
 	{
+		mesh.setBufferMesh();
 		if (HOTreload == false) {
 			Interface->setSettingFrame();
 			Interface->interfacebeginCanvas();
@@ -165,7 +166,7 @@ int main() {
 		glClearColor(Interface->lastedColorFrame[0], Interface->lastedColorFrame[1], Interface->lastedColorFrame[2], 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		mesh.useShaderObject();
-			camera.processInputCamera(window, deltatime, Interface->getCmerraSpeed());
+		camera.processInputCamera(window, deltatime, Interface->getCmerraSpeed());
 		matrixAnimation->initialiseMatrix();
 		matrixAnimation->setLookAtMatrixCamera(camera.getcamPos(), camera.getcamFront(), camera.getcamUp());
 		matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
@@ -483,8 +484,31 @@ int main() {
 				Interface->setColorEditorFrame(COLOR_FRAME);
 			}
 		}
-			matrixAnimation->frameMatrix(mesh.getShaderObject());
-			rendering.drawElements(mesh, numberMesh);
+		ImGui::Begin("Viewport");
+
+		// Get the size of the child (i.e. the whole draw size of the windows).
+		ImVec2 wsize = ImGui::GetWindowSize();
+		// Because I use the texture from OpenGL, I need to invert the V from the UV.
+		ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoTitleBar |
+			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
+			ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus |
+			ImGuiWindowFlags_NoBackground;
+
+		ImGuiViewport* viewport = ImGui::GetMainViewport();
+		ImGui::SetNextWindowPos(viewport->WorkPos);
+		ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x, viewport->WorkSize.y));
+		ImGui::SetWindowSize((ImVec2(viewport->Size.x - viewport->Size.x/4.25, viewport->WorkSize.y)));
+
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 10.0f);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+		ImGui::PopStyleVar(3);
+		matrixAnimation->frameMatrix(mesh.getShaderObject());
+		rendering.drawElements(mesh, numberMesh);
+
+		// ------ End of docking --------
+		ImGui::End();
+			
 		if (HOTreload == false) {
 			ImGui::End();
 			Interface->endFrame();
