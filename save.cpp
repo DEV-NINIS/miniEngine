@@ -14,13 +14,14 @@
 #include <fileapi.h>
 
 using namespace writing;
+using namespace reading;
 
-save::save() {
+save::save() : read() {
 	fileContent; lastedFile;
 }
 save::~save() {}
 
-std::string save::setFilePath(GLFWwindow* window) {
+std::string save::setFilePath(GLFWwindow* window){
 	OPENFILENAMEA ofn;
 	CHAR szFile[260] = { 0 };
 	CHAR currentDir[256] = { 0 };
