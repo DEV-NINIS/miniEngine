@@ -40,18 +40,14 @@ std::string save::setFilePath(GLFWwindow* window){
 
 	return std::string();
 }
-void save::setFileContent(const char* filetexture, float colorObjectR, float ColorObjectG, 
-	float ColorObjectB, float ValuePositionObjectX,float ValuePositionObjectY, float ValuePositionObjectZ,
-	float ValueTransformX, float ValueTransformY, float ValueTransformZ,float ValueColorFrameR, 
-	float ValueColorFrameG, float ValueColorFrameB, float ValueCameraSpeed, float ValueFOV, float LastedScaleXFile, 
-	float LastedScaleYFile, float LastedScaleZFile, std::string filepath)
+void save::setFileContent(std::string filepath)
 {
 	std::ofstream flux(filepath.c_str()); // set filepath in std::string to char
 	// fonction
-	flux << filetexture << " " << colorObjectR << " " << ColorObjectG << " " << ColorObjectB << " " << ValuePositionObjectX 
-	<< " " << ValuePositionObjectY << " " << ValuePositionObjectZ << " " << ValueTransformX << " " <<
-	ValueTransformY << " " << ValueTransformZ << " " << ValueColorFrameR << " " << ValueColorFrameG <<
-	" " << ValueColorFrameB << " " << ValueCameraSpeed << " " << ValueFOV <<  " " << LastedScaleXFile << " "
-	 << LastedScaleYFile << " " << LastedScaleZFile << std::endl;
+	flux << read::filetextureFile << " " << read::colorObjectFileR << " " << read::ColorObjectFileG << " " << read::ColorObjectFileB << " " << read::ValuePositionObjectFileX
+		<< " " << read::ValuePositionObjectFileY << " " << read::ValuePositionObjectFileZ << " " << read::ValueTransformXFile << " " <<
+		read::ValueTransformYFile << " " << read::ValueTransformZFile << " " << read::ValueColorFrameRFile << " " << read::ValueColorFrameGFile <<
+		" " << read::ValueColorFrameBFile << " " << read::ValueCameraSpeedFile << " " << read::ValueFOVFile << " " << read::LastedScaleXFile << " "
+		<< read::LastedScaleYFile << " " << read::LastedScaleZFile << std::endl;
 }
 std::string save::getLastedFile() { return lastedFile; }

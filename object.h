@@ -71,11 +71,16 @@ namespace objectUser {
 			GLuint getVertexArray() const;
 			std::vector<const char*> getPathTexture();
 			void OpenShader(std::string filePathVertex, std::string filePathFragment);
+			bool OpenMeshObjFile(std::string filePath);
 	    protected:
 			const char* fragmentShaderCODE;
 			const char* vertexShaderCODE;
-			static float verteciesObject[];
-			static unsigned int indexObject[];
+			static std::vector<unsigned int> indexObject;
+			static std::vector<float> verteciesObject;
+			static std::vector<unsigned int> normalIndices;
+			std::vector<glm::vec3> temp_vertices;
+			std::vector<glm::vec2> temp_uvs;
+			std::vector<glm::vec3> temp_normals;
 			GLuint objectVAO;
 			GLuint objectVBO;
 			GLuint objectEBO;
@@ -86,7 +91,6 @@ namespace objectUser {
 			GLuint texture2 = 0;
 			std::vector<int> LoaderTextureSUCCESS;
 			std::vector<const char*> pathTexture;
-
 	};
 #endif
 }

@@ -13,6 +13,8 @@
 #include "UserInterface.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "glmAnimation3D.h"
+#include "iconcpp.h"
+#include "icons.h"
 #include "Camera.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -107,7 +109,7 @@ int main() {
 
 	else {
 
-		glViewport(*resX / 4.25, 0, *resX, *resY);
+		glViewport(*resX / 4.25, *resY / 4.25, *resX, *resY);
 
 	}
 
@@ -116,17 +118,6 @@ int main() {
 	char* filePathTex1; filePathTex1 = new char;
 	char* filePathTex2; filePathTex2 = new char;
 	int indicatorNumberTexVector = 0;
-	int* IndicatorDemandCamera = nullptr; IndicatorDemandCamera = new int; *IndicatorDemandCamera = 0;
-	int* IndicatorDemandChangeCameraSpeed = nullptr; IndicatorDemandChangeCameraSpeed = new int; *IndicatorDemandChangeCameraSpeed = 0;
-	int* IndicatorDemandingChangeFOV = nullptr; IndicatorDemandingChangeFOV = new int; *IndicatorDemandingChangeFOV = 0;
-	int* IndicatorDemandingTexture = nullptr; IndicatorDemandingTexture = new int; *IndicatorDemandingTexture = 0;
-	int* IndicatorDemandingRotateAroundX = nullptr; IndicatorDemandingRotateAroundX = new int; *IndicatorDemandingRotateAroundX = 0;
-	int* IndicatorDemandingRotateAroundY = nullptr; IndicatorDemandingRotateAroundY = new int; *IndicatorDemandingRotateAroundY = 0;
-	int* IndicatorDemandingRotateAroundZ = nullptr; IndicatorDemandingRotateAroundZ = new int; *IndicatorDemandingRotateAroundZ = 0;
-	int* IndicatorDemandingRotate = nullptr; IndicatorDemandingRotate = new int; *IndicatorDemandingRotate = 0;
-	int* IndicatorDemandingRotateRight = nullptr; IndicatorDemandingRotateRight = new int; *IndicatorDemandingRotateRight = 0;
-	int* IndicatorDemandingRotateLeft = nullptr; IndicatorDemandingRotateLeft = new int; *IndicatorDemandingRotateLeft = 0;
-	int* IndicatorDemandingAnimation = nullptr; IndicatorDemandingAnimation = new int; *IndicatorDemandingAnimation = 0;
 	int indicatorFolderTexture1 = 0; int indicatorFolderTexture2 = 0;
 	const char* filePath;
 	glmAnimation3D* matrixAnimation; matrixAnimation = new glmAnimation3D(window);
@@ -151,7 +142,7 @@ int main() {
 	TCHAR nBufferLength = 102; char lpFileName[2]; char* lpFilePart = nullptr; lpFilePart = &filePathBuffer[1];
 	std::string a = "VertexShaderObject.glsl"; std::string b = "FragmentShaderObject.glsl";
 	int numberMesh = 1;
-	
+	mesh.OpenMeshObjFile("D:/uploads_files_2792345_Koenigsegg2.obj");
 	while (!glfwWindowShouldClose(window)) // render
 	{
 		mesh.setBufferMesh();
@@ -182,8 +173,8 @@ int main() {
 		matrixAnimation->setPercentTexture(mesh.getShaderObject(), Interface->getpercentTexture());
 
 		if (HOTreload == false) {
-			ImGui::Begin("Engine");
-			if (ImGui::Button("PLAY", ImVec2(2560 / 4.5, 60.0f))) {
+			ImGui::Begin("Editor");
+			if (ImGui::Button( ICON_FA_PLAY "  PLAY", ImVec2(2560 / 4.35, 40.0f))) {
 				HOTreload = true;
 				glViewport(0, 0, *resX, *resY);
 
@@ -211,6 +202,7 @@ int main() {
 				matrixAnimation->frameMatrix(mesh.getShaderObject());
 				ImGui::Separator();
 			}
+			ImGui::Spacing();
 			if (ImGui::CollapsingHeader("positions")) {
 				ImGui::Spacing();
 				Interface->setPositionObjectX();
@@ -240,7 +232,7 @@ int main() {
 				if (ImGui::BeginMenu("file")) {
 					if (ImGui::MenuItem("Open")) {
 						Read.setValueFile(Read.selectPath(window));
-
+						Interface = nullptr;
 						Interface = new UserInterface(window, Read.getValueColorFrameRFile(), Read.getValueColorFrameGFile(), Read.getValueColorFrameBFile(),
 							Read.getLastedScaleXFile(), Read.getLastedScaleYFile(), Read.getLastedScaleZFile(), Read.getValueTransformXFile(),
 							Read.getValueTransformYFile(), Read.getValueTransformZFile(), Read.getcolorObjectFileR(),
@@ -257,18 +249,11 @@ int main() {
 					}
 					ImGui::Spacing();
 					if (ImGui::MenuItem("Save")) {
-						Save.setFileContent(mesh.getPathTexture()[0], Interface->LastedColorObject[0], Interface->LastedColorObject[1], Interface->LastedColorObject[2], Interface->getPositionObjectX(), Interface->getPositionObjectY()
-							, Interface->getPositionObjectZ(), Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ()
-							, Interface->lastedColorFrame[0], Interface->lastedColorFrame[1], Interface->lastedColorFrame[2], Interface->getCmerraSpeed(), Interface->getFOV_Value()
-							, Interface->getScaleCubeX(), Interface->getScaleCubeY(), Interface->getScaleCubeZ(), Read.getLastedFilepath());
+						Save.setFileContent(Read.selectPath(window));
 					}
 					ImGui::Spacing();
 					if (ImGui::MenuItem("Save as")) {
-
-						Save.setFileContent(mesh.getPathTexture()[0], Interface->LastedColorObject[0], Interface->LastedColorObject[1], Interface->LastedColorObject[2], Interface->getPositionObjectX(), Interface->getPositionObjectY()
-							, Interface->getPositionObjectZ(), Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ()
-							, Interface->lastedColorFrame[0], Interface->lastedColorFrame[1], Interface->lastedColorFrame[2], Interface->getCmerraSpeed(), Interface->getFOV_Value()
-							, Interface->getScaleCubeX(), Interface->getScaleCubeY(), Interface->getScaleCubeZ(), Save.setFilePath(window) + formatFile);
+						Save.setFileContent(Read.selectPath(window));
 					}
 					if (ImGui::MenuItem("Wiew Source Code ")) {
 						ShellExecuteA(NULL, "open", "https://github.com/DEV-NINIS/miniEngine", NULL, NULL, SW_SHOWDEFAULT);
@@ -293,89 +278,12 @@ int main() {
 
 			// position cube
 			if (HOTreload == false) {
-				ImGui::Spacing();
 
-				ImGui::Spacing();
 				// Animation
-				if (Interface->ButtonForSetAnimation() == true) {
-					*IndicatorDemandingAnimation = *IndicatorDemandingAnimation + 1;
-				}
-				if (*IndicatorDemandingAnimation == 1) {
-					if (Interface->inputDemandingRotate() == true) {
-						*IndicatorDemandingRotate = *IndicatorDemandingRotate + 1;
-					}
-					if (*IndicatorDemandingRotate == 1) {
-						// x
-						if (Interface->inputDemandingRotateAroundX() == true) {
-							*IndicatorDemandingRotateAroundX = *IndicatorDemandingRotateAroundX + 1;
-						}
-						if (*IndicatorDemandingRotateAroundX == 1) {
-							Interface->setRotateAroundXValue();
-							matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
 
-						}
-						else if (*IndicatorDemandingRotateAroundX > 1) {
-							*IndicatorDemandingRotateAroundX = 0;
-						}
-						// y
-						if (Interface->inputDemandingRotateAroundY() == true) {
-							*IndicatorDemandingRotateAroundY = *IndicatorDemandingRotateAroundY + 1;
-						}
-						if (*IndicatorDemandingRotateAroundY == 1) {
-							Interface->setRotateAroundYValue();
-							matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
-
-						}
-						else if (*IndicatorDemandingRotateAroundY > 1) {
-							*IndicatorDemandingRotateAroundY = 0;
-						}
-						// z
-						if (Interface->inputDemandingRotateAroundZ() == true) {
-							*IndicatorDemandingRotateAroundZ = *IndicatorDemandingRotateAroundZ + 1;
-						}
-						if (*IndicatorDemandingRotateAroundZ == 1) {
-							Interface->setRotateAroundZValue();
-							matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
-
-						}
-						else if (*IndicatorDemandingRotateAroundZ > 1) {
-							*IndicatorDemandingRotateAroundZ = 0;
-						}
-						// rotate right or left
-						if (Interface->inputDemandingRotateRight() == true) {
-							*IndicatorDemandingRotateRight = *IndicatorDemandingRotateRight + 1;
-						}
-						if (*IndicatorDemandingRotateRight == 1) {
-							// fonction
-							RotateValue += 1;
-						}
-						else if (*IndicatorDemandingRotateRight > 1) {
-							*IndicatorDemandingRotateRight = 0;
-						}
-						if (Interface->inputDemandingRotateLeft() == true) {
-							*IndicatorDemandingRotateLeft = *IndicatorDemandingRotateLeft + 1;
-						}
-						if (*IndicatorDemandingRotateLeft == 1) {
-							// fonction
-							RotateValue -= 1;
-						}
-						else if (*IndicatorDemandingRotateLeft > 1) {
-							*IndicatorDemandingRotateLeft = 0;
-						}
-					}
-					else if (*IndicatorDemandingRotate > 1) {
-						*IndicatorDemandingRotate = 0;
-					}
-				}
-				else if (*IndicatorDemandingAnimation > 1) {
-					*IndicatorDemandingAnimation = 0;
-				}
 				ImGui::Spacing();
 				// texture
-				if (Interface->inputDemandingTexture1() == true) {
-					*IndicatorDemandingTexture = *IndicatorDemandingTexture + 1;
-				}
-				if (*IndicatorDemandingTexture == 1) {
+				if (ImGui::CollapsingHeader("texture")) {
 					if (Interface->inputDemandSelectFolderForTex1() == true) {
 						indicatorFolderTexture1 = 1;
 						filePathTex1 = unconstchar(static_cast<const char*>(Read.selectPath(window).c_str()));
@@ -395,10 +303,6 @@ int main() {
 						mesh.setTexture1(filePathTex1);
 						mesh.setTexture2(filePathTex2);
 					}
-					matrixAnimation->setPercentTexture(mesh.getShaderObject(), Interface->getpercentTexture());
-				}
-				else if (*IndicatorDemandingTexture > 1) {
-					*IndicatorDemandingTexture = 0;
 				}
 			}
 		}
@@ -415,47 +319,34 @@ int main() {
 
 			// settings 
 			// colors
-			ImGui::Spacing();
+
 			// camera
-			if (Interface->inputDemandingCamera() == true) {
-				*IndicatorDemandCamera = *IndicatorDemandCamera + 1;
-			}
-			if (*IndicatorDemandCamera == 1) {
-				// FONCTION
-				if (Interface->inputDemandCameraSpeed() == true) {
-					*IndicatorDemandChangeCameraSpeed = *IndicatorDemandChangeCameraSpeed + 1;
-				}
-				if (*IndicatorDemandChangeCameraSpeed == 1) {
-					Interface->setCameraSpeed();
-				}
-				else if (*IndicatorDemandChangeCameraSpeed > 1) {
-					*IndicatorDemandChangeCameraSpeed = 0;
-				}
-				ImGui::Text("press E to forward");
-				ImGui::Text("press D to move back");
-				ImGui::Text("press S to move right");
-				ImGui::Text("press F to move left");
-			}
-			else if (*IndicatorDemandCamera > 1) {
-				*IndicatorDemandCamera = 0;
-			}
-			ImGui::Spacing();
-			// FOV
-			if (Interface->inputDemandingChangeFOV() == true) {
-				*IndicatorDemandingChangeFOV = *IndicatorDemandingChangeFOV + 1;
-			}
-			if (*IndicatorDemandingChangeFOV == 1) {
+			if (ImGui::CollapsingHeader("Camera")) {
+				ImGui::Spacing();
+				Interface->setCameraSpeed();
+				ImGui::Spacing();
 				Interface->setChangeFOV();
 				FOV = Interface->getFOV_Value();
+				ImGui::Text("press E to forward " );
+				ImGui::Spacing();
+				ImGui::Text("press D to move back " );
+				ImGui::Spacing();
+				ImGui::Text("press S to move right " );
+				ImGui::Spacing();
+				ImGui::Text("press F to move left " );
+				ImGui::Spacing();
 			}
-			else if (*IndicatorDemandingChangeFOV > 1) {
-				*IndicatorDemandingChangeFOV = 0;
-			}
-			ImGui::Checkbox(" draw ", &drawingCube);
-			if (drawingCube == true) {
-				matrixAnimation->frameMatrix(mesh.getShaderObject());
-				rendering.drawElements(mesh, numberMesh);
-			}
+			
+			ImGui::Spacing();
+			// FOV
+
+
+			// render
+			matrixAnimation->frameMatrix(mesh.getShaderObject());
+			rendering.drawElements(mesh, numberMesh);
+
+
+
 			matrixAnimation->setLookAtMatrixCamera(camera.getcamPos(), camera.getcamPos() - camera.getcamFront(), camera.getcamUp());
 			ImGui::Columns(2);
 			ImGui::SetColumnOffset(1, 2560 / 4 / 2);
@@ -484,31 +375,14 @@ int main() {
 				Interface->setColorEditorFrame(COLOR_FRAME);
 			}
 		}
-		ImGui::Begin("Viewport");
-
 		// Get the size of the child (i.e. the whole draw size of the windows).
-		ImVec2 wsize = ImGui::GetWindowSize();
-		// Because I use the texture from OpenGL, I need to invert the V from the UV.
-		ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoTitleBar |
-			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
-			ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus |
-			ImGuiWindowFlags_NoBackground;
-
-		ImGuiViewport* viewport = ImGui::GetMainViewport();
-		ImGui::SetNextWindowPos(viewport->WorkPos);
-		ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x, viewport->WorkSize.y));
-		ImGui::SetWindowSize((ImVec2(viewport->Size.x - viewport->Size.x/4.25, viewport->WorkSize.y)));
-
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 10.0f);
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-		ImGui::PopStyleVar(3);
-		matrixAnimation->frameMatrix(mesh.getShaderObject());
-		rendering.drawElements(mesh, numberMesh);
+		
 
 		// ------ End of docking --------
+		// node window
+		Interface->setNodeWindow();
+		ImGui::Begin("node");
 		ImGui::End();
-			
 		if (HOTreload == false) {
 			ImGui::End();
 			Interface->endFrame();
@@ -523,11 +397,4 @@ int main() {
 	Cube->~cube();
 	mesh.~Mesh();
 	delete Cube; Cube = NULL;
-	delete IndicatorDemandingRotate; delete IndicatorDemandingRotateLeft;
-	delete IndicatorDemandingRotateRight; delete IndicatorDemandingAnimation;
-	delete IndicatorDemandingRotateAroundZ;
-	delete IndicatorDemandingRotateAroundX; delete IndicatorDemandingRotateAroundY;
-	delete IndicatorDemandingTexture;  delete IndicatorDemandingChangeFOV;
-
-	delete IndicatorDemandCamera; delete IndicatorDemandChangeCameraSpeed;
 }
