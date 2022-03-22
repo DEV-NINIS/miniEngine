@@ -142,7 +142,8 @@ int main() {
 	TCHAR nBufferLength = 102; char lpFileName[2]; char* lpFilePart = nullptr; lpFilePart = &filePathBuffer[1];
 	std::string a = "VertexShaderObject.glsl"; std::string b = "FragmentShaderObject.glsl";
 	int numberMesh = 1;
-	mesh.OpenMeshObjFile("D:/uploads_files_2792345_Koenigsegg2.obj");
+	mesh.OpenMeshObjFile("D:/uploads_files_2792345_Koenigsegg33.obj");
+	
 	while (!glfwWindowShouldClose(window)) // render
 	{
 		mesh.setBufferMesh();
