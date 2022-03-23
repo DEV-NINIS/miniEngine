@@ -89,6 +89,21 @@ void UserInterface::interfacebeginCanvas() {
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 	ImGui::PopStyleVar(3);
 }
+void UserInterface::setNodeWindow() {
+	ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoTitleBar |
+		ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
+		ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus |
+		ImGuiWindowFlags_NoBackground;
+
+	ImGuiViewport* viewport = ImGui::GetMainViewport();
+	ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - viewport->WorkSize.x / 4.25, -(viewport->WorkSize.y + viewport->WorkSize.y / 1.5)));
+	ImGui::SetNextWindowPos(ImVec2(-viewport->WorkPos.x + viewport->WorkSize.x / 4.25, viewport->WorkSize.y / 2 + viewport->WorkSize.y / 4));
+
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 10.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+	ImGui::PopStyleVar(3);
+}
 void UserInterface::setStyleSettingFrame(GLFWwindow* window) {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -163,13 +178,13 @@ void UserInterface::setSettingFrame() {
 	ImGui::NewFrame();
 }
 bool UserInterface::inputDemandSelectFolderForTex1() const {
-	if (ImGui::Button(ICON_FA_UPLOAD "  select folder for texture 1", ImVec2(220, 30))) {
+	if ((ImGui::Button(ICON_FA_UPLOAD "  select folder for texture 1", ImVec2(400, 30)))) {
 		return true;
 	}
 	else { return false; }
 }
 bool UserInterface::inputDemandSelectFolderForTex2() const {
-	if (ImGui::Button(ICON_FA_UPLOAD "  select folder for texture 2", ImVec2(220, 30))) {
+	if (ImGui::Button(ICON_FA_UPLOAD "  select folder for texture 2", ImVec2(400, 30))) {
 		return true;
 	}
 	else { return false; }

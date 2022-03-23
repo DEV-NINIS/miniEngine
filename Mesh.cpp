@@ -25,7 +25,52 @@ using namespace objectUser;
 std::vector<unsigned int> Mesh::indexObject = { 0 };
 std::vector<float> Mesh::verteciesObject = { 0 };
 std::vector<unsigned int> Mesh::normalIndices = { 0 };
+float vertecies[] = {
 
+	// position         // color
+   // positions         // colors
+-0.5f, -0.5f, -0.5f,   0.2f, 0.6f, 0.9f, 0.0f, 0.0f,
+	0.5f, -0.5f, -0.5f,  0.9f, 0.6f, 0.2f, 1.0f, 0.0f,
+	0.5f,  0.5f, -0.5f,  0.5f, 0.6f, 0.9f,1.0f, 1.0f,
+	0.5f,  0.5f, -0.5f,  0.7f, 0.6f, 0.8f,1.0f, 1.0f,
+   -0.5f,  0.5f, -0.5f,  0.1f, 0.6f, 0.9f,0.0f, 1.0f,
+   -0.5f, -0.5f, -0.5f,  0.3f, 0.6f, 0.1f,0.0f, 0.0f,
+
+   -0.5f, -0.5f,  0.5f,  0.2f, 0.1f, 0.9f,0.0f, 0.0f,
+	0.5f, -0.5f,  0.5f,  0.9f, 0.6f, 0.9f,1.0f, 0.0f,
+	0.5f,  0.5f,  0.5f,  0.2f, 0.2f, 0.9f,1.0f, 1.0f,
+	0.5f,  0.5f,  0.5f,  0.3f, 0.6f, 0.1f,1.0f, 1.0f,
+   -0.5f,  0.5f,  0.5f,  0.2f, 0.3f, 0.9f,0.0f, 1.0f,
+   -0.5f, -0.5f,  0.5f,  0.2f, 0.6f, 0.9f,0.0f, 0.0f,
+
+   -0.5f,  0.5f,  0.5f,  0.9f, 0.1f, 0.2f,1.0f, 0.0f,
+   -0.5f,  0.5f, -0.5f,  0.4f, 0.6f, 0.8f,1.0f, 1.0f,
+   -0.5f, -0.5f, -0.5f,  0.0f, 0.5f, 0.4f,0.0f, 1.0f,
+   -0.5f, -0.5f, -0.5f,  0.1f, 0.2f, 0.8f,0.0f, 1.0f,
+   -0.5f, -0.5f,  0.5f,  0.6f, 0.6f, 0.9f,0.0f, 0.0f,
+   -0.5f,  0.5f,  0.5f,  1.0f, 0.5f, 0.3f,1.0f, 0.0f,
+
+	0.5f,  0.5f,  0.5f, 0.3f, 0.9f, 0.9f, 1.0f, 0.0f,
+	0.5f,  0.5f, -0.5f, 0.9f, 0.4f, 0.3f, 1.0f, 1.0f,
+	0.5f, -0.5f, -0.5f, 0.1f, 0.6f, 0.9f, 0.0f, 1.0f,
+	0.5f, -0.5f, -0.5f, 0.7f, 0.1f, 0.5f, 0.0f, 1.0f,
+	0.5f, -0.5f,  0.5f, 0.2f, 0.4f, 0.1f, 0.0f, 0.0f,
+	0.5f,  0.5f,  0.5f, 0.7f, 0.9f, 0.0f, 1.0f, 0.0f,
+
+   -0.5f, -0.5f, -0.5f, 0.7f, 0.6f, 0.8f, 0.0f, 1.0f,
+	0.5f, -0.5f, -0.5f, 0.5f, 0.4f, 0.1f, 1.0f, 1.0f,
+	0.5f, -0.5f,  0.5f, 0.6f, 0.6f, 0.5f, 1.0f, 0.0f,
+	0.5f, -0.5f,  0.5f, 0.9f, 0.3f, 0.2f, 1.0f, 0.0f,
+   -0.5f, -0.5f,  0.5f, 0.1f, 0.9f, 0.7f, 0.0f, 0.0f,
+   -0.5f, -0.5f, -0.5f, 0.2f, 0.1f, 0.9f, 0.0f, 1.0f,
+
+   -0.5f,  0.5f, -0.5f, 0.8f, 0.8f, 0.8f, 0.0f, 1.0f,
+	0.5f,  0.5f, -0.5f, 0.4f, 0.7f, 0.5f, 1.0f, 1.0f,
+	0.5f,  0.5f,  0.5f, 0.2f, 0.4f, 0.6f, 1.0f, 0.0f,
+	0.5f,  0.5f,  0.5f, 0.3f, 0.3f, 0.6f, 1.0f, 0.0f,
+   -0.5f,  0.5f,  0.5f, 0.9f, 0.9f, 0.1f, 0.0f, 0.0f,
+   -0.5f,  0.5f, -0.5f, 0.1f, 0.1f, 0.4f, 0.0f, 1.0f
+};
 Mesh::Mesh(GLFWwindow* window) {
 	// textures
 	LoaderTextureSUCCESS.push_back(0);
@@ -193,7 +238,7 @@ void Mesh::setBufferMesh() {
 
 	glGenBuffers(1, &objectVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, objectVBO);
-	glBufferData(GL_ARRAY_BUFFER, verteciesObject.size() * sizeof(glm::vec3), &verteciesObject[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertecies), vertecies, GL_STATIC_DRAW);
 
 	glGenBuffers(1, &objectEBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, objectEBO);
@@ -218,6 +263,9 @@ void Mesh::OpenShader(std::string filePathVertex, std::string filePathFragment) 
 	fragmentShaderCODE = static_cast<const char*>(FileContent.c_str());
 	fluxFragment.close();
 }
+
+
+// temporaire (n'est pas utilisé dans le code)
 bool Mesh::OpenMeshObjFile(std::string filePath) {
 	std::ifstream file(filePath.c_str());
 		if (!file) {
@@ -228,11 +276,14 @@ bool Mesh::OpenMeshObjFile(std::string filePath) {
 
 			char lineHeader[128];
 			// read the first word of the line
-			if (file.tellg() == EOF) {
+			if (strcmp(lineHeader, "f") == 0) {
 				break;
 			}
 			if (strcmp(lineHeader, "v") == 0) {
 				glm::vec3 vertex;
+				file >> vertex.x;
+				file >> vertex.y;
+				file >> vertex.z;
 				temp_vertices.push_back(vertex);
 			}
 			else if (strcmp(lineHeader, "vt") == 0) {
@@ -273,6 +324,9 @@ bool Mesh::OpenMeshObjFile(std::string filePath) {
 			out_vertices.push_back(vertex);
 		}
 }
+// end code temp
+
+
 
 void Mesh::useShaderObject() { glUseProgram(shaderProgram); }
 // getting

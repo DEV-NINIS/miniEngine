@@ -39,7 +39,9 @@ static bool HOTreload = false;
 //			 /		  \		|	 \	|	 |			 |
 //			/		   \	|	  \	|	 |		_____|
 //
-void abc() {
+void setCameraPitchYaw(GLFWwindow* window, Camera& camera, float &lastX, float &lastY) {
+	lastX = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width)/2;
+	lastY = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height) / 2;
 
 }
 void processInput(GLFWwindow* window) {
@@ -142,10 +144,9 @@ int main() {
 	TCHAR nBufferLength = 102; char lpFileName[2]; char* lpFilePart = nullptr; lpFilePart = &filePathBuffer[1];
 	std::string a = "VertexShaderObject.glsl"; std::string b = "FragmentShaderObject.glsl";
 	int numberMesh = 1;
-	mesh.OpenMeshObjFile("D:/uploads_files_2792345_Koenigsegg33.obj");
-	
 	while (!glfwWindowShouldClose(window)) // render
 	{
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		mesh.setBufferMesh();
 		if (HOTreload == false) {
 			Interface->setSettingFrame();
@@ -170,7 +171,7 @@ int main() {
 			HOTreload = false;
 			glViewport(*resX / 4.5, 0, *resX, *resY);
 		}
-		
+		glfwSetScrollCallback(window, camera.mouseCallBack(window, glfwGetCursorPos(win)))
 		matrixAnimation->setPercentTexture(mesh.getShaderObject(), Interface->getpercentTexture());
 
 		if (HOTreload == false) {
