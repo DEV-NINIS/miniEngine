@@ -31,6 +31,14 @@
 
 
 static bool HOTreload = false;
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+float lastX = glfwGetVideoMode(glfwGetPrimaryMonitor())->width / 2.0f;
+float lastY = glfwGetVideoMode(glfwGetPrimaryMonitor())->height / 2.0f;
+bool firstMouse = true;
+
+// timing
+float deltaTime = 0.0f;	// time between current frame and last frame
+float lastFrame = 0.0f;
 //												_____
 //               /\         |\		|	 |	   |
 //				/  \		| \		|	 |	   |
@@ -39,11 +47,7 @@ static bool HOTreload = false;
 //			 /		  \		|	 \	|	 |			 |
 //			/		   \	|	  \	|	 |		_____|
 //
-void setCameraPitchYaw(GLFWwindow* window, Camera& camera, float &lastX, float &lastY) {
-	lastX = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width)/2;
-	lastY = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height) / 2;
 
-}
 void processInput(GLFWwindow* window) {
 
 }
@@ -65,7 +69,44 @@ char* unconstchar(const char* s) {
 		return res;
 	}
 }
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	// make sure the viewport matches the new window dimensions; note that width and 
+	// height will be significantly larger than specified on retina displays.
+	glViewport(0, 0, width, height);
+}
+void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
+{
+	float xpos = static_cast<float>(xposIn);
+	float ypos = static_cast<float>(yposIn);
+
+	if (firstMouse)
+	{
+		lastX = xpos;
+		lastY = ypos;
+		firstMouse = false;
+	}
+
+	float xoffset = xpos - lastX;
+	float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+
+	lastX = xpos;
+	lastY = ypos;
+
+	camera.ProcessMouseMovement(xoffset, yoffset);
+}
+
+// glfw: whenever the mouse scroll wheel scrolls, this callback is called
+// ----------------------------------------------------------------------
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	camera.ProcessMouseScroll(static_cast<float>(yoffset));
+}
+
+
 int main() {
+	const float lastX = glfwGetVideoMode(glfwGetPrimaryMonitor())->width / 2.0f;
+	const float lastY = glfwGetVideoMode(glfwGetPrimaryMonitor())->height / 2.0f;
 	HWND hWnd = GetConsoleWindow();
 	ShowWindow(hWnd, SW_HIDE);
 	FreeConsole();
@@ -101,6 +142,10 @@ int main() {
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	glfwSetCursorPosCallback(window, mouse_callback);
+	glfwSetScrollCallback(window, scroll_callback);
+
 	// set glad
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 		MessageBoxA(0, static_cast<const char*>("failed to initialise glad"), "ERROR", 0);
@@ -144,9 +189,9 @@ int main() {
 	TCHAR nBufferLength = 102; char lpFileName[2]; char* lpFilePart = nullptr; lpFilePart = &filePathBuffer[1];
 	std::string a = "VertexShaderObject.glsl"; std::string b = "FragmentShaderObject.glsl";
 	int numberMesh = 1;
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	while (!glfwWindowShouldClose(window)) // render
 	{
-		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		mesh.setBufferMesh();
 		if (HOTreload == false) {
 			Interface->setSettingFrame();
@@ -161,7 +206,7 @@ int main() {
 		mesh.useShaderObject();
 		camera.processInputCamera(window, deltatime, Interface->getCmerraSpeed());
 		matrixAnimation->initialiseMatrix();
-		matrixAnimation->setLookAtMatrixCamera(camera.getcamPos(), camera.getcamFront(), camera.getcamUp());
+		matrixAnimation->setLookAtMatrixCamera(camera.getViewMatrix());
 		matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
 		matrixAnimation->setMatrixPerspectiveProjection(FOV, resX2, resY2);
 		matrixAnimation->setTransformValue();
@@ -171,7 +216,6 @@ int main() {
 			HOTreload = false;
 			glViewport(*resX / 4.5, 0, *resX, *resY);
 		}
-		glfwSetScrollCallback(window, camera.mouseCallBack(window, glfwGetCursorPos(win)))
 		matrixAnimation->setPercentTexture(mesh.getShaderObject(), Interface->getpercentTexture());
 
 		if (HOTreload == false) {
@@ -349,8 +393,7 @@ int main() {
 
 
 
-			matrixAnimation->setLookAtMatrixCamera(camera.getcamPos(), camera.getcamPos() - camera.getcamFront(), camera.getcamUp());
-			ImGui::Columns(2);
+			matrixAnimation->setLookAtMatrixCamera(camera.getViewMatrix());
 			ImGui::SetColumnOffset(1, 2560 / 4 / 2);
 			ImGui::Spacing();
 			if (ImGui::CollapsingHeader("Color Object")) {
