@@ -32,10 +32,9 @@
 
 static bool HOTreload = false;
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
-float lastX = glfwGetVideoMode(glfwGetPrimaryMonitor())->width / 2.0f;
-float lastY = glfwGetVideoMode(glfwGetPrimaryMonitor())->height / 2.0f;
 bool firstMouse = true;
-
+float lastX = 2560;
+float lastY = 1440;
 // timing
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
@@ -69,44 +68,9 @@ char* unconstchar(const char* s) {
 		return res;
 	}
 }
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-	// make sure the viewport matches the new window dimensions; note that width and 
-	// height will be significantly larger than specified on retina displays.
-	glViewport(0, 0, width, height);
-}
-void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
-{
-	float xpos = static_cast<float>(xposIn);
-	float ypos = static_cast<float>(yposIn);
-
-	if (firstMouse)
-	{
-		lastX = xpos;
-		lastY = ypos;
-		firstMouse = false;
-	}
-
-	float xoffset = xpos - lastX;
-	float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
-
-	lastX = xpos;
-	lastY = ypos;
-
-	camera.ProcessMouseMovement(xoffset, yoffset);
-}
-
-// glfw: whenever the mouse scroll wheel scrolls, this callback is called
-// ----------------------------------------------------------------------
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
-	camera.ProcessMouseScroll(static_cast<float>(yoffset));
-}
-
 
 int main() {
-	const float lastX = glfwGetVideoMode(glfwGetPrimaryMonitor())->width / 2.0f;
-	const float lastY = glfwGetVideoMode(glfwGetPrimaryMonitor())->height / 2.0f;
+	
 	HWND hWnd = GetConsoleWindow();
 	ShowWindow(hWnd, SW_HIDE);
 	FreeConsole();
@@ -118,6 +82,8 @@ int main() {
 #ifdef _APPLE_
 	glfwwindowhint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif // _APPLE_
+	const float lastX = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width) / 2.0f;
+	const float lastY = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height) / 2.0f;
 	//
 	int* resY = new int; *resY = 1440; float resX2 = 2560;
 	int* resX = new int; *resX = 2560; float resY2 = 1440;
@@ -139,16 +105,16 @@ int main() {
 
 	if (window == NULL) {
 		MessageBoxA(0, static_cast<const char*>("failed to initialise glad"), "ERROR", 0);
+		exit(EXIT_FAILURE);
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	glfwSetCursorPosCallback(window, mouse_callback);
-	glfwSetScrollCallback(window, scroll_callback);
+	
 
 	// set glad
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 		MessageBoxA(0, static_cast<const char*>("failed to initialise glad"), "ERROR", 0);
+		exit(EXIT_FAILURE);
 		return -1;
 	}
 
@@ -160,6 +126,9 @@ int main() {
 
 	}
 
+#define SRC_WIDTH = glfwGetVideoMode(glfwGetPrimaryMonitor())->width / 2.0f;
+#define SRC_HEIGHT = glfwGetVideoMode(glfwGetPrimaryMonitor())->height / 2.0f;
+
 	float FOV = 55.0f; float RotateValue = -55.0f;
 	bool drawingCube = true;
 	char* filePathTex1; filePathTex1 = new char;
@@ -168,14 +137,15 @@ int main() {
 	int indicatorFolderTexture1 = 0; int indicatorFolderTexture2 = 0;
 	const char* filePath;
 	glmAnimation3D* matrixAnimation; matrixAnimation = new glmAnimation3D(window);
-	// initialise imgui
+	// initialise imgui 
 	UserInterface* Interface = nullptr; Interface = new UserInterface(window); // in the builder of this class they create a imgui context is because in argument they have GLFWwindow* ...
 	if (HOTreload == false) {
 		Interface->setStyleSettingFrame(window);
 	}
 	basicObject::cube* Cube; Cube = new basicObject::cube(window);
 	std::string formatFile; formatFile = ".dev_ninis";
-	Camera camera; writing::save Save; reading::read Read;
+	 writing::save Save; reading::read Read;
+	 Camera camera;
 	Render rendering(window); objectUser::Mesh mesh(window);
 	int* IndicatorFilepath = nullptr; IndicatorFilepath = new int; *IndicatorFilepath = Interface->getIndicatorTextureFilePath();
 	mesh.setBufferMesh();
@@ -189,7 +159,6 @@ int main() {
 	TCHAR nBufferLength = 102; char lpFileName[2]; char* lpFilePart = nullptr; lpFilePart = &filePathBuffer[1];
 	std::string a = "VertexShaderObject.glsl"; std::string b = "FragmentShaderObject.glsl";
 	int numberMesh = 1;
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	while (!glfwWindowShouldClose(window)) // render
 	{
 		mesh.setBufferMesh();
@@ -206,9 +175,9 @@ int main() {
 		mesh.useShaderObject();
 		camera.processInputCamera(window, deltatime, Interface->getCmerraSpeed());
 		matrixAnimation->initialiseMatrix();
-		matrixAnimation->setLookAtMatrixCamera(camera.getViewMatrix());
+		matrixAnimation->setLookAtMatrixCamera(camera);
 		matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
-		matrixAnimation->setMatrixPerspectiveProjection(FOV, resX2, resY2);
+		matrixAnimation->setMatrixPerspectiveProjection(FOV, resX2, resY2, camera);
 		matrixAnimation->setTransformValue();
 		matrixAnimation->frameMatrix(mesh.getShaderObject());
 		matrixAnimation->setScaleValue(mesh.getShaderObject(), Interface->LastedFloatFrame);
@@ -393,7 +362,7 @@ int main() {
 
 
 
-			matrixAnimation->setLookAtMatrixCamera(camera.getViewMatrix());
+			matrixAnimation->setLookAtMatrixCamera(camera);
 			ImGui::SetColumnOffset(1, 2560 / 4 / 2);
 			ImGui::Spacing();
 			if (ImGui::CollapsingHeader("Color Object")) {
@@ -425,10 +394,9 @@ int main() {
 
 		// ------ End of docking --------
 		// node window
-		Interface->setNodeWindow();
-		ImGui::Begin("node");
-		ImGui::End();
 		if (HOTreload == false) {
+			Interface->setNodeWindow();
+			ImGui::Begin("node");
 			ImGui::End();
 			Interface->endFrame();
 		}

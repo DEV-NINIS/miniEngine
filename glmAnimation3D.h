@@ -10,6 +10,8 @@
 #include "object.h"
 #include <glm/gtc/type_ptr.hpp>
 #include "UserInterface.h"
+#include "Camera.h"
+
 
 // the fonction of this class is animate de 3d objects and set the matrix projection of the engine
 class glmAnimation3D
@@ -20,14 +22,14 @@ public:
 	void initialiseMatrix();
 	void setModelProjection(float& ValueRotate);
 	void setViewProjection();
-	void setMatrixPerspectiveProjection(float& FOV, float& width, float& height);
+	void setMatrixPerspectiveProjection(float& FOV, float& width, float& height, Camera camera);
 	void frameMatrix(GLuint& shader);
 	void setTransformValue();
 	void setRotateRight(float& Radius);
 	void setColorObject(GLuint& shader, float ValueR, float ValueG, float ValueB);
 	void setPositionObject(GLuint& shader, float ValueX, float ValueY, float ValueZ);
 	void setRotateLeft(float Radius, float& ValueX, float& ValueY, float& ValueZ);
-	void setLookAtMatrixCamera(glm::vec3 camPos, glm::vec3 camFront, glm::vec3 camUp);
+	void setLookAtMatrixCamera(Camera camera);
 	glm::mat4 setScaleValue(GLuint& shader, float& Value);
 	float setColorValueFrame();
 	float setScaleValueX(GLuint& shader);
