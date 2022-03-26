@@ -25,6 +25,11 @@ public:
 	
 	// getting values of camera
 	glm::mat4 getViewMatrix();
+// getting values of camera
+	glm::vec3 getcamPos();
+	glm::vec3 getcamFront();
+	glm::vec3 getcamUp();
+protected:
 	glm::vec3 camPos;
 	glm::vec3 camFront;
 	glm::vec3 camUp;

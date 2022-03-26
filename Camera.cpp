@@ -12,6 +12,7 @@ Camera::Camera() {
 	camPos = glm::vec3(0.0f, 0.0f, -3.0f);
 	camFront = glm::vec3(0.0f, 0.0f, 1.0f);
 	camUp = glm::vec3(0.0f, 1.0f, 0.0f);
+	camPos = glm::vec3(0.0f, 0.0f, 1.0f); camFront = glm::vec3(0.0f, 0.0f, 1.0f); camUp = glm::vec3(0.0f, 1.0f, 0.0f); cameraSpeed;
 }
 Camera::~Camera() {}
 
@@ -24,10 +25,14 @@ void Camera::processInputCamera(GLFWwindow* window, float deltaTime, float Camer
 		camPos -= camFront * cameraSpeed;
 	}
 	if (glfwGetKey(window, GLFW_KEY_S) == true) {
-		camPos -= glm::normalize(glm::cross(camUp, camFront)) * cameraSpeed;
+		camPos += glm::normalize(glm::cross(camUp, camFront)) * cameraSpeed;
 	}
 	if (glfwGetKey(window, GLFW_KEY_F) == true) {
-		camPos += glm::normalize(glm::cross(camUp, camFront)) * cameraSpeed;
+		camPos -= glm::normalize(glm::cross(camUp, camFront)) * cameraSpeed;
 	}
 }
 glm::mat4 Camera::getViewMatrix() { return glm::lookAt(camPos, camPos + camFront, camUp); }
+
+glm::vec3 Camera::getcamFront() { return camFront; }
+glm::vec3 Camera::getcamUp() { return camUp; }
+glm::vec3 Camera::getcamPos() { return camPos; }

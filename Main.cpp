@@ -220,7 +220,6 @@ int main() {
 				matrixAnimation->frameMatrix(mesh.getShaderObject());
 				ImGui::Separator();
 			}
-			ImGui::Spacing();
 			if (ImGui::CollapsingHeader("positions")) {
 				ImGui::Spacing();
 				Interface->setPositionObjectX();
@@ -301,7 +300,6 @@ int main() {
 
 				// Animation
 
-				ImGui::Spacing();
 				// texture
 				if (ImGui::CollapsingHeader("texture")) {
 					if (Interface->inputDemandSelectFolderForTex1() == true) {
@@ -333,8 +331,6 @@ int main() {
 
 		}
 		if (HOTreload == false) {
-			ImGui::Spacing();
-
 			// menubar
 
 			// settings 
@@ -357,7 +353,6 @@ int main() {
 				ImGui::Spacing();
 			}
 
-			ImGui::Spacing();
 			// FOV
 
 
@@ -367,7 +362,6 @@ int main() {
 
 
 			ImGui::SetColumnOffset(2, (2560 / 4 / 2));
-			ImGui::Spacing();
 			if (ImGui::CollapsingHeader("Color Object")) {
 				ImGui::Spacing();
 				Interface->setColorObjectR();
@@ -380,7 +374,6 @@ int main() {
 				Interface->setColorEditorObject(COLOR_OBJECT);
 			}
 			ImGui::NextColumn();
-			ImGui::Spacing();
 			if (ImGui::CollapsingHeader("Color Frame")) {
 				ImGui::Spacing();
 				Interface->setColorR();
@@ -391,7 +384,6 @@ int main() {
 				ImGui::Spacing();
 				Interface->setColorEditorFrame(COLOR_FRAME);
 			}
-			ImGui::TableSetColumnEnabled(2, true);
 
 		}
 		// Get the size of the child (i.e. the whole draw size of the windows).
@@ -400,6 +392,7 @@ int main() {
 
 		// ------ End of docking --------
 		// node window
+		
 		if (HOTreload == false) {
 			Interface->setNodeWindow();
 			ImGui::Begin("node");
@@ -408,6 +401,7 @@ int main() {
 		glEnable(GL_DEPTH_TEST);
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+		
 	}
 	if (HOTreload == false) {
 		Interface->~UserInterface();
