@@ -7,22 +7,11 @@
 #include <glm/gtc/type_ptr.hpp>
 
 
-Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) :
-    camFront(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM) {
-    position = glm::vec3(0.0f, 0.0f, 0.0f);
-    up = glm::vec3(0.0f, 1.0f, 0.0f);
-    yaw = YAW; pitch = PITCH;
-    camPos = position;
-    camUp = up;
-    Yaw = yaw;
-    Pitch = pitch;
-}
-Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) : camFront(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
-{
-    camPos = glm::vec3(posX, posY, posZ);
-    camUp = glm::vec3(upX, upY, upZ);
-    Yaw = yaw;
-    Pitch = pitch;
+Camera::Camera() {
+	cameraSpeed; 
+	camPos = glm::vec3(0.0f, 0.0f, -3.0f);
+	camFront = glm::vec3(0.0f, 0.0f, 1.0f);
+	camUp = glm::vec3(0.0f, 1.0f, 0.0f);
 }
 Camera::~Camera() {}
 

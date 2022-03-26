@@ -358,10 +358,10 @@ void UserInterface::setChangeFOV() {
 	}
 }
 void UserInterface::inputFileTexture1(char* filePath) {
-	ImGui::Text(filePath, ": is your filepath");
+	ImGui::Text(filePath , ": is your filepath");
 }
 void UserInterface::inputFileTexture2(char* filePath) {
-	ImGui::Text(filePath, ": is your filepath");
+	ImGui::Text(filePath ,": is your filepath");
 }
 
 void UserInterface::setColorObjectR() {
