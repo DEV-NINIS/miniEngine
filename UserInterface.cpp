@@ -74,7 +74,7 @@ UserInterface::~UserInterface() {
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 }
-void UserInterface::interfacebeginCanvas() {
+void UserInterface::interfaceEditorWindow() {
 	ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoTitleBar |
 		ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
 		ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus |
@@ -405,6 +405,7 @@ void UserInterface::setPercentTexture() {
 	ImGui::SliderFloat("percentTexture", &percentTexture, 0, 1);
 }
 void UserInterface::endFrame() {
+	ImGui::EndFrame();
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

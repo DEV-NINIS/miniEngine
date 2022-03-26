@@ -38,7 +38,7 @@ public:
 	bool confirmFilePath() const;
 	void inputFileTexture1(char* filePathTex1);
 	void inputFileTexture2(char* filePathTex2);
-	void interfacebeginCanvas();
+	void interfaceEditorWindow();
 	float setRotateAroundXValue();
 	float setRotateAroundYValue();
 	float setRotateAroundZValue();
@@ -78,6 +78,9 @@ public:
 
 	void setColorEditorFrame(int objectOrFrame);
 	void setColorEditorObject(int objectOrFrame);
+
+	// window 
+	void setNodeWindow();
 
 
 	// gettting values for save

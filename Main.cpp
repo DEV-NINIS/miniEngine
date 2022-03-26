@@ -31,13 +31,6 @@
 
 
 static bool HOTreload = false;
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
-bool firstMouse = true;
-float lastX = 2560;
-float lastY = 1440;
-// timing
-float deltaTime = 0.0f;	// time between current frame and last frame
-float lastFrame = 0.0f;
 //												_____
 //               /\         |\		|	 |	   |
 //				/  \		| \		|	 |	   |
@@ -157,23 +150,31 @@ int main() {
 	float deltatime = 0, currentFrame = 0, lastedFrame = 0;
 	TCHAR filepath = 100; char filePathBuffer[100]; filePathBuffer[100];
 	TCHAR nBufferLength = 102; char lpFileName[2]; char* lpFilePart = nullptr; lpFilePart = &filePathBuffer[1];
-	std::string a = "VertexShaderObject.glsl"; std::string b = "FragmentShaderObject.glsl";
 	int numberMesh = 1;
 	while (!glfwWindowShouldClose(window)) // render
 	{
-		mesh.setBufferMesh();
-		if (HOTreload == false) {
-			Interface->setSettingFrame();
-			Interface->interfacebeginCanvas();
-		}
+		// delta time 
 		currentFrame = glfwGetTime();
 		deltatime = currentFrame - lastedFrame;
 		lastedFrame = currentFrame;
+
+
+		mesh.setBufferMesh();
+
+
+		if (HOTreload == false) {
+			Interface->setSettingFrame();
+			Interface->interfaceEditorWindow();
+		}
+
+
 		processInput(window);
 		glClearColor(Interface->lastedColorFrame[0], Interface->lastedColorFrame[1], Interface->lastedColorFrame[2], 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		mesh.useShaderObject();
 		camera.processInputCamera(window, deltatime, Interface->getCmerraSpeed());
+
+		// initialise matrix, ect...
 		matrixAnimation->initialiseMatrix();
 		matrixAnimation->setLookAtMatrixCamera(camera);
 		matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
@@ -181,15 +182,17 @@ int main() {
 		matrixAnimation->setTransformValue();
 		matrixAnimation->frameMatrix(mesh.getShaderObject());
 		matrixAnimation->setScaleValue(mesh.getShaderObject(), Interface->LastedFloatFrame);
+		matrixAnimation->setPercentTexture(mesh.getShaderObject(), Interface->getpercentTexture());
+
+
+		
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 			HOTreload = false;
 			glViewport(*resX / 4.5, 0, *resX, *resY);
 		}
-		matrixAnimation->setPercentTexture(mesh.getShaderObject(), Interface->getpercentTexture());
-
 		if (HOTreload == false) {
 			ImGui::Begin("Editor");
-			if (ImGui::Button( ICON_FA_PLAY "  PLAY", ImVec2(2560 / 4.35, 40.0f))) {
+			if (ImGui::Button(ICON_FA_PLAY "  PLAY", ImVec2(2560 / 4.35, 40.0f))) {
 				HOTreload = true;
 				glViewport(0, 0, *resX, *resY);
 
@@ -231,6 +234,8 @@ int main() {
 				matrixAnimation->setPositionObject(mesh.getShaderObject(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
 			}
 		}
+
+
 
 		if (HOTreload == true) {
 			matrixAnimation->setScaleValue(mesh.getShaderObject(), Interface->LastedFloatFrame);
@@ -342,28 +347,26 @@ int main() {
 				ImGui::Spacing();
 				Interface->setChangeFOV();
 				FOV = Interface->getFOV_Value();
-				ImGui::Text("press E to forward " );
+				ImGui::Text("press E to forward ");
 				ImGui::Spacing();
-				ImGui::Text("press D to move back " );
+				ImGui::Text("press D to move back ");
 				ImGui::Spacing();
-				ImGui::Text("press S to move right " );
+				ImGui::Text("press S to move right ");
 				ImGui::Spacing();
-				ImGui::Text("press F to move left " );
+				ImGui::Text("press F to move left ");
 				ImGui::Spacing();
 			}
-			
+
 			ImGui::Spacing();
 			// FOV
 
 
 			// render
-			matrixAnimation->frameMatrix(mesh.getShaderObject());
-			rendering.drawElements(mesh, numberMesh);
+			
 
 
 
-			matrixAnimation->setLookAtMatrixCamera(camera);
-			ImGui::SetColumnOffset(1, 2560 / 4 / 2);
+			ImGui::SetColumnOffset(2, (2560 / 4 / 2));
 			ImGui::Spacing();
 			if (ImGui::CollapsingHeader("Color Object")) {
 				ImGui::Spacing();
@@ -388,16 +391,18 @@ int main() {
 				ImGui::Spacing();
 				Interface->setColorEditorFrame(COLOR_FRAME);
 			}
+			ImGui::TableSetColumnEnabled(2, true);
+
 		}
 		// Get the size of the child (i.e. the whole draw size of the windows).
-		
+		matrixAnimation->frameMatrix(mesh.getShaderObject());
+		rendering.drawElements(mesh, numberMesh);
 
 		// ------ End of docking --------
 		// node window
 		if (HOTreload == false) {
 			Interface->setNodeWindow();
 			ImGui::Begin("node");
-			ImGui::End();
 			Interface->endFrame();
 		}
 		glEnable(GL_DEPTH_TEST);
