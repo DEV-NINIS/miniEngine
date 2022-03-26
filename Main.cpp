@@ -39,6 +39,10 @@ static bool HOTreload = false;
 //			 /		  \		|	 \	|	 |			 |
 //			/		   \	|	  \	|	 |		_____|
 //
+void setCameraPitchYaw(GLFWwindow* window, Camera& camera, float& lastX, float& lastY) {
+	lastX = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width) / 2;
+	lastY = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height) / 2;
+}
 
 void processInput(GLFWwindow* window) {
 
@@ -151,16 +155,12 @@ int main() {
 	TCHAR filepath = 100; char filePathBuffer[100]; filePathBuffer[100];
 	TCHAR nBufferLength = 102; char lpFileName[2]; char* lpFilePart = nullptr; lpFilePart = &filePathBuffer[1];
 	int numberMesh = 1;
+	mesh.OpenMeshObjFile("D:/uploads_files_2792345_Koenigsegg33.obj");
+	
 	while (!glfwWindowShouldClose(window)) // render
 	{
-		// delta time 
-		currentFrame = glfwGetTime();
-		deltatime = currentFrame - lastedFrame;
-		lastedFrame = currentFrame;
-
-
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		mesh.setBufferMesh();
-
 
 		if (HOTreload == false) {
 			Interface->setSettingFrame();
@@ -190,9 +190,12 @@ int main() {
 			HOTreload = false;
 			glViewport(*resX / 4.5, 0, *resX, *resY);
 		}
+		glfwSetScrollCallback(window, camera.mouseCallBack(window, glfwGetCursorPos(win)))
+		matrixAnimation->setPercentTexture(mesh.getShaderObject(), Interface->getpercentTexture());
+
 		if (HOTreload == false) {
 			ImGui::Begin("Editor");
-			if (ImGui::Button(ICON_FA_PLAY "  PLAY", ImVec2(2560 / 4.35, 40.0f))) {
+			if (ImGui::Button( ICON_FA_PLAY "  PLAY", ImVec2(2560 / 4.35, 40.0f))) {
 				HOTreload = true;
 				glViewport(0, 0, *resX, *resY);
 
@@ -220,6 +223,7 @@ int main() {
 				matrixAnimation->frameMatrix(mesh.getShaderObject());
 				ImGui::Separator();
 			}
+			ImGui::Spacing();
 			if (ImGui::CollapsingHeader("positions")) {
 				ImGui::Spacing();
 				Interface->setPositionObjectX();
@@ -300,6 +304,7 @@ int main() {
 
 				// Animation
 
+				ImGui::Spacing();
 				// texture
 				if (ImGui::CollapsingHeader("texture")) {
 					if (Interface->inputDemandSelectFolderForTex1() == true) {
@@ -331,6 +336,8 @@ int main() {
 
 		}
 		if (HOTreload == false) {
+			ImGui::Spacing();
+
 			// menubar
 
 			// settings 
@@ -353,6 +360,7 @@ int main() {
 				ImGui::Spacing();
 			}
 
+			ImGui::Spacing();
 			// FOV
 
 
@@ -362,6 +370,7 @@ int main() {
 
 
 			ImGui::SetColumnOffset(2, (2560 / 4 / 2));
+			ImGui::Spacing();
 			if (ImGui::CollapsingHeader("Color Object")) {
 				ImGui::Spacing();
 				Interface->setColorObjectR();
@@ -374,6 +383,7 @@ int main() {
 				Interface->setColorEditorObject(COLOR_OBJECT);
 			}
 			ImGui::NextColumn();
+			ImGui::Spacing();
 			if (ImGui::CollapsingHeader("Color Frame")) {
 				ImGui::Spacing();
 				Interface->setColorR();
@@ -384,6 +394,7 @@ int main() {
 				ImGui::Spacing();
 				Interface->setColorEditorFrame(COLOR_FRAME);
 			}
+			ImGui::TableSetColumnEnabled(2, true);
 
 		}
 		// Get the size of the child (i.e. the whole draw size of the windows).
@@ -392,7 +403,6 @@ int main() {
 
 		// ------ End of docking --------
 		// node window
-		
 		if (HOTreload == false) {
 			Interface->setNodeWindow();
 			ImGui::Begin("node");
@@ -401,7 +411,6 @@ int main() {
 		glEnable(GL_DEPTH_TEST);
 		glfwSwapBuffers(window);
 		glfwPollEvents();
-		
 	}
 	if (HOTreload == false) {
 		Interface->~UserInterface();
