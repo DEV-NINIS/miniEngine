@@ -81,13 +81,27 @@ void UserInterface::interfaceEditorWindow() {
 		ImGuiWindowFlags_NoBackground;
 
 	ImGuiViewport* viewport = ImGui::GetMainViewport();
-	ImGui::SetNextWindowPos(viewport->WorkPos);
+	ImGui::SetNextWindowPos(ImVec2(viewport->WorkPos.x, viewport->WorkPos.y));
 	ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - viewport->WorkSize.x * 0.9, viewport->WorkSize.y));
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 10.0f);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 	ImGui::PopStyleVar(3);
+}
+void UserInterface::setNodeWindow() {
+	ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoTitleBar |
+		ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
+		ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus |
+		ImGuiWindowFlags_NoBackground;
+	ImGuiViewport* viewport = ImGui::GetMainViewport();
+	ImGui::SetNextWindowPos(ImVec2(viewport->WorkPos.x + (viewport->WorkSize.x/4.25), viewport->WorkPos.y - viewport->WorkSize.y/4));
+	ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - viewport->WorkSize.x/ 4.25, viewport->WorkSize.y/4));
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 10.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+	ImGui::PopStyleVar(3);
+
 }
 void UserInterface::setStyleSettingFrame(GLFWwindow* window) {
 	IMGUI_CHECKVERSION();
@@ -163,72 +177,13 @@ void UserInterface::setSettingFrame() {
 	ImGui::NewFrame();
 }
 bool UserInterface::inputDemandSelectFolderForTex1() const {
-	if (ImGui::Button(ICON_FA_UPLOAD "  select folder for texture 1", ImVec2(220, 30))) {
+	if (ImGui::Button(ICON_FA_UPLOAD "  select folder for texture 1", ImVec2(glfwGetVideoMode(glfwGetPrimaryMonitor())->width/4.5, glfwGetVideoMode(glfwGetPrimaryMonitor())->height / 40.5))) {
 		return true;
 	}
 	else { return false; }
 }
 bool UserInterface::inputDemandSelectFolderForTex2() const {
-	if (ImGui::Button(ICON_FA_UPLOAD "  select folder for texture 2", ImVec2(220, 30))) {
-		return true;
-	}
-	else { return false; }
-}
-bool UserInterface::inputDemandingAnimation() const {
-	if (ImGui::CollapsingHeader("Animation")) {
-		return true;
-	}
-	else { return false; }
-}
-bool UserInterface::inputDemandingCamera() const {
-	if (ImGui::Button( "Camera", ImVec2(200, 30)) == true) {
-		return true;
-	}
-	else { return false; }
-}
-bool UserInterface::inputDemandCameraSpeed() const {
-	if (ImGui::Button("Camera Speed", ImVec2(150, 20)) == true) {
-		return true;
-	}
-	else { return false; }
-}
-bool UserInterface::inputDemandingRotateLeft() const {
-	if (ImGui::Button("save direction and Rotate", ImVec2(200, 20))) {
-		return true;
-	}
-	else { return false; }
-}
-bool UserInterface::inputDemandingRotateRight() const {
-	if (ImGui::Button("change direction <- -> ", ImVec2(175, 20))) {
-		return true;
-	}
-	else { return false; }
-}
-bool UserInterface::inputDemandingRotate() const {
-	if (ImGui::Button("Rotate", ImVec2(60, 40))) {
-		return true;
-	}
-	else { return false; }
-}
-bool UserInterface::inputDemandingTexture1() const {
-	if (ImGui::Button("Texture", ImVec2(300, 40))) {
-		return true;
-	}
-	else { return false; }
-}
-bool UserInterface::inputDemandingRotateAroundX() const {
-	if (ImGui::Button("Rotate X", ImVec2(65, 20))) {
-		return true;
-	}
-	else { return false; }
-}
-bool UserInterface::inputDemandingRotateAroundY() const {
-	if (ImGui::Button("Rotate Y", ImVec2(65, 20))) {
-		return true;
-	}
-	else { return false; }
-}bool UserInterface::inputDemandingRotateAroundZ() const {
-	if (ImGui::Button("Rotate Z", ImVec2(65, 20))) {
+	if (ImGui::Button(ICON_FA_UPLOAD "  select folder for texture 2", ImVec2(glfwGetVideoMode(glfwGetPrimaryMonitor())->width / 4.5, glfwGetVideoMode(glfwGetPrimaryMonitor())->height / 40.5))) {
 		return true;
 	}
 	else { return false; }

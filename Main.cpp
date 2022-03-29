@@ -6,6 +6,7 @@
 #include <string>
 #include "object.h"
 #include "Render.h"
+#include "imgui/imgui_node_editor.h"
 #include "stbi_image.h"
 #include "file.h"
 #include "imgui/imgui.h"
@@ -31,6 +32,8 @@
 
 
 static bool HOTreload = false;
+namespace ed = ax::NodeEditor;
+
 //												_____
 //               /\         |\		|	 |	   |
 //				/  \		| \		|	 |	   |
@@ -39,11 +42,11 @@ static bool HOTreload = false;
 //			 /		  \		|	 \	|	 |			 |
 //			/		   \	|	  \	|	 |		_____|
 //
-void setCameraPitchYaw(GLFWwindow* window, Camera& camera, float& lastX, float& lastY) {
-	lastX = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width) / 2;
+void setCameraPitchYaw(GLFWwindow* window, Camera& camera, float &lastX, float &lastY) {
+	lastX = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width)/2;
 	lastY = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height) / 2;
-}
 
+}
 void processInput(GLFWwindow* window) {
 
 }
@@ -65,9 +68,8 @@ char* unconstchar(const char* s) {
 		return res;
 	}
 }
-
 int main() {
-	
+
 	HWND hWnd = GetConsoleWindow();
 	ShowWindow(hWnd, SW_HIDE);
 	FreeConsole();
@@ -106,8 +108,6 @@ int main() {
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
-	
-
 	// set glad
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 		MessageBoxA(0, static_cast<const char*>("failed to initialise glad"), "ERROR", 0);
@@ -138,6 +138,7 @@ int main() {
 	UserInterface* Interface = nullptr; Interface = new UserInterface(window); // in the builder of this class they create a imgui context is because in argument they have GLFWwindow* ...
 	if (HOTreload == false) {
 		Interface->setStyleSettingFrame(window);
+		
 	}
 	basicObject::cube* Cube; Cube = new basicObject::cube(window);
 	std::string formatFile; formatFile = ".dev_ninis";
@@ -155,17 +156,24 @@ int main() {
 	TCHAR filepath = 100; char filePathBuffer[100]; filePathBuffer[100];
 	TCHAR nBufferLength = 102; char lpFileName[2]; char* lpFilePart = nullptr; lpFilePart = &filePathBuffer[1];
 	int numberMesh = 1;
-	mesh.OpenMeshObjFile("D:/uploads_files_2792345_Koenigsegg33.obj");
-	
+	int uniqueId = 1;
+	ed::Config config;
+	static ed::EditorContext* g_Context = ed::CreateEditor(&config);
 	while (!glfwWindowShouldClose(window)) // render
 	{
-		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		mesh.setBufferMesh();
 
 		if (HOTreload == false) {
 			Interface->setSettingFrame();
 			Interface->interfaceEditorWindow();
 		}
+
+	
+	
+
+	
+
+		
 
 
 		processInput(window);
@@ -190,7 +198,6 @@ int main() {
 			HOTreload = false;
 			glViewport(*resX / 4.5, 0, *resX, *resY);
 		}
-		glfwSetScrollCallback(window, camera.mouseCallBack(window, glfwGetCursorPos(win)))
 		matrixAnimation->setPercentTexture(mesh.getShaderObject(), Interface->getpercentTexture());
 
 		if (HOTreload == false) {
@@ -369,7 +376,9 @@ int main() {
 
 
 
-			ImGui::SetColumnOffset(2, (2560 / 4 / 2));
+			matrixAnimation->setLookAtMatrixCamera(camera);
+			ImGui::Columns(2);
+			ImGui::SetColumnOffset(1, 2560 / 4 / 2);
 			ImGui::Spacing();
 			if (ImGui::CollapsingHeader("Color Object")) {
 				ImGui::Spacing();
@@ -394,24 +403,29 @@ int main() {
 				ImGui::Spacing();
 				Interface->setColorEditorFrame(COLOR_FRAME);
 			}
-			ImGui::TableSetColumnEnabled(2, true);
 
+
+
+
+
+			// node 
 		}
 		// Get the size of the child (i.e. the whole draw size of the windows).
 		matrixAnimation->frameMatrix(mesh.getShaderObject());
 		rendering.drawElements(mesh, numberMesh);
-
-		// ------ End of docking --------
-		// node window
 		if (HOTreload == false) {
-			Interface->setNodeWindow();
-			ImGui::Begin("node");
+			ImGui::End();
 			Interface->endFrame();
 		}
+		// ------ End of docking --------
+		// node window
+	
 		glEnable(GL_DEPTH_TEST);
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+	ed::DestroyEditor(g_Context);
+
 	if (HOTreload == false) {
 		Interface->~UserInterface();
 	}
