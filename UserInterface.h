@@ -21,17 +21,6 @@ public:
 
 	virtual ~UserInterface();
 	void setStyleSettingFrame(GLFWwindow* window);
-	
-	bool inputDemandCameraSpeed() const;
-	bool inputDemandingCamera() const;
-	bool inputDemandingAnimation() const;
-	bool inputDemandingRotate() const;
-	bool inputDemandingTexture1() const;
-	bool inputDemandingRotateAroundX() const;
-	bool inputDemandingRotateAroundY() const;
-	bool inputDemandingRotateAroundZ() const;
-	bool inputDemandingRotateRight() const;
-	bool inputDemandingRotateLeft() const;
 	bool inputDemandingChangeFOV() const;
 	bool inputDemandSelectFolderForTex1() const;
 	bool inputDemandSelectFolderForTex2() const;
@@ -79,9 +68,13 @@ public:
 	void setColorEditorFrame(int objectOrFrame);
 	void setColorEditorObject(int objectOrFrame);
 
-	// window 
+	// node window 
 	void setNodeWindow();
 
+	// node editor
+	void setNodeInformation(); // this fonction initialise the fps latence .ect
+
+	void setNodeRotateMeshWithRadius();
 
 	// gettting values for save
 	void setSettingFrame();

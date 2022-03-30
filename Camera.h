@@ -29,16 +29,15 @@ public:
 	glm::vec3 getcamPos();
 	glm::vec3 getcamFront();
 	glm::vec3 getcamUp();
-protected:
-	glm::vec3 camPos;
-	glm::vec3 camFront;
-	glm::vec3 camUp;
+	
 	float Zoom;
 
 protected:
 	bool firstMouse = true;
 	
-
+	glm::vec3 camPos;
+	glm::vec3 camFront;
+	glm::vec3 camUp;
 	glm::vec3 camRight; 
 	float cameraSpeed;
 	float Yaw = -90.0f;	// yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right so we initially rotate a bit to the left.

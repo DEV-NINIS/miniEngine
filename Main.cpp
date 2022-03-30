@@ -30,7 +30,6 @@
 #define COLOR_FRAME 1
 #define COLOR_OBJECT 2
 
-
 static bool HOTreload = false;
 namespace ed = ax::NodeEditor;
 
@@ -49,6 +48,22 @@ void setCameraPitchYaw(GLFWwindow* window, Camera& camera, float &lastX, float &
 }
 void processInput(GLFWwindow* window) {
 
+}
+void ImGuiEx_BeginColumn()
+{
+	ImGui::BeginGroup();
+}
+
+void ImGuiEx_NextColumn()
+{
+	ImGui::EndGroup();
+	ImGui::SameLine();
+	ImGui::BeginGroup();
+}
+
+void ImGuiEx_EndColumn()
+{
+	ImGui::EndGroup();
 }
 char* unconstchar(const char* s) {
 	if (!s)
@@ -99,7 +114,7 @@ int main() {
 #ifndef HOT_REALOAD
 	GLFWwindow* window; window = glfwCreateWindow(glfwGetVideoMode(glfwGetPrimaryMonitor())->width,
 		glfwGetVideoMode(glfwGetPrimaryMonitor())->height, "DevNinisEngineMotion",
-		nullptr, nullptr);
+		glfwGetPrimaryMonitor(), nullptr);
 #endif
 
 	if (window == NULL) {
@@ -161,6 +176,10 @@ int main() {
 	static ed::EditorContext* g_Context = ed::CreateEditor(&config);
 	while (!glfwWindowShouldClose(window)) // render
 	{
+		float currentFrame = static_cast<float>(glfwGetTime());
+		deltatime = currentFrame - lastedFrame;
+		lastedFrame = currentFrame;
+
 		mesh.setBufferMesh();
 
 		if (HOTreload == false) {
@@ -184,7 +203,7 @@ int main() {
 
 		// initialise matrix, ect...
 		matrixAnimation->initialiseMatrix();
-		matrixAnimation->setLookAtMatrixCamera(camera);
+		matrixAnimation->setLookAtMatrixCamera(camera.getcamPos(), camera.getcamFront(), camera.getcamUp());
 		matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
 		matrixAnimation->setMatrixPerspectiveProjection(FOV, resX2, resY2, camera);
 		matrixAnimation->setTransformValue();
@@ -370,13 +389,13 @@ int main() {
 			ImGui::Spacing();
 			// FOV
 
-
+			
 			// render
 			
 
 
 
-			matrixAnimation->setLookAtMatrixCamera(camera);
+			matrixAnimation->setLookAtMatrixCamera(camera.getcamPos(), camera.getcamFront(), camera.getcamUp());
 			ImGui::Columns(2);
 			ImGui::SetColumnOffset(1, 2560 / 4 / 2);
 			ImGui::Spacing();
@@ -404,11 +423,62 @@ int main() {
 				Interface->setColorEditorFrame(COLOR_FRAME);
 			}
 
-
-
+			ImGui::End();
 
 
 			// node 
+
+
+
+
+
+			Interface->setNodeWindow();
+			ed::Style style;
+			style.Colors->w = 20;
+			style.PinRounding = 0;
+			style.NodeRounding = 0;
+			style.GroupRounding = 0;
+			ImGui::Begin("node");
+			ed::SetCurrentEditor(g_Context);
+
+			ed::Begin("My Editor");
+			
+
+
+
+			int uniqueId = 1;
+
+			// Start drawing nodes.
+			ed::BeginNode(uniqueId++);
+			ImGui::Text("Node A");
+			ed::BeginPin(uniqueId++, ed::PinKind::Input);
+			ImGui::Text("-> In");
+			ed::EndPin();
+			ImGui::SameLine();
+			ed::BeginPin(uniqueId++, ed::PinKind::Output);
+			ImGui::Text("Out ->");
+			ed::EndPin();
+			ed::EndNode();
+
+			ed::End();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		}
 		// Get the size of the child (i.e. the whole draw size of the windows).
 		matrixAnimation->frameMatrix(mesh.getShaderObject());
@@ -424,12 +494,15 @@ int main() {
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
-	ed::DestroyEditor(g_Context);
 
 	if (HOTreload == false) {
 		Interface->~UserInterface();
+		ed::DestroyEditor(g_Context);
 	}
+
 	Cube->~cube();
 	mesh.~Mesh();
 	delete Cube; Cube = NULL;
 }
+
+

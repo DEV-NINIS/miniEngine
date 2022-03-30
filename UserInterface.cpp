@@ -1,6 +1,8 @@
 #include "UserInterface.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_node_editor.h"
+#include "imgui/imgui_node_editor_internal.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_impl_opengl3_loader.h"
 #include "imgui/imgui_internal.h"
@@ -13,6 +15,8 @@
 
 #define COLOR_FRAME 1
 #define COLOR_OBJECT 2
+
+namespace ed = ax::NodeEditor;
 
 char UserInterface::filePath1[] = { 0 };
 char UserInterface::filePath2[] = { 0 };
@@ -95,13 +99,19 @@ void UserInterface::setNodeWindow() {
 		ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus |
 		ImGuiWindowFlags_NoBackground;
 	ImGuiViewport* viewport = ImGui::GetMainViewport();
-	ImGui::SetNextWindowPos(ImVec2(viewport->WorkPos.x + (viewport->WorkSize.x/4.25), viewport->WorkPos.y - viewport->WorkSize.y/4));
+	ImGui::SetNextWindowPos(ImVec2(viewport->WorkPos.x + (viewport->WorkSize.x/4.25), viewport->WorkSize.y- viewport->WorkSize.y/3.5));
 	ImGui::SetNextWindowSize(ImVec2(viewport->WorkSize.x - viewport->WorkSize.x/ 4.25, viewport->WorkSize.y/4));
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 10.0f);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 	ImGui::PopStyleVar(3);
 
+}
+void UserInterface::setNodeInformation() {
+	auto& io = ImGui::GetIO();
+	ImGui::Text("FPS: %.2f (%.2gms)", io.Framerate, io.Framerate ? 1000.0f / io.Framerate : 0.0f);
+	ImGui::Separator();
+	ed::Begin("My Editor", ImVec2(0.0, 0.0f));
 }
 void UserInterface::setStyleSettingFrame(GLFWwindow* window) {
 	IMGUI_CHECKVERSION();
@@ -344,6 +354,13 @@ void UserInterface::setPositionObjectZ() {
 void UserInterface::setPercentTexture() {
 	ImGui::SliderFloat("percentTexture", &percentTexture, 0, 1);
 }
+
+// node
+
+void UserInterface::setNodeRotateMeshWithRadius() {
+	
+}
+
 void UserInterface::endFrame() {
 	ImGui::EndFrame();
 	ImGui::Render();
