@@ -401,7 +401,7 @@ int main() {
 
 			matrixAnimation->setLookAtMatrixCamera(camera.getcamPos(), camera.getcamFront(), camera.getcamUp());
 			ImGui::Columns(2);
-			ImGui::SetColumnOffset(1, 2560 / 4 / 2);
+			ImGui::SetColumnOffset(1, glfwGetVideoMode(glfwGetPrimaryMonitor())->width / 4 / 2);
 			ImGui::Spacing();
 			if (ImGui::CollapsingHeader("Color Object")) {
 				ImGui::Spacing();
@@ -426,7 +426,7 @@ int main() {
 				ImGui::Spacing();
 				Interface->setColorEditorFrame(COLOR_FRAME);
 			}
-
+			
 			ImGui::End();
 
 
@@ -437,6 +437,12 @@ int main() {
 			Interface->setNodeWindow();
 			Interface->setStyleNodeFrame();
 			ImGui::Begin("Node");
+
+			ImGui::Columns(2);
+			ImGui::SetColumnOffset(1, (glfwGetVideoMode(glfwGetPrimaryMonitor())->width - glfwGetVideoMode(glfwGetPrimaryMonitor())->width/4.25)/4);
+
+			ImGui::NextColumn();
+			ImGui::Spacing();
 			ed::SetCurrentEditor(g_Context);
 			ed::Begin("My Editor", ImVec2(0.0, 0.0f));
 			Interface->setNodeRotateMeshWithRadius();

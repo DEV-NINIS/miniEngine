@@ -141,8 +141,8 @@ void glmAnimation3D::setPositionObject(GLuint& shader, float ValueX, float Value
 void glmAnimation3D::setPercentTexture(GLuint& shader, float Value) {
 	glUniform1f(glGetUniformLocation(shader, "PercentTexture"), Value);
 }
-void glmAnimation3D::setLookAtMatrixCamera(Camera camera) {
-	view = glm::lookAt(camera.camPos, camera.camPos - camera.camFront, camera.camUp);
+void glmAnimation3D::setLookAtMatrixCamera(glm::vec3 camPos, glm::vec3 camFront, glm::vec3 camUp) {
+	view = glm::lookAt(camPos, camPos + camFront, camUp);
 }
 float glmAnimation3D::getValueX() { return LastedFloatFrameX; }
 float glmAnimation3D::getValueY() { return LastedFloatFrameY; }

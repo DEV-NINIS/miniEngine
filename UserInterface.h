@@ -70,6 +70,7 @@ public:
 
 	// node window 
 	void setNodeWindow();
+	void addNode();
 
 	// node editor
 	void setStyleNodeFrame();
