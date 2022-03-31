@@ -29,7 +29,11 @@
 #include <filesystem> // C++17 standard header file name
 #define COLOR_FRAME 1
 #define COLOR_OBJECT 2
-
+IMGUI_API ImTextureID ImGui_CreateTexture32(const void* data, int width, int height);
+IMGUI_API ImTextureID ImGui_CreateTextureFromDescriptor(...); // API dependent
+IMGUI_API void        ImGui_DestroyTexture(ImTextureID texture);
+IMGUI_API int         ImGui_GetTextureWidth(ImTextureID texture);
+IMGUI_API int         ImGui_GetTextureHeight(ImTextureID texture);
 static bool HOTreload = false;
 namespace ed = ax::NodeEditor;
 
@@ -430,38 +434,13 @@ int main() {
 
 
 
-
-
 			Interface->setNodeWindow();
-			ed::Style style;
-			style.Colors->w = 20;
-			style.PinRounding = 0;
-			style.NodeRounding = 0;
-			style.GroupRounding = 0;
-			ImGui::Begin("node");
+			Interface->setStyleNodeFrame();
+			ImGui::Begin("Node");
 			ed::SetCurrentEditor(g_Context);
-
-			ed::Begin("My Editor");
-			
-
-
-
-			int uniqueId = 1;
-
-			// Start drawing nodes.
-			ed::BeginNode(uniqueId++);
-			ImGui::Text("Node A");
-			ed::BeginPin(uniqueId++, ed::PinKind::Input);
-			ImGui::Text("-> In");
-			ed::EndPin();
-			ImGui::SameLine();
-			ed::BeginPin(uniqueId++, ed::PinKind::Output);
-			ImGui::Text("Out ->");
-			ed::EndPin();
-			ed::EndNode();
-
+			ed::Begin("My Editor", ImVec2(0.0, 0.0f));
+			Interface->setNodeRotateMeshWithRadius();
 			ed::End();
-
 
 
 

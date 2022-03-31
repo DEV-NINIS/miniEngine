@@ -72,6 +72,7 @@ public:
 	void setNodeWindow();
 
 	// node editor
+	void setStyleNodeFrame();
 	void setNodeInformation(); // this fonction initialise the fps latence .ect
 
 	void setNodeRotateMeshWithRadius();
