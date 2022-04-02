@@ -11,7 +11,49 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "UserInterface.h"
 #include "Camera.h"
+#define ADD_NODE_ROTATE_RIGHT 1
+#define ADD_NODE_ROTATE_LEFT 2
+#define ADD_NODE_MOVE_CAMERA_LEFT 3
+#define ADD_NODE_MOVE_CAMERA_RIGHT 4
+#define ADD_NODE_MOVE_CAMERA_UP 5
+#define ADD_NODE_MOVE_CAMERA_DOWN 6
+#define ADD_NODE_ROTATE_AROUD_X_MATRIX 7
+#define ADD_NODE_ROTATE_AROUND_Y_MATRIX 8
+#define ADD_NODE_ROTATE_AROUND_Z_MATRIX 9
+#define ADD_NODE_CHANGE_CAMERA_SPEED 10
+#define ADD_NODE_CHANGE_PERCENT_TEXTURE 11
+#define ADD_NODE_CHANGE_POSITION_X 12
+#define ADD_NODE_CHANGE_POSITION_Y 13
+#define ADD_NODE_CHANGE_POSITION_Z 14
+#define ADD_NODE_CHANGE_COLOR_FRAME 15
+#define ADD_NODE_CHANGE_COLOR_OBJECT 16
+#define ADD_NODE_CHANGE_FOV 17
+#define ADD_NODE_CHANGE_SIZE_X 18 
+#define ADD_NODE_CHANGE_SIZE_Y 19
+#define ADD_NODE_CHANGE_SIZE_Z 20
+#define ADD_NODE_CHANGE_DIRECTION_ROTATE_MATRIX 21
 
+struct setAnimation {
+	template<typename T> inline T setCHANGE_DIRECTION_ROTATE_MATRIX();
+	template<typename T> inline T setCHANGE_SIZE_Z();
+	template<typename T> inline T setCHANGE_SIZE_Y();
+	template<typename T> inline T setCHANGE_SIZE_X();
+	template<typename T> inline T setADD_NODE_CHANGE_FOV();
+	template<typename T> inline T setCHANGE_COLOR_OBJECT();
+	template<typename T> inline T setCHANGE_COLOR_FRAME();
+	template<typename T> inline T setCHANGE_POSITION_Z();
+	template<typename T> inline T setCHANGE_POSITION_Y();
+	template<typename T> inline T setCHANGE_POSITION_X();
+	template<typename T> inline T setCHANGE_PERCENT_TEXTURE();
+	template<typename T> inline T setCHANGE_CAMERA_SPEED();
+	template<typename T> inline T setROTATE_AROUND_Z_MATRIX();
+	template<typename T> inline T setROTATE_AROUND_Y_MATRIX();
+	template<typename T> inline T setROTATE_AROUD_X_MATRIX();
+	template<typename T> inline T setMOVE_CAMERA_DOWN();
+	template<typename T> inline T setMOVE_CAMERA_UP();
+	template<typename T> inline T setMOVE_CAMERA_RIGHT();
+	template<typename T> inline T setMOVE_CAMERA_LEFT();
+};
 
 // the fonction of this class is animate de 3d objects and set the matrix projection of the engine
 class glmAnimation3D
