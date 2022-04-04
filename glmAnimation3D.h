@@ -33,7 +33,6 @@
 #define ADD_NODE_CHANGE_SIZE_Z 20
 #define ADD_NODE_CHANGE_DIRECTION_ROTATE_MATRIX 21
 
-struct setAnimation {
 	template<typename T> inline T setCHANGE_DIRECTION_ROTATE_MATRIX();
 	template<typename T> inline T setCHANGE_SIZE_Z();
 	template<typename T> inline T setCHANGE_SIZE_Y();
@@ -53,7 +52,7 @@ struct setAnimation {
 	template<typename T> inline T setMOVE_CAMERA_UP();
 	template<typename T> inline T setMOVE_CAMERA_RIGHT();
 	template<typename T> inline T setMOVE_CAMERA_LEFT();
-};
+#include "glmAnimation3D.inl"
 
 // the fonction of this class is animate de 3d objects and set the matrix projection of the engine
 class glmAnimation3D

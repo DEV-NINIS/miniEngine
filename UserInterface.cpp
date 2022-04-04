@@ -33,6 +33,11 @@
 #define ADD_NODE_CHANGE_POSITION_Z 14
 #define ADD_NODE_CHANGE_COLOR_FRAME 15
 #define ADD_NODE_CHANGE_COLOR_OBJECT 16
+#define ADD_NODE_CHANGE_FOV 17
+#define ADD_NODE_CHANGE_SIZE_X 18 
+#define ADD_NODE_CHANGE_SIZE_Y 19
+#define ADD_NODE_CHANGE_SIZE_Z 20
+#define ADD_NODE_CHANGE_DIRECTION_ROTATE_MATRIX 21
 
 
 
@@ -377,9 +382,6 @@ void UserInterface::setPositionObjectZ() {
 		LastedPositionObjectZ = 0.0f;
 	}
 }
-void UserInterface::setPercentTexture() {
-	ImGui::SliderFloat("percentTexture", &percentTexture, 0, 1);
-}
 
 // node
 
@@ -397,7 +399,35 @@ void UserInterface::setNodeRotateMeshWithRadius() {
 	ed::EndPin();
 	ed::EndNode();
 }
+void UserInterface::addNode(int typeOfNode) {
+	switch (typeOfNode)
+	{
+	case ADD_NODE_ROTATE_RIGHT: 
+	case ADD_NODE_ROTATE_LEFT:
+	case ADD_NODE_MOVE_CAMERA_LEFT:
+	case ADD_NODE_MOVE_CAMERA_RIGHT:
+	case ADD_NODE_MOVE_CAMERA_UP:
+	case ADD_NODE_MOVE_CAMERA_DOWN:
+	case ADD_NODE_ROTATE_AROUD_X_MATRIX:
+	case ADD_NODE_ROTATE_AROUND_Y_MATRIX:
+	case ADD_NODE_ROTATE_AROUND_Z_MATRIX:
+	case ADD_NODE_CHANGE_CAMERA_SPEED:
+	case ADD_NODE_CHANGE_PERCENT_TEXTURE: 
+	case ADD_NODE_CHANGE_POSITION_X:
+	case ADD_NODE_CHANGE_POSITION_Y:
+	case ADD_NODE_CHANGE_POSITION_Z:
+	case ADD_NODE_CHANGE_COLOR_FRAME:
+	case ADD_NODE_CHANGE_COLOR_OBJECT:
+	case ADD_NODE_CHANGE_FOV:
+	case ADD_NODE_CHANGE_SIZE_X:
+	case ADD_NODE_CHANGE_SIZE_Y:
+	case ADD_NODE_CHANGE_SIZE_Z:
+	case ADD_NODE_CHANGE_DIRECTION_ROTATE_MATRIX:
 
+	default:
+		break;
+	}
+}
 void UserInterface::endFrame() {
 	ImGui::EndFrame();
 	ImGui::Render();

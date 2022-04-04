@@ -7,6 +7,7 @@
 #include "object.h"
 #include "Render.h"
 #include "imgui/imgui_node_editor.h"
+#include "imgui/imgui_bezier_math.h"
 #include "stbi_image.h"
 #include "file.h"
 #include "imgui/imgui.h"
@@ -34,6 +35,29 @@ IMGUI_API ImTextureID ImGui_CreateTextureFromDescriptor(...); // API dependent
 IMGUI_API void        ImGui_DestroyTexture(ImTextureID texture);
 IMGUI_API int         ImGui_GetTextureWidth(ImTextureID texture);
 IMGUI_API int         ImGui_GetTextureHeight(ImTextureID texture);
+
+#define ADD_NODE_ROTATE_RIGHT 1
+#define ADD_NODE_ROTATE_LEFT 2
+#define ADD_NODE_MOVE_CAMERA_LEFT 3
+#define ADD_NODE_MOVE_CAMERA_RIGHT 4
+#define ADD_NODE_MOVE_CAMERA_UP 5
+#define ADD_NODE_MOVE_CAMERA_DOWN 6
+#define ADD_NODE_ROTATE_AROUD_X_MATRIX 7
+#define ADD_NODE_ROTATE_AROUND_Y_MATRIX 8
+#define ADD_NODE_ROTATE_AROUND_Z_MATRIX 9
+#define ADD_NODE_CHANGE_CAMERA_SPEED 10
+#define ADD_NODE_CHANGE_PERCENT_TEXTURE 11
+#define ADD_NODE_CHANGE_POSITION_X 12
+#define ADD_NODE_CHANGE_POSITION_Y 13
+#define ADD_NODE_CHANGE_POSITION_Z 14
+#define ADD_NODE_CHANGE_COLOR_FRAME 15
+#define ADD_NODE_CHANGE_COLOR_OBJECT 16
+#define ADD_NODE_CHANGE_FOV 17
+#define ADD_NODE_CHANGE_SIZE_X 18 
+#define ADD_NODE_CHANGE_SIZE_Y 19
+#define ADD_NODE_CHANGE_SIZE_Z 20
+#define ADD_NODE_CHANGE_DIRECTION_ROTATE_MATRIX 21
+
 static bool HOTreload = false;
 namespace ed = ax::NodeEditor;
 
@@ -351,7 +375,7 @@ int main() {
 					if (indicatorFolderTexture2 == 1) {
 						Interface->inputFileTexture2(filePathTex2);
 					}
-					Interface->setPercentTexture();
+					Interface->setPercentTexture<void>();
 					if (Interface->confirmFilePath() == true) {
 						mesh.setTexture1(filePathTex1);
 						mesh.setTexture2(filePathTex2);
@@ -388,6 +412,7 @@ int main() {
 				ImGui::Spacing();
 				ImGui::Text("press F to move left ");
 				ImGui::Spacing();
+				
 			}
 
 			ImGui::Spacing();
@@ -425,11 +450,10 @@ int main() {
 				Interface->setColorB();
 				ImGui::Spacing();
 				Interface->setColorEditorFrame(COLOR_FRAME);
+				setCHANGE_DIRECTION_ROTATE_MATRIX<void>();
 			}
 			
 			ImGui::End();
-
-
 			// node 
 
 
@@ -440,18 +464,15 @@ int main() {
 
 			ImGui::Columns(2);
 			ImGui::SetColumnOffset(1, (glfwGetVideoMode(glfwGetPrimaryMonitor())->width - glfwGetVideoMode(glfwGetPrimaryMonitor())->width/4.25)/4);
-
+			ImGui::Button("rotate object in the x abscisses");
 			ImGui::NextColumn();
 			ImGui::Spacing();
 			ed::SetCurrentEditor(g_Context);
 			ed::Begin("My Editor", ImVec2(0.0, 0.0f));
+			Interface->addNode(ADD_NODE_CHANGE_DIRECTION_ROTATE_MATRIX);
+			Interface->setNodeRotateMeshWithRadius();
 			Interface->setNodeRotateMeshWithRadius();
 			ed::End();
-
-
-
-
-
 
 
 
@@ -481,7 +502,6 @@ int main() {
 	}
 
 	if (HOTreload == false) {
-		Interface->~UserInterface();
 		ed::DestroyEditor(g_Context);
 	}
 
