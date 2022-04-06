@@ -74,14 +74,7 @@ void glmAnimation3D::initialiseMatrix() {
 	transform = glm::mat4(1.0f);
 	projectionPerspective = glm::mat4(1.0f);
 }
-glm::mat4 glmAnimation3D::setScaleValue(GLuint& shader, float& Value) {
-	size2 = glm::mat4(1.0f);
-	if (Value > -401602080) {
-		size2 = glm::scale(size2, glm::vec3(Value * 1.0f * this->LastedFloatFrameX, Value * 1.0f * this->LastedFloatFrameY, Value * 1.0f * this->LastedFloatFrameZ));
-		glUniformMatrix4fv(glGetUniformLocation(shader, "Scale"), 1, GL_FALSE, glm::value_ptr(size2));
-	}
-	return size;
-}
+
 float glmAnimation3D::setScaleValueX(GLuint& shader) {
 		float* size2 = nullptr; size2 = new float;
 		ImGui::SliderFloat("sizeX", &*size2, -2, 3);
@@ -151,3 +144,23 @@ glm::mat4 glmAnimation3D::getmodelVARIABLE() { return model; }
 glm::mat4 glmAnimation3D::getviewVARIABLE() { return view; }
 glm::mat4 glmAnimation3D::gettransformVARIABLE() { return transform; }
 glm::mat4 glmAnimation3D::getprojectionPerspectiveVARIABLE() { return projectionPerspective; }
+
+
+
+
+// variables size
+ 
+
+
+
+
+
+float VariablesSize::LastedFloatFrameX = static_cast<float>(1.0f);
+float VariablesSize::LastedFloatFrameY = static_cast<float>(1.0f);
+float VariablesSize::LastedFloatFrameZ = static_cast<float>(1.0f);
+
+
+VariablesSize::VariablesSize() {
+	
+}
+VariablesSize::~VariablesSize() {};

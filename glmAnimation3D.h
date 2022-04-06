@@ -33,31 +33,84 @@
 #define ADD_NODE_CHANGE_SIZE_Z 20
 #define ADD_NODE_CHANGE_DIRECTION_ROTATE_MATRIX 21
 
-	template<typename T> inline T setCHANGE_DIRECTION_ROTATE_MATRIX();
-	template<typename T> inline T setCHANGE_SIZE_Z();
-	template<typename T> inline T setCHANGE_SIZE_Y();
-	template<typename T> inline T setCHANGE_SIZE_X();
-	template<typename T> inline T setADD_NODE_CHANGE_FOV();
-	template<typename T> inline T setCHANGE_COLOR_OBJECT();
-	template<typename T> inline T setCHANGE_COLOR_FRAME();
-	template<typename T> inline T setCHANGE_POSITION_Z();
-	template<typename T> inline T setCHANGE_POSITION_Y();
-	template<typename T> inline T setCHANGE_POSITION_X();
-	template<typename T> inline T setCHANGE_PERCENT_TEXTURE();
-	template<typename T> inline T setCHANGE_CAMERA_SPEED();
-	template<typename T> inline T setROTATE_AROUND_Z_MATRIX();
-	template<typename T> inline T setROTATE_AROUND_Y_MATRIX();
-	template<typename T> inline T setROTATE_AROUD_X_MATRIX();
-	template<typename T> inline T setMOVE_CAMERA_DOWN();
-	template<typename T> inline T setMOVE_CAMERA_UP();
-	template<typename T> inline T setMOVE_CAMERA_RIGHT();
-	template<typename T> inline T setMOVE_CAMERA_LEFT();
+	
 #include "glmAnimation3D.inl"
 
 // the fonction of this class is animate de 3d objects and set the matrix projection of the engine
+
+
+template<typename T> inline T setCHANGE_DIRECTION_ROTATE_MATRIX();
+template<typename T> inline T setADD_NODE_CHANGE_FOV();
+template<typename T> inline T setCHANGE_COLOR_OBJECT();
+template<typename T> inline T setCHANGE_COLOR_FRAME();
+template<typename T> inline T setCHANGE_POSITION_Z();
+template<typename T> inline T setCHANGE_POSITION_Y();
+template<typename T> inline T setCHANGE_POSITION_X();
+template<typename T> inline T setCHANGE_PERCENT_TEXTURE();
+template<typename T> inline T setCHANGE_CAMERA_SPEED();
+template<typename T> inline T setROTATE_AROUND_Z_MATRIX();
+template<typename T> inline T setROTATE_AROUND_Y_MATRIX();
+template<typename T> inline T setROTATE_AROUD_X_MATRIX();
+template<typename T> inline T setMOVE_CAMERA_DOWN();
+template<typename T> inline T setMOVE_CAMERA_UP();
+template<typename T> inline T setMOVE_CAMERA_RIGHT();
+template<typename T> inline T setMOVE_CAMERA_LEFT();
+
+
+
+		class VariablesSize {
+		public:
+			VariablesSize();
+			~VariablesSize();
+			template<typename U> void setCHANGE_VALUE_ALL_SIZE(GLuint& shader, U& Value) { // this fonction save the 3 axes (X, Y, Z)
+
+			}
+			template<typename T>  T setCHANGE_SIZE_X(T& ValueX) {
+				ImGui::SliderFloat("sizeX", &this->LastedFloatFrameX, -2, 3);
+				if (this->LastedFloatFrameX > -401602080) {
+					return this->LastedFloatFrameX;
+				}
+				else {
+					return this;
+				}
+			}
+			template<typename T>  T setCHANGE_SIZE_Y(T& ValueY) {
+				ImGui::SliderFloat("sizeY", &this->LastedFloatFrameY, -2, 3);
+				if (this->LastedFloatFrameY > -401602080) {
+					return this->LastedFloatFrameY;
+				}
+				else {
+					return this;
+				}
+			}
+			template<typename T>  T setCHANGE_SIZE_Z(T& ValueZ) {
+				ImGui::SliderFloat("sizeZ", &this->LastedFloatFrameZ, -2, 3);
+				if (this->LastedFloatFrameZ > -401602080) {
+					return this->LastedFloatFrameZ;
+				}
+				else {
+					return this;
+				}
+			}
+				static float LastedFloatFrameX;
+				static float LastedFloatFrameY;
+				static float LastedFloatFrameZ;
+		};
+// |													|
+// |____________________________________________________|
+//							|
+//					associated variables
+//							|
+//						   \|/
+#include "glmAnimation3D.inl"
+
+			
+			
+
 class glmAnimation3D
 {
 public:
+	static glmAnimation3D Ma3d;
 	glmAnimation3D(GLFWwindow* window);
 	virtual ~glmAnimation3D();
 	void initialiseMatrix();
@@ -71,17 +124,21 @@ public:
 	void setPositionObject(GLuint& shader, float ValueX, float ValueY, float ValueZ);
 	void setRotateLeft(float Radius, float& ValueX, float& ValueY, float& ValueZ);
 	void setLookAtMatrixCamera(glm::vec3 camPos, glm::vec3 camFront, glm::vec3 camUp);
-	glm::mat4 setScaleValue(GLuint& shader, float& Value);
 	float setColorValueFrame();
+
+
 	float setScaleValueX(GLuint& shader);
 	float setScaleValueY(GLuint& shader);
 	float setScaleValueZ(GLuint& shader);
 	void setPercentTexture(GLuint& shader, float Value);
 	float getValueX(); float getValueY(); float getValueZ();
+
+
 	glm::mat4 getprojectionPerspectiveVARIABLE();
 	glm::mat4 getviewVARIABLE();
 	glm::mat4 getmodelVARIABLE();
 	glm::mat4 gettransformVARIABLE();
+
 	
 protected:
 	float LastedFloatFrameX;
@@ -95,5 +152,8 @@ protected:
 	glm::mat4 size2;
 	glm::mat4 Scale2;
 };
+#endif
 
-#endif // !1
+
+
+	
