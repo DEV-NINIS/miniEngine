@@ -74,43 +74,6 @@ void glmAnimation3D::initialiseMatrix() {
 	transform = glm::mat4(1.0f);
 	projectionPerspective = glm::mat4(1.0f);
 }
-
-float glmAnimation3D::setScaleValueX(GLuint& shader) {
-		float* size2 = nullptr; size2 = new float;
-		ImGui::SliderFloat("sizeX", &*size2, -2, 3);
-		if (*size2 > -401602080) {
-			LastedFloatFrameX = *size2;
-			return *size2;
-		}
-		else {
-			return LastedFloatFrameX;
-		}
-		delete size2;
-}
-float glmAnimation3D::setScaleValueY(GLuint& shader) {
-	float* size3 = nullptr; size3 = new float;
-	ImGui::SliderFloat("sizeY", &*size3, -5, 5);
-	if (*size3 > -401602080) {
-		LastedFloatFrameY = *size3;
-		return *size3;
-	}
-	else {
-		return LastedFloatFrameY;
-	}
-	delete size3;
-}
-float glmAnimation3D::setScaleValueZ(GLuint& shader) {
-	float* size4 = nullptr; size4 = new float;
-	ImGui::SliderFloat("sizeZ", &*size4, -5, 5);
-	if (*size4 > -401602080) {
-		LastedFloatFrameZ = *size4;
-		return *size4;
-	}
-	else {
-		return LastedFloatFrameZ;
-	}
-	delete size4;
-}
 float glmAnimation3D::setColorValueFrame() {
 	float color = 0;
 	ImGui::ColorEdit4(" Color Frame ", &color);
@@ -155,12 +118,12 @@ glm::mat4 glmAnimation3D::getprojectionPerspectiveVARIABLE() { return projection
 
 
 
-float VariablesSize::LastedFloatFrameX = static_cast<float>(1.0f);
+float VariablesSize::LastedFloatFrameX = static_cast<float>(2.0f);
 float VariablesSize::LastedFloatFrameY = static_cast<float>(1.0f);
 float VariablesSize::LastedFloatFrameZ = static_cast<float>(1.0f);
 
 
 VariablesSize::VariablesSize() {
-	
+	SizeMatrix = glm::scale(SizeMatrix, glm::vec3(1.0f, 1.0f, 1.0f));
 }
 VariablesSize::~VariablesSize() {};

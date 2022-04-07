@@ -11,6 +11,9 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "UserInterface.h"
 #include "Camera.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #define ADD_NODE_ROTATE_RIGHT 1
 #define ADD_NODE_ROTATE_LEFT 2
 #define ADD_NODE_MOVE_CAMERA_LEFT 3
@@ -63,38 +66,47 @@ template<typename T> inline T setMOVE_CAMERA_LEFT();
 			VariablesSize();
 			~VariablesSize();
 			template<typename U> void setCHANGE_VALUE_ALL_SIZE(GLuint& shader, U& Value) { // this fonction save the 3 axes (X, Y, Z)
+				if (this->LastedFloatFrameX != 0 && this->LastedFloatFrameY != 0 && this->LastedFloatFrameZ != 0) {
+					SizeMatrix = glm::mat4(1.0f);
+					SizeMatrix = glm::scale(SizeMatrix, glm::vec3(this->LastedFloatFrameX,
+						this->LastedFloatFrameY,
+						this->LastedFloatFrameZ));
 
+					glUniformMatrix4fv(glGetUniformLocation(shader, "Scale"), 1, GL_FALSE, glm::value_ptr(SizeMatrix));
+				}
 			}
-			template<typename T>  T setCHANGE_SIZE_X(T& ValueX) {
+			template<typename T>  T setCHANGE_SIZE_X() {
 				ImGui::SliderFloat("sizeX", &this->LastedFloatFrameX, -2, 3);
 				if (this->LastedFloatFrameX > -401602080) {
 					return this->LastedFloatFrameX;
 				}
 				else {
-					return this;
+					return LastedFloatFrameX;
 				}
 			}
-			template<typename T>  T setCHANGE_SIZE_Y(T& ValueY) {
+			template<typename T>  T setCHANGE_SIZE_Y() {
 				ImGui::SliderFloat("sizeY", &this->LastedFloatFrameY, -2, 3);
 				if (this->LastedFloatFrameY > -401602080) {
 					return this->LastedFloatFrameY;
 				}
 				else {
-					return this;
+					return LastedFloatFrameY;
 				}
 			}
-			template<typename T>  T setCHANGE_SIZE_Z(T& ValueZ) {
+			template<typename T>  T setCHANGE_SIZE_Z() {
 				ImGui::SliderFloat("sizeZ", &this->LastedFloatFrameZ, -2, 3);
 				if (this->LastedFloatFrameZ > -401602080) {
 					return this->LastedFloatFrameZ;
 				}
 				else {
-					return this;
+					return LastedFloatFrameZ;
 				}
 			}
-				static float LastedFloatFrameX;
+			static float LastedFloatFrameX;
 				static float LastedFloatFrameY;
 				static float LastedFloatFrameZ;
+		private:
+				glm::mat4 SizeMatrix; // this variable have the 3 values of size (axes x, y, z)
 		};
 // |													|
 // |____________________________________________________|
@@ -125,11 +137,6 @@ public:
 	void setRotateLeft(float Radius, float& ValueX, float& ValueY, float& ValueZ);
 	void setLookAtMatrixCamera(glm::vec3 camPos, glm::vec3 camFront, glm::vec3 camUp);
 	float setColorValueFrame();
-
-
-	float setScaleValueX(GLuint& shader);
-	float setScaleValueY(GLuint& shader);
-	float setScaleValueZ(GLuint& shader);
 	void setPercentTexture(GLuint& shader, float Value);
 	float getValueX(); float getValueY(); float getValueZ();
 

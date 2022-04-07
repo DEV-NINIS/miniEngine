@@ -261,19 +261,19 @@ int main() {
 				ImGui::Separator();
 				Interface->setLastedmatrix();
 				SizeObject.setCHANGE_VALUE_ALL_SIZE<float>(mesh.getShaderObject(), Interface->LastedFloatFrame);
-				matrixAnimation->setScaleValueX(mesh.getShaderObject());
+				SizeObject.setCHANGE_SIZE_X<float>();
 				matrixAnimation->frameMatrix(mesh.getShaderObject());
 				ImGui::Separator();
 				Interface->setLastedmatrix();
 				SizeObject.setCHANGE_VALUE_ALL_SIZE<float>(mesh.getShaderObject(), Interface->LastedFloatFrame);
-				matrixAnimation->setScaleValueY(mesh.getShaderObject());
+				SizeObject.setCHANGE_SIZE_Y<float>();
 				matrixAnimation->frameMatrix(mesh.getShaderObject());
 				ImGui::Separator();
 
 
 				Interface->setLastedmatrix();
 				SizeObject.setCHANGE_VALUE_ALL_SIZE<float>(mesh.getShaderObject(), Interface->LastedFloatFrame);
-				matrixAnimation->setScaleValueZ(mesh.getShaderObject());
+				SizeObject.setCHANGE_SIZE_Z<float>();
 				matrixAnimation->frameMatrix(mesh.getShaderObject());
 				ImGui::Separator();
 			}
