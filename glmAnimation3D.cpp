@@ -118,12 +118,29 @@ glm::mat4 glmAnimation3D::getprojectionPerspectiveVARIABLE() { return projection
 
 
 
-float VariablesSize::LastedFloatFrameX = static_cast<float>(2.0f);
-float VariablesSize::LastedFloatFrameY = static_cast<float>(1.0f);
-float VariablesSize::LastedFloatFrameZ = static_cast<float>(1.0f);
+
+float VariablesSize::KoefMultiplicatorSizeALL = static_cast<float>(1.0f);
 
 
 VariablesSize::VariablesSize() {
 	SizeMatrix = glm::scale(SizeMatrix, glm::vec3(1.0f, 1.0f, 1.0f));
+	LastedFloatFrame[0] = 1.0f;
+	LastedFloatFrame[1] = 1.0f;
+	LastedFloatFrame[2] = 1.0f;
+
 }
-VariablesSize::~VariablesSize() {};
+VariablesSize::~VariablesSize() {}
+
+void VariablesSize::InputSize() {
+	ImGui::InputFloat3("input:X,Y,Z", LastedFloatFrame);
+}
+
+
+
+
+
+
+ // AnimationProgramUser class
+
+AnimationProgramUser::AnimationProgramUser(GLFWwindow* window) : glmAnimation3D(window) {}
+AnimationProgramUser::~AnimationProgramUser() {}

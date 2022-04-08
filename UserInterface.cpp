@@ -229,10 +229,6 @@ bool UserInterface::inputDemandSelectFolderForTex2() const {
 	}
 	else { return false; }
 }
-float UserInterface::setScaleCube() {
-	ImGui::SliderFloat("size all", &LastedFloatFrame, 0.0, 10.0);
-	return LastedFloatFrame;
-}
 float UserInterface::setScaleCubeX() {
 	ImGui::SliderFloat("sizeX", &LastedFloatFrameX, 0.0f, 10.0f);
 	if (LastedFloatFrameX > -401602080) {

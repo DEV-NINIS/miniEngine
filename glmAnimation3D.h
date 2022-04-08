@@ -36,6 +36,10 @@
 #define ADD_NODE_CHANGE_SIZE_Z 20
 #define ADD_NODE_CHANGE_DIRECTION_ROTATE_MATRIX 21
 
+#define IN_FRAME_NOT 1
+#define IN_FRAME_TRUE 2
+
+
 	
 #include "glmAnimation3D.inl"
 
@@ -64,47 +68,50 @@ template<typename T> inline T setMOVE_CAMERA_LEFT();
 		class VariablesSize {
 		public:
 			VariablesSize();
-			~VariablesSize();
-			template<typename U> void setCHANGE_VALUE_ALL_SIZE(GLuint& shader, U& Value) { // this fonction save the 3 axes (X, Y, Z)
-				if (this->LastedFloatFrameX != 0 && this->LastedFloatFrameY != 0 && this->LastedFloatFrameZ != 0) {
+			virtual ~VariablesSize();
+			template<typename U> void setCHANGE_VALUE_ALL_SIZE(GLuint& shader, U Value) { // this fonction save the 3 axes (X, Y, Z)
 					SizeMatrix = glm::mat4(1.0f);
-					SizeMatrix = glm::scale(SizeMatrix, glm::vec3(this->LastedFloatFrameX,
-						this->LastedFloatFrameY,
-						this->LastedFloatFrameZ));
-
+					if (Value == IN_FRAME_NOT) {
+						ImGui::SliderFloat("sizeALL", &this->KoefMultiplicatorSizeALL, -10, 10);
+					}
+					SizeMatrix = glm::scale(SizeMatrix, glm::vec3(this->LastedFloatFrame[0] * this->KoefMultiplicatorSizeALL,
+						this->LastedFloatFrame[1] * this->KoefMultiplicatorSizeALL,
+						this->LastedFloatFrame[2] * this->KoefMultiplicatorSizeALL));
 					glUniformMatrix4fv(glGetUniformLocation(shader, "Scale"), 1, GL_FALSE, glm::value_ptr(SizeMatrix));
-				}
+
 			}
 			template<typename T>  T setCHANGE_SIZE_X() {
-				ImGui::SliderFloat("sizeX", &this->LastedFloatFrameX, -2, 3);
-				if (this->LastedFloatFrameX > -401602080) {
-					return this->LastedFloatFrameX;
+				ImGui::SliderFloat("sizeX", &this->LastedFloatFrame[0], -this->LastedFloatFrame[0] -100, this->LastedFloatFrame[0] + 100);
+				if (this->LastedFloatFrame[0] > -401602080) {
+					return this->LastedFloatFrame[0];
 				}
 				else {
-					return LastedFloatFrameX;
+					return LastedFloatFrame[0];
 				}
 			}
 			template<typename T>  T setCHANGE_SIZE_Y() {
-				ImGui::SliderFloat("sizeY", &this->LastedFloatFrameY, -2, 3);
-				if (this->LastedFloatFrameY > -401602080) {
-					return this->LastedFloatFrameY;
+				ImGui::SliderFloat("sizeY", &this->LastedFloatFrame[1], -this->LastedFloatFrame[1] - 100, this->LastedFloatFrame[1] + 100);
+				if (this->LastedFloatFrame[1] > -401602080) {
+					return this->LastedFloatFrame[1];
 				}
 				else {
-					return LastedFloatFrameY;
+					return LastedFloatFrame[1];
 				}
 			}
 			template<typename T>  T setCHANGE_SIZE_Z() {
-				ImGui::SliderFloat("sizeZ", &this->LastedFloatFrameZ, -2, 3);
-				if (this->LastedFloatFrameZ > -401602080) {
-					return this->LastedFloatFrameZ;
+				ImGui::SliderFloat("sizeZ", &this->LastedFloatFrame[2], -this->LastedFloatFrame[2] - 100, this->LastedFloatFrame[2] + 100);
+				if (this->LastedFloatFrame[2] > -401602080) {
+					return this->LastedFloatFrame[2];
 				}
 				else {
-					return LastedFloatFrameZ;
+					return LastedFloatFrame[2];
 				}
 			}
-			static float LastedFloatFrameX;
-				static float LastedFloatFrameY;
-				static float LastedFloatFrameZ;
+			void InputSize(); // definded in the .cpp file
+				static float KoefMultiplicatorSizeALL; // this variable multiply the 3 axes of the size (x, y, z)
+				 float LastedFloatFrame[3];
+
+
 		private:
 				glm::mat4 SizeMatrix; // this variable have the 3 values of size (axes x, y, z)
 		};
@@ -158,6 +165,20 @@ protected:
 	glm::mat4 size;
 	glm::mat4 size2;
 	glm::mat4 Scale2;
+};
+
+
+
+
+
+
+class AnimationProgramUser : public glmAnimation3D {
+public:
+	AnimationProgramUser(GLFWwindow* window);
+	virtual ~AnimationProgramUser();
+private:
+
+
 };
 #endif
 

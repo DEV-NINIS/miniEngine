@@ -58,6 +58,10 @@ IMGUI_API int         ImGui_GetTextureHeight(ImTextureID texture);
 #define ADD_NODE_CHANGE_SIZE_Z 20
 #define ADD_NODE_CHANGE_DIRECTION_ROTATE_MATRIX 21
 
+#define IN_FRAME_NOT static_cast<float>(1.0f)
+#define IN_FRAME_TRUE static_cast<float>(2.0f)
+
+
 static bool HOTreload = false;
 namespace ed = ax::NodeEditor;
 
@@ -205,6 +209,8 @@ int main() {
 
 
 	VariablesSize SizeObject;
+	SizeObject.setCHANGE_VALUE_ALL_SIZE<float>(mesh.getShaderObject(), IN_FRAME_TRUE);
+
 	while (!glfwWindowShouldClose(window)) // render
 	{
 		float currentFrame = static_cast<float>(glfwGetTime());
@@ -239,7 +245,6 @@ int main() {
 		matrixAnimation->setMatrixPerspectiveProjection(FOV, resX2, resY2, camera);
 		matrixAnimation->setTransformValue();
 		matrixAnimation->frameMatrix(mesh.getShaderObject());
-		SizeObject.setCHANGE_VALUE_ALL_SIZE<float>(mesh.getShaderObject(), Interface->LastedFloatFrame);
 		matrixAnimation->setPercentTexture(mesh.getShaderObject(), Interface->getpercentTexture());
 
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -257,23 +262,26 @@ int main() {
 			}
 			if (ImGui::CollapsingHeader("size")) {
 				ImGui::Separator();
-				Interface->setScaleCube();
-				ImGui::Separator();
 				Interface->setLastedmatrix();
-				SizeObject.setCHANGE_VALUE_ALL_SIZE<float>(mesh.getShaderObject(), Interface->LastedFloatFrame);
+				ImGui::Separator();
+				SizeObject.setCHANGE_VALUE_ALL_SIZE<float>(mesh.getShaderObject(), IN_FRAME_NOT);
+				ImGui::Separator();
+
 				SizeObject.setCHANGE_SIZE_X<float>();
 				matrixAnimation->frameMatrix(mesh.getShaderObject());
 				ImGui::Separator();
 				Interface->setLastedmatrix();
-				SizeObject.setCHANGE_VALUE_ALL_SIZE<float>(mesh.getShaderObject(), Interface->LastedFloatFrame);
 				SizeObject.setCHANGE_SIZE_Y<float>();
 				matrixAnimation->frameMatrix(mesh.getShaderObject());
 				ImGui::Separator();
 
 
 				Interface->setLastedmatrix();
-				SizeObject.setCHANGE_VALUE_ALL_SIZE<float>(mesh.getShaderObject(), Interface->LastedFloatFrame);
 				SizeObject.setCHANGE_SIZE_Z<float>();
+				ImGui::Separator();
+
+				SizeObject.InputSize();
+
 				matrixAnimation->frameMatrix(mesh.getShaderObject());
 				ImGui::Separator();
 			}
