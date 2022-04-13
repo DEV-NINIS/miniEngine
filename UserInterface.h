@@ -6,6 +6,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "glmAnimation3D.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
+
 
 class UserInterface 
 {
@@ -19,7 +23,7 @@ public:
 		float LastedColorObjectGFile, float LastedColorObjectBFile, float LastedPositionObjectXFile, float LastedPositionObjectYFile,
 		float LastedPositionObjectZFile, float CameraSpeedFile, const char* filePathPointerFile);
 
-	virtual ~UserInterface();
+	 virtual ~UserInterface();
 	void setStyleSettingFrame(GLFWwindow* window);
 	bool inputDemandingChangeFOV() const;
 	bool inputDemandSelectFolderForTex1() const;
@@ -31,10 +35,11 @@ public:
 	float setRotateAroundXValue();
 	float setRotateAroundYValue();
 	float setRotateAroundZValue();
-	float setScaleCube();
 	float setScaleCubeX();
 	float setScaleCubeZ();
-	void setPercentTexture();
+	template<typename U> U setPercentTexture() {
+		ImGui::SliderFloat("percentTexture", &percentTexture, 0, 1);
+	}
 	void setCameraSpeed();
 	void setColorR();
 	void setColorG();
@@ -70,7 +75,7 @@ public:
 
 	// node window 
 	void setNodeWindow();
-	void addNode();
+	void addNode(int typeOfNode);
 
 	// node editor
 	void setStyleNodeFrame();

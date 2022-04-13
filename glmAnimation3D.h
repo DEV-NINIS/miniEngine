@@ -65,55 +65,74 @@ template<typename T> inline T setMOVE_CAMERA_LEFT();
 
 
 
-		class VariablesSize {
-		public:
-			VariablesSize();
-			virtual ~VariablesSize();
-			template<typename U> void setCHANGE_VALUE_ALL_SIZE(GLuint& shader, U Value) { // this fonction save the 3 axes (X, Y, Z)
-					SizeMatrix = glm::mat4(1.0f);
-					if (Value == IN_FRAME_NOT) {
-						ImGui::SliderFloat("sizeALL", &this->KoefMultiplicatorSizeALL, -10, 10);
-					}
-					SizeMatrix = glm::scale(SizeMatrix, glm::vec3(this->LastedFloatFrame[0] * this->KoefMultiplicatorSizeALL,
-						this->LastedFloatFrame[1] * this->KoefMultiplicatorSizeALL,
-						this->LastedFloatFrame[2] * this->KoefMultiplicatorSizeALL));
-					glUniformMatrix4fv(glGetUniformLocation(shader, "Scale"), 1, GL_FALSE, glm::value_ptr(SizeMatrix));
 
-			}
-			template<typename T>  T setCHANGE_SIZE_X() {
-				ImGui::SliderFloat("sizeX", &this->LastedFloatFrame[0], -this->LastedFloatFrame[0] -100, this->LastedFloatFrame[0] + 100);
-				if (this->LastedFloatFrame[0] > -401602080) {
-					return this->LastedFloatFrame[0];
-				}
-				else {
-					return LastedFloatFrame[0];
-				}
-			}
-			template<typename T>  T setCHANGE_SIZE_Y() {
-				ImGui::SliderFloat("sizeY", &this->LastedFloatFrame[1], -this->LastedFloatFrame[1] - 100, this->LastedFloatFrame[1] + 100);
-				if (this->LastedFloatFrame[1] > -401602080) {
-					return this->LastedFloatFrame[1];
-				}
-				else {
-					return LastedFloatFrame[1];
-				}
-			}
-			template<typename T>  T setCHANGE_SIZE_Z() {
-				ImGui::SliderFloat("sizeZ", &this->LastedFloatFrame[2], -this->LastedFloatFrame[2] - 100, this->LastedFloatFrame[2] + 100);
-				if (this->LastedFloatFrame[2] > -401602080) {
-					return this->LastedFloatFrame[2];
-				}
-				else {
-					return LastedFloatFrame[2];
-				}
-			}
+class AnimationProgramUser {
+public:
+	AnimationProgramUser(GLFWwindow* window);
+	virtual ~AnimationProgramUser();
+	virtual void setCHANGE_X(int ValueIndicator) = 0;
+	virtual void setCHANGE_Y(int ValueIndicator) = 0;
+	virtual void setCHANGE_Z(int ValueIndicator) = 0;
+
+private:
+
+};
+
+
+		class VariablesSize : public AnimationProgramUser {
+		public:
+
+			VariablesSize(GLFWwindow* window);
+			virtual ~VariablesSize();
+			void setCHANGE_VALUE_ALL_SIZE(GLuint& shader, int Value);
+			void setCHANGE_X(int ValueIndicator);
+			void setCHANGE_Y(int ValueIndicator);
+			void setCHANGE_Z(int ValueIndicator);
 			void InputSize(); // definded in the .cpp file
 				static float KoefMultiplicatorSizeALL; // this variable multiply the 3 axes of the size (x, y, z)
-				 float LastedFloatFrame[3];
-
-
+				static float LastedFloatFrame[3];
 		private:
 				glm::mat4 SizeMatrix; // this variable have the 3 values of size (axes x, y, z)
+		};
+
+
+
+		class VariablePosition : public AnimationProgramUser{
+
+		public:
+			VariablePosition(GLFWwindow* window);
+			virtual ~VariablePosition();
+			void setCHANGE_X(int ValueIndicator);
+			void setCHANGE_Y(int ValueIndicator);
+			void setCHANGE_Z(int ValueIndicator);
+		private:
+
+
+		};
+
+		class RotateAxes : public AnimationProgramUser {
+		public:
+			RotateAxes(GLFWwindow* window);
+			virtual ~RotateAxes();
+			void setCHANGE_X(int ValueIndicator);
+			void setCHANGE_Y(int ValueIndicator);
+			void setCHANGE_Z(int ValueIndicator);
+		private:
+
+		};
+
+		class Color {
+
+		public:
+			Color();
+			virtual ~Color();
+			void InputColorObject();
+			void InputColorFrame();
+		private:
+			float LastedFloatFrameColor[3];
+			float LastedFloatObjectColor[3];
+
+
 		};
 // |													|
 // |____________________________________________________|
@@ -129,7 +148,7 @@ template<typename T> inline T setMOVE_CAMERA_LEFT();
 class glmAnimation3D
 {
 public:
-	static glmAnimation3D Ma3d;
+
 	glmAnimation3D(GLFWwindow* window);
 	virtual ~glmAnimation3D();
 	void initialiseMatrix();
@@ -168,18 +187,6 @@ protected:
 };
 
 
-
-
-
-
-class AnimationProgramUser : public glmAnimation3D {
-public:
-	AnimationProgramUser(GLFWwindow* window);
-	virtual ~AnimationProgramUser();
-private:
-
-
-};
 #endif
 
 

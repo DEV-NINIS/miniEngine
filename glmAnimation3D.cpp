@@ -120,9 +120,9 @@ glm::mat4 glmAnimation3D::getprojectionPerspectiveVARIABLE() { return projection
 
 
 float VariablesSize::KoefMultiplicatorSizeALL = static_cast<float>(1.0f);
+float VariablesSize::LastedFloatFrame[] = { 1.0f };
 
-
-VariablesSize::VariablesSize() {
+VariablesSize::VariablesSize(GLFWwindow* window) : AnimationProgramUser(window) {
 	SizeMatrix = glm::scale(SizeMatrix, glm::vec3(1.0f, 1.0f, 1.0f));
 	LastedFloatFrame[0] = 1.0f;
 	LastedFloatFrame[1] = 1.0f;
@@ -134,13 +134,87 @@ VariablesSize::~VariablesSize() {}
 void VariablesSize::InputSize() {
 	ImGui::InputFloat3("input:X,Y,Z", LastedFloatFrame);
 }
+void VariablesSize::setCHANGE_VALUE_ALL_SIZE(GLuint& shader, int Value) { // this fonction save the 3 axes (X, Y, Z)
+	SizeMatrix = glm::mat4(1.0f);
+	if (Value == IN_FRAME_NOT) {
+		ImGui::SliderFloat("sizeALL", &this->KoefMultiplicatorSizeALL, -10, 10);
+	}
+	SizeMatrix = glm::scale(SizeMatrix, glm::vec3(this->LastedFloatFrame[0] * this->KoefMultiplicatorSizeALL,
+		this->LastedFloatFrame[1] * this->KoefMultiplicatorSizeALL,
+		this->LastedFloatFrame[2] * this->KoefMultiplicatorSizeALL));
+	glUniformMatrix4fv(glGetUniformLocation(shader, "Scale"), 1, GL_FALSE, glm::value_ptr(SizeMatrix));
+
+}
+void VariablesSize::setCHANGE_X(int ValueIndicator) {
+	if (ValueIndicator == IN_FRAME_NOT) {
+		ImGui::SliderFloat("sizeX", &this->LastedFloatFrame[0], -this->LastedFloatFrame[0] - 100, this->LastedFloatFrame[0] + 100);
+	}
+}
+void VariablesSize::setCHANGE_Y(int ValueIndicator) {
+	if (ValueIndicator == IN_FRAME_NOT) {
+		ImGui::SliderFloat("sizeY", &this->LastedFloatFrame[1], -this->LastedFloatFrame[1] - 100, this->LastedFloatFrame[1] + 100);
+	}
+}
+void VariablesSize::setCHANGE_Z(int ValueIndicator) {
+	if (ValueIndicator == IN_FRAME_NOT) {
+		ImGui::SliderFloat("sizeZ", &this->LastedFloatFrame[2], -this->LastedFloatFrame[2] - 100, this->LastedFloatFrame[2] + 100);
+	}
+}
 
 
 
+
+
+// position class
+VariablePosition::VariablePosition(GLFWwindow* window) : AnimationProgramUser(window) {}
+VariablePosition::~VariablePosition() {}
+
+void VariablePosition::setCHANGE_X(int ValueIndicator) {
+
+}
+void VariablePosition::setCHANGE_Y(int ValueIndicator) {
+
+}
+void VariablePosition::setCHANGE_Z(int ValueIndicator) {
+
+}
+
+
+
+// rotate class 
+RotateAxes::RotateAxes(GLFWwindow* window) : AnimationProgramUser(window) {
+
+}
+RotateAxes::~RotateAxes() {}
+
+void RotateAxes::setCHANGE_X(int ValueIndicator) {
+
+}
+void RotateAxes::setCHANGE_Y(int ValueIndicator) {
+
+}
+void RotateAxes::setCHANGE_Z(int ValueIndicator) {
+
+}
+
+
+
+
+
+// color class
+
+
+Color::Color() { 
+	LastedFloatFrameColor;
+	LastedFloatObjectColor;
+}
+Color::~Color() {}
 
 
 
  // AnimationProgramUser class
 
-AnimationProgramUser::AnimationProgramUser(GLFWwindow* window) : glmAnimation3D(window) {}
+AnimationProgramUser::AnimationProgramUser(GLFWwindow* window) {
+
+}
 AnimationProgramUser::~AnimationProgramUser() {}

@@ -117,9 +117,6 @@ char* unconstchar(const char* s) {
 }
 int main() {
 
-	HWND hWnd = GetConsoleWindow();
-	ShowWindow(hWnd, SW_HIDE);
-	FreeConsole();
 	// set parametters of OpenGL
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4.6);
@@ -208,8 +205,9 @@ int main() {
 	static ed::EditorContext* g_Context = ed::CreateEditor(&config);
 
 
-	VariablesSize SizeObject;
-	SizeObject.setCHANGE_VALUE_ALL_SIZE<float>(mesh.getShaderObject(), IN_FRAME_TRUE);
+	VariablesSize SizeObject(window);
+	SizeObject.setCHANGE_VALUE_ALL_SIZE(mesh.getShaderObject(), IN_FRAME_TRUE);
+	AnimationProgramUser* UserProgram = nullptr;
 
 	while (!glfwWindowShouldClose(window)) // render
 	{
@@ -261,25 +259,27 @@ int main() {
 
 			}
 			if (ImGui::CollapsingHeader("size")) {
+				if (UserProgram == nullptr) {
+					UserProgram = new VariablesSize(window);
+				}
 				ImGui::Separator();
 				Interface->setLastedmatrix();
 				ImGui::Separator();
-				SizeObject.setCHANGE_VALUE_ALL_SIZE<float>(mesh.getShaderObject(), IN_FRAME_NOT);
+				SizeObject.setCHANGE_VALUE_ALL_SIZE(mesh.getShaderObject(), IN_FRAME_NOT);
 				ImGui::Separator();
 
-				SizeObject.setCHANGE_SIZE_X<float>();
+				UserProgram->setCHANGE_X(IN_FRAME_NOT);
 				matrixAnimation->frameMatrix(mesh.getShaderObject());
 				ImGui::Separator();
 				Interface->setLastedmatrix();
-				SizeObject.setCHANGE_SIZE_Y<float>();
+				UserProgram->setCHANGE_Y(IN_FRAME_NOT);
 				matrixAnimation->frameMatrix(mesh.getShaderObject());
 				ImGui::Separator();
 
 
 				Interface->setLastedmatrix();
-				SizeObject.setCHANGE_SIZE_Z<float>();
+				UserProgram->setCHANGE_Z(IN_FRAME_NOT);
 				ImGui::Separator();
-
 				SizeObject.InputSize();
 
 				matrixAnimation->frameMatrix(mesh.getShaderObject());
@@ -303,7 +303,7 @@ int main() {
 
 
 		if (HOTreload == true) {
-			SizeObject.setCHANGE_VALUE_ALL_SIZE<float>(mesh.getShaderObject(), Interface->LastedFloatFrame);
+			SizeObject.setCHANGE_VALUE_ALL_SIZE(mesh.getShaderObject(), Interface->LastedFloatFrame);
 		}
 
 
@@ -327,7 +327,7 @@ int main() {
 						mesh.setTexture1(Interface->filePathPointer[0]);
 						mesh.setTexture2(Interface->filePathPointer[0]);
 						matrixAnimation->setPercentTexture(mesh.getShaderObject(), Interface->getpercentTexture());
-						SizeObject.setCHANGE_VALUE_ALL_SIZE<float>(mesh.getShaderObject(), Interface->LastedFloatFrame);
+						SizeObject.setCHANGE_VALUE_ALL_SIZE(mesh.getShaderObject(), Interface->LastedFloatFrame);
 						matrixAnimation->setPositionObject(mesh.getShaderObject(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
 						matrixAnimation->setColorObject(mesh.getShaderObject(), Interface->LastedColorObject[0], Interface->LastedColorObject[1], Interface->LastedColorObject[2]);
 						matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
