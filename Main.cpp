@@ -65,6 +65,8 @@ IMGUI_API int         ImGui_GetTextureHeight(ImTextureID texture);
 static bool HOTreload = false;
 namespace ed = ax::NodeEditor;
 
+
+
 //												_____
 //               /\         |\		|	 |	   |
 //				/  \		| \		|	 |	   |
@@ -247,6 +249,7 @@ int main() {
 
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 			HOTreload = false;
+
 			glViewport(*resX / 4.5, 0, *resX, *resY);
 		}
 		matrixAnimation->setPercentTexture(mesh.getShaderObject(), Interface->getpercentTexture());
@@ -470,21 +473,24 @@ int main() {
 			Interface->setStyleNodeFrame();
 			ImGui::Begin("Node");
 
-			ImGui::Columns(2);
-			ImGui::SetColumnOffset(1, (glfwGetVideoMode(glfwGetPrimaryMonitor())->width - glfwGetVideoMode(glfwGetPrimaryMonitor())->width/4.25)/4);
-			ImGui::Button("rotate object in the x abscisses");
-			ImGui::NextColumn();
-			ImGui::Spacing();
+			
+
 			ed::SetCurrentEditor(g_Context);
 			ed::Begin("My Editor", ImVec2(0.0, 0.0f));
-			Interface->addNode(ADD_NODE_CHANGE_DIRECTION_ROTATE_MATRIX);
-			Interface->setNodeRotateMeshWithRadius();
-			Interface->setNodeRotateMeshWithRadius();
+			// Start drawing nodes.
+			Interface->recevedNodeValueForSetNodeText();
 			ed::End();
+			ImGui::End();
+			Interface->setNodeAddButtonWindow();
+			ImGui::Begin("add Node +");
+			Interface->setNodeButtonFORadd();
 
 
 
 
+
+
+		
 
 
 
