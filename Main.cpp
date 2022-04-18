@@ -479,11 +479,13 @@ int main() {
 			ed::Begin("My Editor", ImVec2(0.0, 0.0f));
 			// Start drawing nodes.
 			Interface->recevedNodeValueForSetNodeText();
+			
 			ed::End();
 			ImGui::End();
 			Interface->setNodeAddButtonWindow();
 			ImGui::Begin("add Node +");
 			Interface->setNodeButtonFORadd();
+			
 
 
 

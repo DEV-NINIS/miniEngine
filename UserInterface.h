@@ -11,6 +11,31 @@
 #include "imgui/imgui_impl_opengl3.h"
 
 
+static int ADD_NODE_ROTATE_RIGHT_variable = NULL;
+static int ADD_NODE_ROTATE_LEFT_variable = NULL;
+static int ADD_NODE_MOVE_CAMERA_LEFT_variable = NULL;
+static int ADD_NODE_MOVE_CAMERA_RIGHT_variable = NULL;
+static int ADD_NODE_MOVE_CAMERA_UP_variable = NULL;
+static int ADD_NODE_MOVE_CAMERA_DOWN_variable = NULL;
+static int ADD_NODE_ROTATE_AROUD_X_MATRIX_variable = NULL;
+static int ADD_NODE_ROTATE_AROUND_Y_MATRIX_variable = NULL;
+static int ADD_NODE_ROTATE_AROUND_Z_MATRIX_variable = NULL;
+static int ADD_NODE_CHANGE_CAMERA_SPEED_variable = NULL;
+static int ADD_NODE_CHANGE_PERCENT_TEXTURE_variable = NULL;
+static int ADD_NODE_CHANGE_POSITION_X_variable = NULL;
+static int ADD_NODE_CHANGE_POSITION_Y_variable = NULL;
+static int ADD_NODE_CHANGE_POSITION_Z_variable = NULL;
+static int ADD_NODE_CHANGE_COLOR_FRAME_variable = NULL;
+static int ADD_NODE_CHANGE_COLOR_OBJECT_variable = NULL;
+static int ADD_NODE_CHANGE_FOV_variable = NULL;
+static int ADD_NODE_CHANGE_SIZE_X_variable = NULL;
+static int ADD_NODE_CHANGE_SIZE_Y_variable = NULL;
+static int ADD_NODE_CHANGE_SIZE_Z_variable = NULL;
+static int ADD_NODE_CHANGE_DIRECTION_ROTATE_MATRIX_variable = NULL;
+
+namespace ed = ax::NodeEditor;
+
+
 class UserInterface 
 {
 public:
@@ -76,12 +101,15 @@ public:
 	// node window 
 	void setNodeWindow();
 	void addNode(int typeOfNode);
+	// button for add window
+	void setNodeAddButtonWindow();
 
 	// node editor
 	void setStyleNodeFrame();
 	void setNodeInformation(); // this fonction initialise the fps latence .ect
-
-	void setNodeRotateMeshWithRadius();
+	void setNodeButtonFORadd(); // this fonction make the button for add  node
+	void addNodeText(const char* text);
+	void recevedNodeValueForSetNodeText();
 
 	// gettting values for save
 	void setSettingFrame();
@@ -118,6 +146,15 @@ public:
 		float LastedPositionObjectZ;
 		float percentTexture;
 		float CameraSpeed;
+
+		int uniqueId = 1;
+		ed::NodeId ROTATE_LEFT_NODE = uniqueId++;
+		ed::PinId  ROTATE_LEFT_NODE_InputPinId = uniqueId++;
+		ed::PinId  ROTATE_LEFT_NODE_OutputPinId = uniqueId++;
+
+		ed::NodeId ROTATE_RIGHT_NODE = uniqueId++;
+		ed::PinId  ROTATE_RIGHT_NODE_InputPinId = uniqueId++;
+		ed::PinId  ROTATE_RIGHT_NODE_OutputPinId = uniqueId++;
 };
 
 #endif // !1

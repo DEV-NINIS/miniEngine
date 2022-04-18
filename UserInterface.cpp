@@ -43,13 +43,14 @@
 #define SRC_HEIGHT glfwGetVideoMode(glfwGetPrimaryMonitor())->height
 
 #define EDITOR_WINDOW_POS ImVec2(viewport->WorkPos.x, viewport->WorkPos.y)
-#define EDITOR_WINDOW_SIZE ImVec2(viewport->WorkSize.x - viewport->WorkSize.x * 0.9, viewport->WorkSize.y)
-#define EDITOR_WINDOW_SIZE_X (viewport->WorkSize.x - viewport->WorkSize.x * 0.9)
-#define NODE_WINDOW_POS ImVec2(viewport->WorkPos.x + (viewport->WorkSize.x/4.25) + (viewport->WorkSize.x - viewport->WorkSize.x / 4.25) / 4, viewport->WorkSize.y- viewport->WorkSize.y/3.5)
-#define NODE_WINDOW_SIZE ImVec2(viewport->WorkSize.x - viewport->WorkSize.x/ 4.25 - (viewport->WorkSize.x - viewport->WorkSize.x / 4.25) / 4, viewport->WorkSize.y/4)
+#define EDITOR_WINDOW_SIZE ImVec2(viewport->WorkSize.x - viewport->WorkSize.x * 0.75, viewport->WorkSize.y)
+#define EDITOR_WINDOW_SIZE_X (viewport->WorkSize.x - viewport->WorkSize.x * 0.75)
+#define NODE_WINDOW_POS ImVec2(viewport->WorkPos.x + (viewport->WorkSize.x/4.25) + (viewport->WorkSize.x - viewport->WorkSize.x / 4.25) / 4, viewport->WorkSize.y- viewport->WorkSize.y/4.275)
+#define NODE_WINDOW_POS_X (viewport->WorkPos.x + (viewport->WorkSize.x/4.25) + (viewport->WorkSize.x - viewport->WorkSize.x / 4.25) / 4)
+#define NODE_WINDOW_SIZE ImVec2(viewport->WorkSize.x - viewport->WorkSize.x/ 4.275 - (viewport->WorkSize.x - viewport->WorkSize.x / 4.275) / 4, viewport->WorkSize.y/4)
 #define NODE_WINDOW_SIZE_X (viewport->WorkSize.x - viewport->WorkSize.x/ 4.25 - (viewport->WorkSize.x - viewport->WorkSize.x / 4.25) / 4)
-#define NODE_ADD_BUTTON_WINDOW_POS ImVec2(viewport->WorkPos.x + (viewport->WorkSize.x / 4.25), viewport->WorkSize.y - viewport->WorkSize.y / 3.5)
-#define NODE_ADD_BUTTON_WINDOW_SIZE ImVec2(viewport->WorkSize.x - NODE_WINDOW_SIZE_X - EDITOR_WINDOW_SIZE_X,  viewport->WorkSize.y/4)
+#define NODE_ADD_BUTTON_WINDOW_POS ImVec2(viewport->WorkSize.x - viewport->WorkSize.x * 0.75, viewport->WorkSize.y - viewport->WorkSize.y/4.275)
+#define NODE_ADD_BUTTON_WINDOW_SIZE ImVec2((viewport->WorkSize.x - NODE_WINDOW_SIZE_X - EDITOR_WINDOW_SIZE_X),  viewport->WorkSize.y/4)
 
 
 
@@ -82,9 +83,15 @@ UserInterface::UserInterface(GLFWwindow* window)  {
 	percentTexture = 0.5f;
 	CameraSpeed = 10.0f;
 
-	
+	uniqueId = 1;
 
+	ROTATE_RIGHT_NODE = uniqueId++;
+	ROTATE_RIGHT_NODE_InputPinId = uniqueId++;
+	ROTATE_RIGHT_NODE_OutputPinId = uniqueId++;
 
+	ROTATE_LEFT_NODE = uniqueId++;
+	ROTATE_LEFT_NODE_InputPinId = uniqueId++;
+	ROTATE_LEFT_NODE_OutputPinId = uniqueId++;
 }
 UserInterface::UserInterface(GLFWwindow* window, int randomNumberJustForSurcharge) {
 
@@ -201,8 +208,7 @@ void UserInterface::setStyleSettingFrame(GLFWwindow* window) {
 	style->WindowBorderSize = 0;
 	style->WindowTitleAlign = ImVec2(0.5, 0.5);
 	style->ButtonTextAlign = ImVec2(0.5, 0.5);
-	style->WindowMinSize = ImVec2(2560 / 4.25, 430);
-	style->FramePadding = ImVec2(2, 2);
+	style->FramePadding = ImVec2(1, 1);
 	style->WindowMenuButtonPosition = ImGuiDir();
 	style->Colors[ImGuiCol_TitleBg] = ImColor(79, 86, 98, 255);
 	style->Colors[ImGuiCol_TitleBgActive] = ImColor(79, 86, 98, 255);
@@ -242,13 +248,13 @@ void UserInterface::setSettingFrame() {
 	ImGui::NewFrame();
 }
 bool UserInterface::inputDemandSelectFolderForTex1() const {
-	if (ImGui::Button(ICON_FA_UPLOAD "  select folder for texture 1", ImVec2(glfwGetVideoMode(glfwGetPrimaryMonitor())->width/4.5, glfwGetVideoMode(glfwGetPrimaryMonitor())->height / 40.5))) {
+	if (ImGui::Button(ICON_FA_UPLOAD "  select folder for texture 1", ImVec2(SRC_WIDTH / 4.5, SRC_HEIGHT / 40.5))) {
 		return true;
 	}
 	else { return false; }
 }
 bool UserInterface::inputDemandSelectFolderForTex2() const {
-	if (ImGui::Button(ICON_FA_UPLOAD "  select folder for texture 2", ImVec2(glfwGetVideoMode(glfwGetPrimaryMonitor())->width / 4.5, glfwGetVideoMode(glfwGetPrimaryMonitor())->height / 40.5))) {
+	if (ImGui::Button(ICON_FA_UPLOAD "  select folder for texture 2", ImVec2(SRC_WIDTH / 4.5, SRC_HEIGHT / 40.5))) {
 		return true;
 	}
 	else { return false; }
@@ -316,20 +322,8 @@ bool UserInterface::inputDemandingChangeColorFrame() {
 	}
 	else { return false; }
 }
-bool UserInterface::ButtonForSetAnimation() {
-	if (ImGui::Button("Animation", ImVec2(300, 40))) {
-		return true;
-	}
-	else { return false; }
-}
 bool UserInterface::confirmFilePath() const {
-	if (ImGui::Button("load", ImVec2(50, 20))) {
-		return true;
-	}
-	else { return false; }
-}
-bool UserInterface::inputDemandingChangeFOV() const {
-	if (ImGui::Button("FOV", ImVec2(200, 30))) {
+	if (ImGui::Button("load", ImVec2(SRC_WIDTH / 60, SRC_HEIGHT/60))) {
 		return true;
 	}
 	else { return false; }
@@ -406,71 +400,139 @@ void UserInterface::setPositionObjectZ() {
 // node
 
 void UserInterface::addNodeText(const char* text) {
+
+	std::cout << text << std::endl;
 	int uniqueId = 1;
 	// Start drawing nodes.
-	ed::BeginNode(uniqueId++);
-	ImGui::Text(text);
-	ed::BeginPin(uniqueId++, ed::PinKind::Input);
-	ImGui::Text("-> In");
-	ed::EndPin();
-	ImGui::SameLine();
-	ed::BeginPin(uniqueId++, ed::PinKind::Output);
-	ImGui::Text("Out ->");
-	ed::EndPin();
-	ed::EndNode();
+	if (text == "ROTATE RIGHT") {
+		ed::SetNodePosition(ROTATE_RIGHT_NODE, ImVec2(210, 60));
+
+		ed::BeginNode(ROTATE_RIGHT_NODE);
+		ImGui::Text(text);
+		ed::BeginPin(ROTATE_RIGHT_NODE_InputPinId, ed::PinKind::Input);
+		ImGui::Text(ICON_FA_ARROW_RIGHT " In");
+		ed::EndPin();
+		ImGui::SameLine();
+		ed::BeginPin(ROTATE_RIGHT_NODE_OutputPinId, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::EndNode();
+	}
+	else if (text == "ROTATE LEFT") {
+		ed::SetNodePosition(ROTATE_LEFT_NODE, ImVec2(10, 50));
+		ed::BeginNode(ROTATE_LEFT_NODE);
+		ImGui::Text(text);
+		ed::BeginPin(ROTATE_LEFT_NODE_InputPinId, ed::PinKind::Input);
+		ImGui::Text(ICON_FA_ARROW_RIGHT " In");
+		ed::EndPin();
+		ImGui::SameLine();
+		ed::BeginPin(ROTATE_LEFT_NODE_OutputPinId, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ImGui::SameLine();
+		ed::BeginPin(ROTATE_LEFT_NODE_OutputPinId, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::EndNode();
+	}
 }
 void UserInterface::recevedNodeValueForSetNodeText() {
-	if (ADD_NODE_ROTATE_RIGHT_variable == 1)
+	if (ADD_NODE_ROTATE_RIGHT_variable == 1) {
 		this->addNodeText("ROTATE RIGHT");
-	if (ADD_NODE_ROTATE_LEFT_variable == 1)
+	}
+	if (ADD_NODE_ROTATE_LEFT_variable == 1) {
 		this->addNodeText("ROTATE LEFT");
-	if (ADD_NODE_MOVE_CAMERA_LEFT_variable == 1)
+	}
+	if (ADD_NODE_MOVE_CAMERA_LEFT_variable == 1) {
 		this->addNodeText("MOVE CAMERA LEFT");
+	}
 }
 
 void UserInterface::setNodeButtonFORadd() {
-	if (ImGui::Button("ROTATE RIGHT", ImVec2(SRC_WIDTH / 8, SRC_HEIGHT / 50)))
+	if (ImGui::Button(static_cast<const char*>("ROTATE RIGHT"), ImVec2(SRC_WIDTH / 6, SRC_HEIGHT / 50))) {
 		this->addNode(ADD_NODE_ROTATE_RIGHT);
-	else if (ImGui::Button("ROTATE_LEFT", ImVec2(SRC_WIDTH / 8, SRC_HEIGHT / 50)))
+	}
+	ImGui::Separator();
+	if (ImGui::Button("ROTATE_LEFT", ImVec2(SRC_WIDTH / 6, SRC_HEIGHT / 50))) {
 		this->addNode(ADD_NODE_ROTATE_LEFT);
-	else if (ImGui::Button("MOVE CAMERA LEFT", ImVec2(SRC_WIDTH / 8, SRC_HEIGHT / 50)))
+	}
+	ImGui::Separator();
+	if (ImGui::Button("MOVE CAMERA LEFT", ImVec2(SRC_WIDTH / 6, SRC_HEIGHT / 50))) {
 		this->addNode(ADD_NODE_MOVE_CAMERA_LEFT);
-	else if (ImGui::Button("MOVE CAMERA RIGHT", ImVec2(SRC_WIDTH / 8, SRC_HEIGHT / 50)))
+	}
+	ImGui::Separator();
+	if (ImGui::Button("MOVE CAMERA RIGHT", ImVec2(SRC_WIDTH / 6, SRC_HEIGHT / 50))) {
 		this->addNode(ADD_NODE_MOVE_CAMERA_RIGHT);
-	else if (ImGui::Button("MOVE CAMERA UP", ImVec2(SRC_WIDTH / 8, SRC_HEIGHT / 50)))
+	}
+	ImGui::Separator();
+	if (ImGui::Button("MOVE CAMERA UP", ImVec2(SRC_WIDTH / 6, SRC_HEIGHT / 50))) {
 		this->addNode(ADD_NODE_MOVE_CAMERA_UP);
-	else if (ImGui::Button("MOVE CAMERA DOWN", ImVec2(SRC_WIDTH / 8, SRC_HEIGHT / 50)))
+	}
+	ImGui::Separator();
+	if (ImGui::Button("MOVE CAMERA DOWN", ImVec2(SRC_WIDTH / 6, SRC_HEIGHT / 50))) {
 		this->addNode(ADD_NODE_MOVE_CAMERA_DOWN);
-	else if (ImGui::Button("ROTATE AROUD X AXES", ImVec2(SRC_WIDTH / 8, SRC_HEIGHT / 50)))
+	}
+	ImGui::Separator();
+	if (ImGui::Button("ROTATE AROUD X AXES", ImVec2(SRC_WIDTH / 6, SRC_HEIGHT / 50))) {
 		this->addNode(ADD_NODE_ROTATE_AROUD_X_MATRIX);
-	else if (ImGui::Button("ROTATE AROUND Y AXES", ImVec2(SRC_WIDTH / 8, SRC_HEIGHT / 50)))
+	}
+	ImGui::Separator();
+	if (ImGui::Button("ROTATE AROUND Y AXES", ImVec2(SRC_WIDTH / 6, SRC_HEIGHT / 50))) {
 		this->addNode(ADD_NODE_ROTATE_AROUND_Y_MATRIX);
-	else if (ImGui::Button("ROTATE AROUND Z AXES", ImVec2(SRC_WIDTH / 8, SRC_HEIGHT / 50)))
+	}
+	ImGui::Separator();
+	if (ImGui::Button("ROTATE AROUND Z AXES", ImVec2(SRC_WIDTH / 6, SRC_HEIGHT / 50))) {
 		this->addNode(ADD_NODE_ROTATE_AROUND_Z_MATRIX);
-	 if (ImGui::Button("CHANGE CAMERA SPEED", ImVec2(SRC_WIDTH / 8, SRC_HEIGHT / 50)))
+	}
+	ImGui::Separator();
+	if (ImGui::Button("CHANGE CAMERA SPEED", ImVec2(SRC_WIDTH / 6, SRC_HEIGHT / 50))) {
 		this->addNode(ADD_NODE_CHANGE_CAMERA_SPEED);
-	else if (ImGui::Button("CHANGE PERCENT TEXTURE", ImVec2(SRC_WIDTH / 8, SRC_HEIGHT / 50)))
+	}
+	ImGui::Separator();
+	if (ImGui::Button("CHANGE PERCENT TEXTURE", ImVec2(SRC_WIDTH / 6, SRC_HEIGHT / 50))) {
 		this->addNode(ADD_NODE_CHANGE_PERCENT_TEXTURE);
-	else if (ImGui::Button("CHANGE POSITION X", ImVec2(SRC_WIDTH / 8, SRC_HEIGHT / 50)))
+	}
+	ImGui::Separator();
+	if (ImGui::Button("CHANGE POSITION X", ImVec2(SRC_WIDTH / 6, SRC_HEIGHT / 50))) {
 		this->addNode(ADD_NODE_CHANGE_POSITION_X);
-	else if (ImGui::Button("CHANGE POSITION Y", ImVec2(SRC_WIDTH / 8, SRC_HEIGHT / 50)))
+	}
+	ImGui::Separator();
+	if (ImGui::Button("CHANGE POSITION Y", ImVec2(SRC_WIDTH / 6, SRC_HEIGHT / 50))) {
 		this->addNode(ADD_NODE_CHANGE_POSITION_Y);
-	else if (ImGui::Button("CHANGE POSITION Z", ImVec2(SRC_WIDTH / 8, SRC_HEIGHT / 50)))
+	}
+	ImGui::Separator();
+	if (ImGui::Button("CHANGE POSITION Z", ImVec2(SRC_WIDTH / 6, SRC_HEIGHT / 50))) {
 		this->addNode(ADD_NODE_CHANGE_POSITION_Z);
-	else if (ImGui::Button("CHANGE COLOR FRAME", ImVec2(SRC_WIDTH / 8, SRC_HEIGHT / 50)))
+	}
+	ImGui::Separator();
+	if (ImGui::Button("CHANGE COLOR FRAME", ImVec2(SRC_WIDTH / 6, SRC_HEIGHT / 50))) {
 		this->addNode(ADD_NODE_CHANGE_COLOR_FRAME);
-	else if (ImGui::Button("CHANGE COLOR OBJECT", ImVec2(SRC_WIDTH / 8, SRC_HEIGHT / 50)))
+	}
+	ImGui::Separator();
+	if (ImGui::Button("CHANGE COLOR OBJECT", ImVec2(SRC_WIDTH / 6, SRC_HEIGHT / 50))) {
 		this->addNode(ADD_NODE_CHANGE_COLOR_OBJECT);
-	else if (ImGui::Button("CHANGE FOV", ImVec2(SRC_WIDTH / 8, SRC_HEIGHT / 50)))
+	}
+	ImGui::Separator();
+	if (ImGui::Button("CHANGE FOV", ImVec2(SRC_WIDTH / 6, SRC_HEIGHT / 50))) {
 		this->addNode(ADD_NODE_CHANGE_FOV);
-	else if (ImGui::Button("CHANGE SIZE X", ImVec2(SRC_WIDTH / 8, SRC_HEIGHT / 50)))
+	}
+	ImGui::Separator();
+	if (ImGui::Button("CHANGE SIZE X", ImVec2(SRC_WIDTH / 6, SRC_HEIGHT / 50))) {
 		this->addNode(ADD_NODE_CHANGE_SIZE_X);
-	else if (ImGui::Button("CHANGE SIZE Y", ImVec2(SRC_WIDTH / 8, SRC_HEIGHT / 50)))
+	}
+	ImGui::Separator();
+	if (ImGui::Button("CHANGE SIZE Y", ImVec2(SRC_WIDTH / 6, SRC_HEIGHT / 50))) {
 		this->addNode(ADD_NODE_CHANGE_SIZE_Y);
-	else if (ImGui::Button("CHANGE SIZE Z", ImVec2(SRC_WIDTH / 8, SRC_HEIGHT / 50)))
+	}
+	ImGui::Separator();
+	if (ImGui::Button("CHANGE SIZE Z", ImVec2(SRC_WIDTH / 6, SRC_HEIGHT / 50))) {
 		this->addNode(ADD_NODE_CHANGE_SIZE_Z);
-	else if (ImGui::Button("CHANGE DIRECTION ROTATE MATRIX", ImVec2(SRC_WIDTH / 8, SRC_HEIGHT / 50)))
+	}
+	ImGui::Separator();
+	if (ImGui::Button("CHANGE DIRECTION ROTATE MATRIX", ImVec2(SRC_WIDTH / 6, SRC_HEIGHT / 50))) {
 		this->addNode(ADD_NODE_CHANGE_DIRECTION_ROTATE_MATRIX);
+	}
+	ImGui::Separator();
 
 }
 void UserInterface::addNode(int typeOfNode) {
@@ -478,46 +540,67 @@ void UserInterface::addNode(int typeOfNode) {
 	{
 	case ADD_NODE_ROTATE_RIGHT:
 		ADD_NODE_ROTATE_RIGHT_variable = 1;
+		break;
 	case ADD_NODE_ROTATE_LEFT:
 		ADD_NODE_ROTATE_LEFT_variable = 1;
+		break;
 	case ADD_NODE_MOVE_CAMERA_LEFT:
 		ADD_NODE_MOVE_CAMERA_LEFT_variable = 1;
+		break;
 	case ADD_NODE_MOVE_CAMERA_RIGHT:
 		ADD_NODE_MOVE_CAMERA_RIGHT_variable = 1;
+		break;
 	case ADD_NODE_MOVE_CAMERA_UP:
 		ADD_NODE_MOVE_CAMERA_UP_variable = 1;
+		break;
 	case ADD_NODE_MOVE_CAMERA_DOWN:
 		ADD_NODE_MOVE_CAMERA_DOWN_variable = 1;
+		break;
 	case ADD_NODE_ROTATE_AROUD_X_MATRIX:
 		ADD_NODE_ROTATE_AROUD_X_MATRIX_variable = 1;
+		break;
 	case ADD_NODE_ROTATE_AROUND_Y_MATRIX:
 		ADD_NODE_ROTATE_AROUND_Y_MATRIX_variable = 1;
+		break;
 	case ADD_NODE_ROTATE_AROUND_Z_MATRIX:
 		ADD_NODE_ROTATE_AROUND_Z_MATRIX_variable = 1;
+		break;
 	case ADD_NODE_CHANGE_CAMERA_SPEED:
 		ADD_NODE_CHANGE_CAMERA_SPEED_variable = 1;
+		break;
 	case ADD_NODE_CHANGE_PERCENT_TEXTURE:
+		break;
 		ADD_NODE_CHANGE_PERCENT_TEXTURE_variable = 1;
 	case ADD_NODE_CHANGE_POSITION_X:
 		ADD_NODE_CHANGE_POSITION_X_variable = 1;
+		break;
 	case ADD_NODE_CHANGE_POSITION_Y:
 		ADD_NODE_CHANGE_POSITION_Y_variable = 1;
+		break;
 	case ADD_NODE_CHANGE_POSITION_Z:
 		ADD_NODE_CHANGE_POSITION_Z_variable = 1;
+		break;
 	case ADD_NODE_CHANGE_COLOR_FRAME:
 		ADD_NODE_CHANGE_COLOR_FRAME_variable = 1;
+		break;
 	case ADD_NODE_CHANGE_COLOR_OBJECT:
 		ADD_NODE_CHANGE_COLOR_OBJECT_variable = 1;
+		break;
 	case ADD_NODE_CHANGE_FOV:
 		ADD_NODE_CHANGE_FOV_variable = 1;
+		break;
 	case ADD_NODE_CHANGE_SIZE_X:
 		ADD_NODE_CHANGE_SIZE_X_variable = 1;
+		break;
 	case ADD_NODE_CHANGE_SIZE_Y:
 		ADD_NODE_CHANGE_SIZE_Y_variable = 1;
+		break;
 	case ADD_NODE_CHANGE_SIZE_Z:
 		ADD_NODE_CHANGE_SIZE_Z_variable = 1;
+		break;
 	case ADD_NODE_CHANGE_DIRECTION_ROTATE_MATRIX:
 		ADD_NODE_CHANGE_DIRECTION_ROTATE_MATRIX_variable = 1;
+		break;
 	default:
 		break;
 	}
