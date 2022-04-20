@@ -66,6 +66,9 @@ const char* UserInterface::filepath2ConstChar = 0;
 float UserInterface::LastedColorObject[] = { 0 };
 float UserInterface::lastedColorFrame[] = { 0 };
 
+
+static int uniqueId = 1;
+
 UserInterface::UserInterface(GLFWwindow* window)  {
 	
 	lastedColorFrame[0] = 0.2; lastedColorFrame[1] = 0.6; lastedColorFrame[2] = 0.9;
@@ -83,15 +86,8 @@ UserInterface::UserInterface(GLFWwindow* window)  {
 	percentTexture = 0.5f;
 	CameraSpeed = 10.0f;
 
-	uniqueId = 1;
 
-	ROTATE_RIGHT_NODE = uniqueId++;
-	ROTATE_RIGHT_NODE_InputPinId = uniqueId++;
-	ROTATE_RIGHT_NODE_OutputPinId = uniqueId++;
-
-	ROTATE_LEFT_NODE = uniqueId++;
-	ROTATE_LEFT_NODE_InputPinId = uniqueId++;
-	ROTATE_LEFT_NODE_OutputPinId = uniqueId++;
+	
 }
 UserInterface::UserInterface(GLFWwindow* window, int randomNumberJustForSurcharge) {
 
@@ -399,60 +395,351 @@ void UserInterface::setPositionObjectZ() {
 
 // node
 
-void UserInterface::addNodeText(const char* text) {
+void UserInterface::addNodeText(int variable, int& uniqueID, const char* text) {
+	
 
-	std::cout << text << std::endl;
-	int uniqueId = 1;
-	// Start drawing nodes.
-	if (text == "ROTATE RIGHT") {
-		ed::SetNodePosition(ROTATE_RIGHT_NODE, ImVec2(210, 60));
+		
+		if (variable == 1) {
+			ed::NodeId idnode = uniqueID++;
+			ed::PinId inodepinin = uniqueID++;
+			ed::PinId inodepinout1 = uniqueID++;
+			ed::PinId inodepinout2 = uniqueID++;
 
-		ed::BeginNode(ROTATE_RIGHT_NODE);
-		ImGui::Text(text);
-		ed::BeginPin(ROTATE_RIGHT_NODE_InputPinId, ed::PinKind::Input);
-		ImGui::Text(ICON_FA_ARROW_RIGHT " In");
-		ed::EndPin();
-		ImGui::SameLine();
-		ed::BeginPin(ROTATE_RIGHT_NODE_OutputPinId, ed::PinKind::Output);
-		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
-		ed::EndPin();
-		ed::EndNode();
-	}
-	else if (text == "ROTATE LEFT") {
-		ed::SetNodePosition(ROTATE_LEFT_NODE, ImVec2(10, 50));
-		ed::BeginNode(ROTATE_LEFT_NODE);
-		ImGui::Text(text);
-		ed::BeginPin(ROTATE_LEFT_NODE_InputPinId, ed::PinKind::Input);
-		ImGui::Text(ICON_FA_ARROW_RIGHT " In");
-		ed::EndPin();
-		ImGui::SameLine();
-		ed::BeginPin(ROTATE_LEFT_NODE_OutputPinId, ed::PinKind::Output);
-		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
-		ed::EndPin();
-		ImGui::SameLine();
-		ed::BeginPin(ROTATE_LEFT_NODE_OutputPinId, ed::PinKind::Output);
-		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
-		ed::EndPin();
-		ed::EndNode();
-	}
+			ed::SetNodePosition(idnode, ImVec2(50, 150));
+			ed::BeginNode(idnode);
+			ImGui::Text(text);
+			ed::BeginPin(inodepinin, ed::PinKind::Input);
+			ImGui::Text(ICON_FA_ARROW_RIGHT " In");
+			ed::EndPin();
+			ImGui::SameLine();
+			ed::BeginPin(inodepinout1, ed::PinKind::Output);
+			ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+			ed::EndPin();
+			ed::BeginPin(inodepinout2, ed::PinKind::Output);
+			ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+			ed::EndPin();
+			ed::EndNode();
+		}
+			
+		
+	
+
+
+		
+	
 }
 void UserInterface::recevedNodeValueForSetNodeText() {
-	if (ADD_NODE_ROTATE_RIGHT_variable == 1) {
-		this->addNodeText("ROTATE RIGHT");
+	int uniqueID =  1;
+
+	if (ADD_NODE_CHANGE_CAMERA_SPEED_variable == 1) {
+		ed::SetNodePosition(uniqueID++, ImVec2(50, 150));
+		ed::BeginNode(uniqueID++);
+		ImGui::Text("CHANGE CAMERA SPEED");
+		ed::BeginPin(uniqueID++, ed::PinKind::Input);
+		ImGui::Text(ICON_FA_ARROW_RIGHT " In");
+		ed::EndPin();
+		ImGui::SameLine();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::EndNode();
 	}
-	if (ADD_NODE_ROTATE_LEFT_variable == 1) {
-		this->addNodeText("ROTATE LEFT");
+	if (ADD_NODE_CHANGE_COLOR_OBJECT_variable == 1) {
+		ed::SetNodePosition(uniqueID++, ImVec2(50, 150));
+		ed::BeginNode(uniqueID++);
+		ImGui::Text("CHANGE COLOR OBJECT");
+		ed::BeginPin(uniqueID++, ed::PinKind::Input);
+		ImGui::Text(ICON_FA_ARROW_RIGHT " In");
+		ed::EndPin();
+		ImGui::SameLine();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::EndNode();
+	}
+	if (ADD_NODE_CHANGE_COLOR_FRAME_variable == 1) {
+		ed::SetNodePosition(uniqueID++, ImVec2(50, 150));
+		ed::BeginNode(uniqueID++);
+		ImGui::Text("CHANGE COLOR FRAME");
+		ed::BeginPin(uniqueID++, ed::PinKind::Input);
+		ImGui::Text(ICON_FA_ARROW_RIGHT " In");
+		ed::EndPin();
+		ImGui::SameLine();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::EndNode();
+	}
+	if (ADD_NODE_CHANGE_DIRECTION_ROTATE_MATRIX_variable == 1) {
+		ed::SetNodePosition(uniqueID++, ImVec2(50, 150));
+		ed::BeginNode(uniqueID++);
+		ImGui::Text("CHANGE DIRECTION ROTATE MATRIX VARIABLE");
+		ed::BeginPin(uniqueID++, ed::PinKind::Input);
+		ImGui::Text(ICON_FA_ARROW_RIGHT " In");
+		ed::EndPin();
+		ImGui::SameLine();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::EndNode();
+	}
+	if (ADD_NODE_CHANGE_FOV_variable == 1) {
+		ed::SetNodePosition(uniqueID++, ImVec2(50, 150));
+		ed::BeginNode(uniqueID++);
+		ImGui::Text("CHANGE FOV");
+		ed::BeginPin(uniqueID++, ed::PinKind::Input);
+		ImGui::Text(ICON_FA_ARROW_RIGHT " In");
+		ed::EndPin();
+		ImGui::SameLine();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::EndNode();
+	}
+	if (ADD_NODE_CHANGE_PERCENT_TEXTURE_variable == 1) {
+		ed::SetNodePosition(uniqueID++, ImVec2(50, 150));
+		ed::BeginNode(uniqueID++);
+		ImGui::Text("CHANGE PERCENT TEXTURE");
+		ed::BeginPin(uniqueID++, ed::PinKind::Input);
+		ImGui::Text(ICON_FA_ARROW_RIGHT " In");
+		ed::EndPin();
+		ImGui::SameLine();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::EndNode();
+	}
+	if (ADD_NODE_CHANGE_POSITION_X_variable == 1) {
+		ed::SetNodePosition(uniqueID++, ImVec2(50, 150));
+		ed::BeginNode(uniqueID++);
+		ImGui::Text("CHANGE POSITION X");
+		ed::BeginPin(uniqueID++, ed::PinKind::Input);
+		ImGui::Text(ICON_FA_ARROW_RIGHT " In");
+		ed::EndPin();
+		ImGui::SameLine();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::EndNode();
+	}
+	if (ADD_NODE_CHANGE_POSITION_Y_variable == 1) {
+		ed::SetNodePosition(uniqueID++, ImVec2(50, 150));
+		ed::BeginNode(uniqueID++);
+		ImGui::Text("CHANGE POSITION Y");
+		ed::BeginPin(uniqueID++, ed::PinKind::Input);
+		ImGui::Text(ICON_FA_ARROW_RIGHT " In");
+		ed::EndPin();
+		ImGui::SameLine();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::EndNode();
+	}
+	if (ADD_NODE_CHANGE_POSITION_Z_variable == 1) {
+		ed::SetNodePosition(uniqueID++, ImVec2(50, 150));
+		ed::BeginNode(uniqueID++);
+		ImGui::Text("CHANGE POSITION Z");
+		ed::BeginPin(uniqueID++, ed::PinKind::Input);
+		ImGui::Text(ICON_FA_ARROW_RIGHT " In");
+		ed::EndPin();
+		ImGui::SameLine();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::EndNode();
+	}
+	if (ADD_NODE_CHANGE_SIZE_X_variable == 1) {
+		ed::SetNodePosition(uniqueID++, ImVec2(50, 150));
+		ed::BeginNode(uniqueID++);
+		ImGui::Text("CHANGE SIZE X");
+		ed::BeginPin(uniqueID++, ed::PinKind::Input);
+		ImGui::Text(ICON_FA_ARROW_RIGHT " In");
+		ed::EndPin();
+		ImGui::SameLine();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::EndNode();
+	}
+	if (ADD_NODE_CHANGE_SIZE_Y_variable == 1) {
+		ed::SetNodePosition(uniqueID++, ImVec2(50, 150));
+		ed::BeginNode(uniqueID++);
+		ImGui::Text("CHANGE SIZE Y");
+		ed::BeginPin(uniqueID++, ed::PinKind::Input);
+		ImGui::Text(ICON_FA_ARROW_RIGHT " In");
+		ed::EndPin();
+		ImGui::SameLine();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::EndNode();
+	}
+	if (ADD_NODE_CHANGE_SIZE_Z_variable == 1) {
+		ed::SetNodePosition(uniqueID++, ImVec2(50, 150));
+		ed::BeginNode(uniqueID++);
+		ImGui::Text("CHANGE SIZE Z");
+		ed::BeginPin(uniqueID++, ed::PinKind::Input);
+		ImGui::Text(ICON_FA_ARROW_RIGHT " In");
+		ed::EndPin();
+		ImGui::SameLine();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::EndNode();
+	}
+	if (ADD_NODE_MOVE_CAMERA_DOWN_variable == 1) {
+		ed::SetNodePosition(uniqueID++, ImVec2(50, 150));
+		ed::BeginNode(uniqueID++);
+		ImGui::Text("MOVE CAMERA DOWN");
+		ed::BeginPin(uniqueID++, ed::PinKind::Input);
+		ImGui::Text(ICON_FA_ARROW_RIGHT " In");
+		ed::EndPin();
+		ImGui::SameLine();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::EndNode();
 	}
 	if (ADD_NODE_MOVE_CAMERA_LEFT_variable == 1) {
-		this->addNodeText("MOVE CAMERA LEFT");
+		ed::SetNodePosition(uniqueID++, ImVec2(50, 150));
+		ed::BeginNode(uniqueID++);
+		ImGui::Text("MOVE CAMERA LEFT");
+		ed::BeginPin(uniqueID++, ed::PinKind::Input);
+		ImGui::Text(ICON_FA_ARROW_RIGHT " In");
+		ed::EndPin();
+		ImGui::SameLine();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::EndNode();
+	}
+	if (ADD_NODE_MOVE_CAMERA_RIGHT_variable == 1) {
+		ed::SetNodePosition(uniqueID++, ImVec2(50, 150));
+		ed::BeginNode(uniqueID++);
+		ImGui::Text("MOVE CAMERA RIGHT");
+		ed::BeginPin(uniqueID++, ed::PinKind::Input);
+		ImGui::Text(ICON_FA_ARROW_RIGHT " In");
+		ed::EndPin();
+		ImGui::SameLine();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::EndNode();
+	}
+	if (ADD_NODE_MOVE_CAMERA_UP_variable == 1) {
+		ed::SetNodePosition(uniqueID++, ImVec2(50, 150));
+		ed::BeginNode(uniqueID++);
+		ImGui::Text("MOVE CAMERA UP");
+		ed::BeginPin(uniqueID++, ed::PinKind::Input);
+		ImGui::Text(ICON_FA_ARROW_RIGHT " In");
+		ed::EndPin();
+		ImGui::SameLine();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::EndNode();
+	}
+	if (ADD_NODE_ROTATE_AROUD_X_MATRIX_variable == 1) {
+		ed::SetNodePosition(uniqueID++, ImVec2(50, 150));
+		ed::BeginNode(uniqueID++);
+		ImGui::Text("ROTATE AROUND X AXES");
+		ed::BeginPin(uniqueID++, ed::PinKind::Input);
+		ImGui::Text(ICON_FA_ARROW_RIGHT " In");
+		ed::EndPin();
+		ImGui::SameLine();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::EndNode();
+	}
+	if (ADD_NODE_ROTATE_AROUND_Y_MATRIX_variable == 1)
+	{
+		ed::SetNodePosition(uniqueID++, ImVec2(50, 150));
+		ed::BeginNode(uniqueID++);
+		ImGui::Text("ROTATE AROUND Y AXES");
+		ed::BeginPin(uniqueID++, ed::PinKind::Input);
+		ImGui::Text(ICON_FA_ARROW_RIGHT " In");
+		ed::EndPin();
+		ImGui::SameLine();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::EndNode();
+	}
+	if (ADD_NODE_ROTATE_AROUND_Z_MATRIX_variable == 1) {
+		ed::SetNodePosition(uniqueID++, ImVec2(50, 150));
+		ed::BeginNode(uniqueID++);
+		ImGui::Text("ROTATE AROUND Z AXES");
+		ed::BeginPin(uniqueID++, ed::PinKind::Input);
+		ImGui::Text(ICON_FA_ARROW_RIGHT " In");
+		ed::EndPin();
+		ImGui::SameLine();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::BeginPin(uniqueID++, ed::PinKind::Output);
+		ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
+		ed::EndPin();
+		ed::EndNode();
 	}
 }
 
 void UserInterface::setNodeButtonFORadd() {
-	if (ImGui::Button(static_cast<const char*>("ROTATE RIGHT"), ImVec2(SRC_WIDTH / 6, SRC_HEIGHT / 50))) {
-		this->addNode(ADD_NODE_ROTATE_RIGHT);
-	}
-	ImGui::Separator();
+	
 	if (ImGui::Button("ROTATE_LEFT", ImVec2(SRC_WIDTH / 6, SRC_HEIGHT / 50))) {
 		this->addNode(ADD_NODE_ROTATE_LEFT);
 	}
@@ -569,8 +856,8 @@ void UserInterface::addNode(int typeOfNode) {
 		ADD_NODE_CHANGE_CAMERA_SPEED_variable = 1;
 		break;
 	case ADD_NODE_CHANGE_PERCENT_TEXTURE:
-		break;
 		ADD_NODE_CHANGE_PERCENT_TEXTURE_variable = 1;
+		break;
 	case ADD_NODE_CHANGE_POSITION_X:
 		ADD_NODE_CHANGE_POSITION_X_variable = 1;
 		break;

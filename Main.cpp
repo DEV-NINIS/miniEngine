@@ -480,6 +480,8 @@ int main() {
 			// Start drawing nodes.
 			Interface->recevedNodeValueForSetNodeText();
 			
+
+			
 			ed::End();
 			ImGui::End();
 			Interface->setNodeAddButtonWindow();
