@@ -395,39 +395,6 @@ void UserInterface::setPositionObjectZ() {
 
 // node
 
-void UserInterface::addNodeText(int variable, int& uniqueID, const char* text) {
-	
-
-		
-		if (variable == 1) {
-			ed::NodeId idnode = uniqueID++;
-			ed::PinId inodepinin = uniqueID++;
-			ed::PinId inodepinout1 = uniqueID++;
-			ed::PinId inodepinout2 = uniqueID++;
-
-			ed::SetNodePosition(idnode, ImVec2(50, 150));
-			ed::BeginNode(idnode);
-			ImGui::Text(text);
-			ed::BeginPin(inodepinin, ed::PinKind::Input);
-			ImGui::Text(ICON_FA_ARROW_RIGHT " In");
-			ed::EndPin();
-			ImGui::SameLine();
-			ed::BeginPin(inodepinout1, ed::PinKind::Output);
-			ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
-			ed::EndPin();
-			ed::BeginPin(inodepinout2, ed::PinKind::Output);
-			ImGui::Text("Out " ICON_FA_ARROW_RIGHT);
-			ed::EndPin();
-			ed::EndNode();
-		}
-			
-		
-	
-
-
-		
-	
-}
 void UserInterface::recevedNodeValueForSetNodeText() {
 	int uniqueID =  1;
 
