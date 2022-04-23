@@ -26,6 +26,7 @@
 #include <commdlg.h>
 #include <shellapi.h>
 #include <fileapi.h>
+#include "Time.h"
 #include <commdlg.h>
 #include <filesystem> // C++17 standard header file name
 #define COLOR_FRAME 1
@@ -205,7 +206,9 @@ int main() {
 	int uniqueId = 1;
 	ed::Config config;
 	static ed::EditorContext* g_Context = ed::CreateEditor(&config);
-
+	float ab2 = 8;
+	std::cout << initTime<float>(ab2).TimeNow << std::endl;;
+	
 
 	VariablesSize SizeObject(window);
 	SizeObject.setCHANGE_VALUE_ALL_SIZE(mesh.getShaderObject(), IN_FRAME_TRUE);
@@ -223,7 +226,7 @@ int main() {
 			Interface->setSettingFrame();
 			Interface->interfaceEditorWindow();
 		}
-
+		
 	
 	
 
