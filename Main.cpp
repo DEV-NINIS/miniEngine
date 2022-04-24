@@ -7,6 +7,7 @@
 #include "object.h"
 #include "Render.h"
 #include "imgui/imgui_node_editor.h"
+#include "Time.h"
 #include "imgui/imgui_bezier_math.h"
 #include "stbi_image.h"
 #include "file.h"
@@ -26,16 +27,11 @@
 #include <commdlg.h>
 #include <shellapi.h>
 #include <fileapi.h>
-#include "Time.h"
+#include "Time.h" // this include import the time of work of animation .ect
 #include <commdlg.h>
 #include <filesystem> // C++17 standard header file name
 #define COLOR_FRAME 1
 #define COLOR_OBJECT 2
-IMGUI_API ImTextureID ImGui_CreateTexture32(const void* data, int width, int height);
-IMGUI_API ImTextureID ImGui_CreateTextureFromDescriptor(...); // API dependent
-IMGUI_API void        ImGui_DestroyTexture(ImTextureID texture);
-IMGUI_API int         ImGui_GetTextureWidth(ImTextureID texture);
-IMGUI_API int         ImGui_GetTextureHeight(ImTextureID texture);
 
 #define ADD_NODE_ROTATE_RIGHT 1
 #define ADD_NODE_ROTATE_LEFT 2
@@ -206,13 +202,14 @@ int main() {
 	int uniqueId = 1;
 	ed::Config config;
 	static ed::EditorContext* g_Context = ed::CreateEditor(&config);
-	float ab2 = 8;
-	std::cout << initTime<float>(ab2).TimeNow << std::endl;;
-	
-
+	float ab2 = 8.3f;
+	Time::TimeValuesResultT<float> valuesTime = Time::initTime<float>(ab2);
 	VariablesSize SizeObject(window);
 	SizeObject.setCHANGE_VALUE_ALL_SIZE(mesh.getShaderObject(), IN_FRAME_TRUE);
 	AnimationProgramUser* UserProgram = nullptr;
+	Time::FonctionThreadToStartTime<float>(valuesTime);
+	
+	
 
 	while (!glfwWindowShouldClose(window)) // render
 	{
