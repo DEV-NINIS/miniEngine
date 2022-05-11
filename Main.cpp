@@ -6,18 +6,22 @@
 #include <string>
 #include "object.h"
 #include "Render.h"
-#include "imgui/imgui_node_editor.h"
+#include "Editor/imgui/imgui_node_editor.h"
 #include "Time.h"
-#include "imgui/imgui_bezier_math.h"
+#include "Editor/imgui/imgui_bezier_math.h"
 #include "stbi_image.h"
 #include "file.h"
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_glfw.h"
-#include "UserInterface.h"
-#include "imgui/imgui_impl_opengl3.h"
+#include "Editor/imgui/imgui.h"
+#include "Editor/imgui/imgui_impl_glfw.h"
+#include "Editor/UserInterface.h"
+#include "Editor/imgui/imgui_impl_opengl3.h"
 #include "glmAnimation3D.h"
-#include "iconcpp.h"
-#include "icons.h"
+#include "Editor/icon/icons.h"
+#include "Editor/icon/iconcpp.h"
+#include "Editor/EditorStart.h"
+#include "Editor/EditorPosition.h"
+#include "Editor/EditorCamera.h"
+#include "Editor/EditorSize.h"
 #include "Camera.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -54,24 +58,23 @@
 #define ADD_NODE_CHANGE_SIZE_Y 19
 #define ADD_NODE_CHANGE_SIZE_Z 20
 #define ADD_NODE_CHANGE_DIRECTION_ROTATE_MATRIX 21
+#define ADD_NODE_ALL_NODES 22
+
 
 #define IN_FRAME_NOT static_cast<float>(1.0f)
 #define IN_FRAME_TRUE static_cast<float>(2.0f)
 
+#define SRC_HEIGHT glfwGetVideoMode(glfwGetPrimaryMonitor())->height
+#define SRC_WIDTH glfwGetVideoMode(glfwGetPrimaryMonitor())->width
+
 
 static bool HOTreload = false;
+static bool IndicatorFinishLoading = false;
 namespace ed = ax::NodeEditor;
 
 
 
-//												_____
-//               /\         |\		|	 |	   |
-//				/  \		| \		|	 |	   |
-//			   /	\		|  \	|	 |	   |_____
-//			  /------\		|	\	|	 |			 |
-//			 /		  \		|	 \	|	 |			 |
-//			/		   \	|	  \	|	 |		_____|
-//
+
 void setCameraPitchYaw(GLFWwindow* window, Camera& camera, float &lastX, float &lastY) {
 	lastX = (glfwGetVideoMode(glfwGetPrimaryMonitor())->width)/2;
 	lastY = (glfwGetVideoMode(glfwGetPrimaryMonitor())->height) / 2;
@@ -114,7 +117,13 @@ char* unconstchar(const char* s) {
 		return res;
 	}
 }
+void LoadingFonction() {
+	while (!IndicatorFinishLoading) {
+		std::cout << "loading..." << std::endl;
+	}
+}
 int main() {
+	std::thread threadLoad(LoadingFonction);
 
 	// set parametters of OpenGL
 	glfwInit();
@@ -181,19 +190,18 @@ int main() {
 	UserInterface* Interface = nullptr; Interface = new UserInterface(window); // in the builder of this class they create a imgui context is because in argument they have GLFWwindow* ...
 	if (HOTreload == false) {
 		Interface->setStyleSettingFrame(window);
-		
+
 	}
 	basicObject::cube* Cube; Cube = new basicObject::cube(window);
 	std::string formatFile; formatFile = ".dev_ninis";
-	 writing::save Save; reading::read Read;
-	 Camera camera;
+	writing::save Save; reading::read Read;
+	Camera camera;
 	Render rendering(window); objectUser::Mesh mesh(window);
 	int* IndicatorFilepath = nullptr; IndicatorFilepath = new int; *IndicatorFilepath = Interface->getIndicatorTextureFilePath();
 	mesh.setBufferMesh();
 	mesh.CompileShaderMesh();
 	mesh.setTexture1(unconstchar("img/containerBois.jpg"));
 	mesh.setTexture2(unconstchar("img/containerBois.jpg"));
-	Interface->LastedFloatFrame = 1;
 	float valueXColor = 0.2f; float ValueYcolor = 0.6f; float ValueZColor = 0.9f; float ValueWColor = 0.1f;
 	float deltatime = 0, currentFrame = 0, lastedFrame = 0;
 	TCHAR filepath = 100; char filePathBuffer[100]; filePathBuffer[100];
@@ -203,14 +211,14 @@ int main() {
 	ed::Config config;
 	static ed::EditorContext* g_Context = ed::CreateEditor(&config);
 	float ab2 = 8.3f;
-	Time::TimeValuesResultT<float> valuesTime = Time::initTime<float>(ab2);
 	VariablesSize SizeObject(window);
 	SizeObject.setCHANGE_VALUE_ALL_SIZE(mesh.getShaderObject(), IN_FRAME_TRUE);
 	AnimationProgramUser* UserProgram = nullptr;
-	Time::FonctionThreadToStartTime<float>(valuesTime);
-	
-	
 
+	std::vector<Time::TimeValuesResultT<float>*> valuesTime = { nullptr };
+	Editor::EditorStart* StandarEditor; StandarEditor = new Editor::EditorStart(window);
+	IndicatorFinishLoading = true;
+	threadLoad.join();
 	while (!glfwWindowShouldClose(window)) // render
 	{
 		float currentFrame = static_cast<float>(glfwGetTime());
@@ -219,29 +227,39 @@ int main() {
 
 		mesh.setBufferMesh();
 
+
+
+
 		if (HOTreload == false) {
 			Interface->setSettingFrame();
 			Interface->interfaceEditorWindow();
+
 		}
-		
-	
-	
 
-	
 
-		
+
+
 
 
 		processInput(window);
-		glClearColor(Interface->lastedColorFrame[0], Interface->lastedColorFrame[1], Interface->lastedColorFrame[2], 1.0f);
+		glClearColor(StandarEditor->lastedColorFrame[0], StandarEditor->lastedColorFrame[1], StandarEditor->lastedColorFrame[2], 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		mesh.useShaderObject();
-		camera.processInputCamera(window, deltatime, Interface->getCmerraSpeed());
+		camera.processInputCamera(window, deltatime, StandarEditor->getCmerraSpeed());
+		if (HOTreload == false) {
+			
+			
+		}
+	
+
+
+
+		
 
 		// initialise matrix, ect...
 		matrixAnimation->initialiseMatrix();
 		matrixAnimation->setLookAtMatrixCamera(camera.getcamPos(), camera.getcamFront(), camera.getcamUp());
-		matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
+		matrixAnimation->setRotateLeft(RotateValue, StandarEditor->getValueRotateX(), StandarEditor->getValueRotateY(), StandarEditor->getValueRotateZ());
 		matrixAnimation->setMatrixPerspectiveProjection(FOV, resX2, resY2, camera);
 		matrixAnimation->setTransformValue();
 		matrixAnimation->frameMatrix(mesh.getShaderObject());
@@ -249,91 +267,25 @@ int main() {
 
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 			HOTreload = false;
-
 			glViewport(*resX / 4.5, 0, *resX, *resY);
 		}
 		matrixAnimation->setPercentTexture(mesh.getShaderObject(), Interface->getpercentTexture());
 
-		if (HOTreload == false) {
-			ImGui::Begin("Editor");
-			if (ImGui::Button( ICON_FA_PLAY "  PLAY", ImVec2(2560 / 4.35, 40.0f))) {
-				HOTreload = true;
-				glViewport(0, 0, *resX, *resY);
-
-			}
-			if (ImGui::CollapsingHeader("size")) {
-				if (UserProgram == nullptr) {
-					UserProgram = new VariablesSize(window);
-				}
-				ImGui::Separator();
-				Interface->setLastedmatrix();
-				ImGui::Separator();
-				SizeObject.setCHANGE_VALUE_ALL_SIZE(mesh.getShaderObject(), IN_FRAME_NOT);
-				ImGui::Separator();
-
-				UserProgram->setCHANGE_X(IN_FRAME_NOT);
-				matrixAnimation->frameMatrix(mesh.getShaderObject());
-				ImGui::Separator();
-				Interface->setLastedmatrix();
-				UserProgram->setCHANGE_Y(IN_FRAME_NOT);
-				matrixAnimation->frameMatrix(mesh.getShaderObject());
-				ImGui::Separator();
-
-
-				Interface->setLastedmatrix();
-				UserProgram->setCHANGE_Z(IN_FRAME_NOT);
-				ImGui::Separator();
-				SizeObject.InputSize();
-
-				matrixAnimation->frameMatrix(mesh.getShaderObject());
-				ImGui::Separator();
-			}
-			ImGui::Spacing();
-			if (ImGui::CollapsingHeader("positions")) {
-				ImGui::Spacing();
-				Interface->setPositionObjectX();
-				ImGui::Separator();
-				matrixAnimation->setPositionObject(mesh.getShaderObject(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
-				Interface->setPositionObjectY();
-				ImGui::Separator();
-				matrixAnimation->setPositionObject(mesh.getShaderObject(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
-				Interface->setPositionObjectZ();
-				ImGui::Separator();
-				matrixAnimation->setPositionObject(mesh.getShaderObject(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
-			}
-		}
-
-
-
-		if (HOTreload == true) {
-			SizeObject.setCHANGE_VALUE_ALL_SIZE(mesh.getShaderObject(), Interface->LastedFloatFrame);
-		}
-
-
-
-
-
-		//Left side
-		if (HOTreload == false) {
-
+		if (HOTreload == false) { 
+			ImGui::Begin("Editor", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 			if (ImGui::BeginMainMenuBar()) {
 				if (ImGui::BeginMenu("file")) {
 					if (ImGui::MenuItem("Open")) {
 						Read.setValueFile(Read.selectPath(window));
 						Interface = nullptr;
-						Interface = new UserInterface(window, Read.getValueColorFrameRFile(), Read.getValueColorFrameGFile(), Read.getValueColorFrameBFile(),
-							Read.getLastedScaleXFile(), Read.getLastedScaleYFile(), Read.getLastedScaleZFile(), Read.getValueTransformXFile(),
-							Read.getValueTransformYFile(), Read.getValueTransformZFile(), Read.getcolorObjectFileR(),
-							Read.getcolorObjectFileG(), Read.getcolorObjectFileB(), Read.getValuePositionObjectFileX(), Read.getValuePositionObjectFileY(),
-							Read.getValuePositionObjectFileZ(), Read.getValueCameraSpeedFile(), Read.getfiletextureFile());
-						matrixAnimation->frameMatrix(mesh.getShaderObject());
-						mesh.setTexture1(Interface->filePathPointer[0]);
-						mesh.setTexture2(Interface->filePathPointer[0]);
-						matrixAnimation->setPercentTexture(mesh.getShaderObject(), Interface->getpercentTexture());
-						SizeObject.setCHANGE_VALUE_ALL_SIZE(mesh.getShaderObject(), Interface->LastedFloatFrame);
-						matrixAnimation->setPositionObject(mesh.getShaderObject(), Interface->getPositionObjectX(), Interface->getPositionObjectY(), Interface->getPositionObjectZ());
-						matrixAnimation->setColorObject(mesh.getShaderObject(), Interface->LastedColorObject[0], Interface->LastedColorObject[1], Interface->LastedColorObject[2]);
-						matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
+
+						mesh.setTexture1(StandarEditor->filePathPointer[0]);
+						mesh.setTexture2(StandarEditor->filePathPointer[0]);
+						matrixAnimation->setPercentTexture(mesh.getShaderObject(), StandarEditor->getpercentTexture());
+						SizeObject.setCHANGE_VALUE_ALL_SIZE(mesh.getShaderObject(), StandarEditor->LastedFloatFrame);
+						matrixAnimation->setPositionObject(mesh.getShaderObject(), StandarEditor->getPositionObjectX(), StandarEditor->getPositionObjectY(), StandarEditor->getPositionObjectZ());
+						matrixAnimation->setColorObject(mesh.getShaderObject(), StandarEditor->LastedColorObject[0], StandarEditor->LastedColorObject[1], StandarEditor->LastedColorObject[2]);
+						matrixAnimation->setRotateLeft(RotateValue, StandarEditor->getValueRotateX(), StandarEditor->getValueRotateY(), StandarEditor->getValueRotateZ());
 					}
 					ImGui::Spacing();
 					if (ImGui::MenuItem("Save")) {
@@ -353,179 +305,241 @@ int main() {
 
 					}
 					ImGui::EndMenu();
+
 				}
 				ImGui::EndMainMenuBar();
 			}
-			// end menubar
+			if (ImGui::Button(ICON_FA_PLAY "  PLAY", ImVec2(2560 / 4.35, 40.0f))) {
+				HOTreload = true;
+				glViewport(0, 0, *resX, *resY);
 
-
-
-			// echelle du cube
-
-			//
-
-			// position cube
-			if (HOTreload == false) {
-
-				// Animation
-
-				ImGui::Spacing();
-				// texture
-				if (ImGui::CollapsingHeader("texture")) {
-					if (Interface->inputDemandSelectFolderForTex1() == true) {
-						indicatorFolderTexture1 = 1;
-						filePathTex1 = unconstchar(static_cast<const char*>(Read.selectPath(window).c_str()));
-					}
-					if (indicatorFolderTexture1 == 1) {
-						Interface->inputFileTexture1(filePathTex1);
-					}
-					if (Interface->inputDemandSelectFolderForTex2() == true) {
-						indicatorFolderTexture2 = 1;
-						filePathTex2 = unconstchar(static_cast<const char*>(Read.selectPath(window).c_str()));
-					}
-					if (indicatorFolderTexture2 == 1) {
-						Interface->inputFileTexture2(filePathTex2);
-					}
-					Interface->setPercentTexture<void>();
-					if (Interface->confirmFilePath() == true) {
-						mesh.setTexture1(filePathTex1);
-						mesh.setTexture2(filePathTex2);
-					}
+			}
+			if (StandarEditor->setCollaspedHeaderSize()) {
+				if (UserProgram == nullptr) {
+					UserProgram = new VariablesSize(window);
 				}
+				ImGui::Separator();
+				ImGui::Separator();
+				SizeObject.setCHANGE_VALUE_ALL_SIZE(mesh.getShaderObject(), IN_FRAME_NOT);
+				ImGui::Separator();
+
+				UserProgram->setCHANGE_X(IN_FRAME_NOT);
+				matrixAnimation->frameMatrix(mesh.getShaderObject());
+				ImGui::Separator();
+				UserProgram->setCHANGE_Y(IN_FRAME_NOT);
+				matrixAnimation->frameMatrix(mesh.getShaderObject());
+				ImGui::Separator();
+
+
+				UserProgram->setCHANGE_Z(IN_FRAME_NOT);
+				ImGui::Separator();
+				SizeObject.InputSize();
+
+				matrixAnimation->frameMatrix(mesh.getShaderObject());
+				ImGui::Separator();
+			}
+			ImGui::Spacing();
+			if (StandarEditor->setCollaspedHeaderPosition()) {
+				ImGui::Spacing();
+				StandarEditor->setPositionObjectX();
+				ImGui::Separator();
+				matrixAnimation->setPositionObject(mesh.getShaderObject(), StandarEditor->getPositionObjectX(), StandarEditor->getPositionObjectY(), StandarEditor->getPositionObjectZ());
+				StandarEditor->setPositionObjectY();
+				ImGui::Separator();
+				matrixAnimation->setPositionObject(mesh.getShaderObject(), StandarEditor->getPositionObjectX(), StandarEditor->getPositionObjectY(), StandarEditor->getPositionObjectZ());
+				StandarEditor->setPositionObjectZ();
+				ImGui::Separator();
+				matrixAnimation->setPositionObject(mesh.getShaderObject(), StandarEditor->getPositionObjectX(), StandarEditor->getPositionObjectY(), StandarEditor->getPositionObjectZ());
 			}
 		}
+
+
 
 		if (HOTreload == true) {
-			matrixAnimation->setRotateLeft(RotateValue, Interface->getValueRotateX(), Interface->getValueRotateY(), Interface->getValueRotateZ());
-			RotateValue += 1;
-
+			SizeObject.setCHANGE_VALUE_ALL_SIZE(mesh.getShaderObject(), StandarEditor->LastedFloatFrame);
 		}
+
+
+
+
+
+		//Left side
+
+			
+				// end menubar
+
+
+
+				// echelle du cube
+
+				//
+
+				// position cube
+				if (HOTreload == false) {
+
+					// Animation
+
+					ImGui::Spacing();
+					// texture
+					if (StandarEditor->setCollaspedHeaderTexture()) {
+						if (Interface->inputDemandSelectFolderForTex1() == true) {
+							indicatorFolderTexture1 = 1;
+							filePathTex1 = unconstchar(static_cast<const char*>(Read.selectPath(window).c_str()));
+						}
+						if (indicatorFolderTexture1 == 1) {
+							Interface->inputFileTexture1(filePathTex1);
+						}
+						if (Interface->inputDemandSelectFolderForTex2() == true) {
+							indicatorFolderTexture2 = 1;
+							filePathTex2 = unconstchar(static_cast<const char*>(Read.selectPath(window).c_str()));
+						}
+						if (indicatorFolderTexture2 == 1) {
+							Interface->inputFileTexture2(filePathTex2);
+						}
+						StandarEditor->setPercentTexture();
+						if (Interface->confirmFilePath() == true) {
+							mesh.setTexture1(filePathTex1);
+							mesh.setTexture2(filePathTex2);
+						}
+					}
+				}
+
+			if (HOTreload == true) {
+				matrixAnimation->setRotateLeft(RotateValue, StandarEditor->getValueRotateX(), StandarEditor->getValueRotateY(), StandarEditor->getValueRotateZ());
+				RotateValue += 1;
+
+			}
+			if (HOTreload == false) {
+				ImGui::Spacing();
+
+				// menubar
+
+				// settings 
+				// colors
+
+				// camera
+				if (StandarEditor->setCollaspedHeaderCamera() == true) {
+					if (StandarEditor != nullptr) {
+						ImGui::Spacing();
+						StandarEditor->setCameraSpeed();
+						ImGui::Spacing();
+						StandarEditor->setChangeFOV();
+						FOV = StandarEditor->getFOV_Value();
+						ImGui::Text("press E to forward ");
+						ImGui::Spacing();
+						ImGui::Text("press D to move back ");
+						ImGui::Spacing();
+						ImGui::Text("press S to move right ");
+						ImGui::Spacing();
+						ImGui::Text("press F to move left ");
+						ImGui::Spacing();
+					}
+
+				}
+				if (HOTreload == false) {
+					ImGui::Spacing();
+					// FOV
+
+
+					// render
+
+
+
+
+					matrixAnimation->setLookAtMatrixCamera(camera.getcamPos(), camera.getcamFront(), camera.getcamUp());
+
+
+					if (StandarEditor->setCollaspedHeaderColorObject()){
+						ImGui::Spacing();
+						StandarEditor->setColorObjectR();
+						ImGui::Spacing();
+					StandarEditor->setColorObjectG();
+					ImGui::Spacing();
+					StandarEditor->setColorObjectB();
+					ImGui::Spacing();
+					matrixAnimation->setColorObject(mesh.getShaderObject(), StandarEditor->LastedColorObject[0], StandarEditor->LastedColorObject[1], StandarEditor->LastedColorObject[2]);
+					StandarEditor->setColorEditorObject(COLOR_OBJECT);
+					}
+
+					ImGui::Spacing();
+
+					if (StandarEditor->setCollaspedHeaderColorFrame()) {
+						StandarEditor->setColorR();
+						ImGui::Spacing();
+						StandarEditor->setColorG();
+						ImGui::Spacing();
+						StandarEditor->setColorB();
+						ImGui::Spacing();
+						StandarEditor->setColorEditorFrame(COLOR_FRAME);
+						setCHANGE_DIRECTION_ROTATE_MATRIX<void>();
+					}
+
+					ImGui::End();
+				}
+				// node 
+
+
+
+				Interface->setNodeWindow();
+				Interface->setStyleNodeFrame();
+				ImGui::Begin("Node", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+
+
+
+				ed::SetCurrentEditor(g_Context);
+				ed::Begin("My Editor", ImVec2(0.0, 0.0f));
+				// Start drawing nodes.
+				Interface->recevedNodeValueForSetNodeText();
+
+
+
+				ed::End();
+				ImGui::End();
+				Interface->setNodeAddButtonWindow();
+				ImGui::Begin("add Node +", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+				Interface->setNodeButtonFORadd();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			}
+			// Get the size of the child (i.e. the whole draw size of the windows).
+			matrixAnimation->frameMatrix(mesh.getShaderObject());
+			rendering.drawElements(mesh, numberMesh);
+			
+			if (HOTreload == false) {
+				ImGui::End();
+				Interface->endFrame();
+			}
+			
+			// ------ End of docking --------
+			// node window
+
+			glEnable(GL_DEPTH_TEST);
+			glfwSwapBuffers(window);
+			glfwPollEvents();
+		}
+
 		if (HOTreload == false) {
-			ImGui::Spacing();
-
-			// menubar
-
-			// settings 
-			// colors
-
-			// camera
-			if (ImGui::CollapsingHeader("Camera")) {
-				ImGui::Spacing();
-				Interface->setCameraSpeed();
-				ImGui::Spacing();
-				Interface->setChangeFOV();
-				FOV = Interface->getFOV_Value();
-				ImGui::Text("press E to forward ");
-				ImGui::Spacing();
-				ImGui::Text("press D to move back ");
-				ImGui::Spacing();
-				ImGui::Text("press S to move right ");
-				ImGui::Spacing();
-				ImGui::Text("press F to move left ");
-				ImGui::Spacing();
-				
-			}
-
-			ImGui::Spacing();
-			// FOV
-
-			
-			// render
-			
-
-
-
-			matrixAnimation->setLookAtMatrixCamera(camera.getcamPos(), camera.getcamFront(), camera.getcamUp());
-			ImGui::Columns(2);
-			ImGui::SetColumnOffset(1, glfwGetVideoMode(glfwGetPrimaryMonitor())->width / 4 / 2);
-			ImGui::Spacing();
-			if (ImGui::CollapsingHeader("Color Object")) {
-				ImGui::Spacing();
-				Interface->setColorObjectR();
-				ImGui::Spacing();
-				Interface->setColorObjectG();
-				ImGui::Spacing();
-				Interface->setColorObjectB();
-				ImGui::Spacing();
-				matrixAnimation->setColorObject(mesh.getShaderObject(), Interface->LastedColorObject[0], Interface->LastedColorObject[1], Interface->LastedColorObject[2]);
-				Interface->setColorEditorObject(COLOR_OBJECT);
-			}
-			ImGui::NextColumn();
-			ImGui::Spacing();
-			if (ImGui::CollapsingHeader("Color Frame")) {
-				ImGui::Spacing();
-				Interface->setColorR();
-				ImGui::Spacing();
-				Interface->setColorG();
-				ImGui::Spacing();
-				Interface->setColorB();
-				ImGui::Spacing();
-				Interface->setColorEditorFrame(COLOR_FRAME);
-				setCHANGE_DIRECTION_ROTATE_MATRIX<void>();
-			}
-			
-			ImGui::End();
-			// node 
-
-
-
-			Interface->setNodeWindow();
-			Interface->setStyleNodeFrame();
-			ImGui::Begin("Node");
-
-			
-
-			ed::SetCurrentEditor(g_Context);
-			ed::Begin("My Editor", ImVec2(0.0, 0.0f));
-			// Start drawing nodes.
-			Interface->recevedNodeValueForSetNodeText();
-			
-
-			
-			ed::End();
-			ImGui::End();
-			Interface->setNodeAddButtonWindow();
-			ImGui::Begin("add Node +");
-			Interface->setNodeButtonFORadd();
-			
-
-
-
-
-
-
-		
-
-
-
-
-
-
-
-
+			ed::DestroyEditor(g_Context);
 		}
-		// Get the size of the child (i.e. the whole draw size of the windows).
-		matrixAnimation->frameMatrix(mesh.getShaderObject());
-		rendering.drawElements(mesh, numberMesh);
-		if (HOTreload == false) {
-			ImGui::End();
-			Interface->endFrame();
-		}
-		// ------ End of docking --------
-		// node window
-	
-		glEnable(GL_DEPTH_TEST);
-		glfwSwapBuffers(window);
-		glfwPollEvents();
+
+		Cube->~cube();
+		mesh.~Mesh();
+		delete Cube; Cube = NULL;
 	}
 
-	if (HOTreload == false) {
-		ed::DestroyEditor(g_Context);
-	}
-
-	Cube->~cube();
-	mesh.~Mesh();
-	delete Cube; Cube = NULL;
-}
 
 
