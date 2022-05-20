@@ -29,7 +29,7 @@ read::read() {
 	 ValueColorFrameBFile = 0;
 	 ValueCameraSpeedFile = 0;
 	 ValueFOVFile = 0;
-	 filetextureFile;
+	 filetextureFile = 0;
 	 fileContent; NumberMove = 0;
 	 LastedScaleXFile = 0; LastedScaleYFile = 0; LastedScaleZFile = 0;
 

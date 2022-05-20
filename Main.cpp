@@ -200,8 +200,9 @@ int main() {
 	int* IndicatorFilepath = nullptr; IndicatorFilepath = new int; *IndicatorFilepath = Interface->getIndicatorTextureFilePath();
 	mesh.setBufferMesh();
 	mesh.CompileShaderMesh();
-	mesh.setTexture1(unconstchar("img/containerBois.jpg"));
-	mesh.setTexture2(unconstchar("img/containerBois.jpg"));
+	mesh.setTexture1(unconstchar("img/containerBois.jpg"), 0);
+	mesh.setTexture1(unconstchar("img/containerBois.jpg"), 1);
+
 	float valueXColor = 0.2f; float ValueYcolor = 0.6f; float ValueZColor = 0.9f; float ValueWColor = 0.1f;
 	float deltatime = 0, currentFrame = 0, lastedFrame = 0;
 	TCHAR filepath = 100; char filePathBuffer[100]; filePathBuffer[100];
@@ -253,7 +254,6 @@ int main() {
 	
 
 
-
 		
 
 		// initialise matrix, ect...
@@ -264,6 +264,8 @@ int main() {
 		matrixAnimation->setTransformValue();
 		matrixAnimation->frameMatrix(mesh.getShaderObject());
 		matrixAnimation->setPercentTexture(mesh.getShaderObject(), Interface->getpercentTexture());
+		matrixAnimation->drawAnimation(mesh.getShaderObject(), rendering, mesh, camera.getcamPos(), camera.getcamFront(), camera.getcamUp());
+
 
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 			HOTreload = false;
@@ -279,8 +281,8 @@ int main() {
 						Read.setValueFile(Read.selectPath(window));
 						Interface = nullptr;
 
-						mesh.setTexture1(StandarEditor->filePathPointer[0]);
-						mesh.setTexture2(StandarEditor->filePathPointer[0]);
+						mesh.setTexture1(StandarEditor->filePathPointer[0], 0);
+						mesh.setTexture1(StandarEditor->filePathPointer[0], 1);
 						matrixAnimation->setPercentTexture(mesh.getShaderObject(), StandarEditor->getpercentTexture());
 						SizeObject.setCHANGE_VALUE_ALL_SIZE(mesh.getShaderObject(), StandarEditor->LastedFloatFrame);
 						matrixAnimation->setPositionObject(mesh.getShaderObject(), StandarEditor->getPositionObjectX(), StandarEditor->getPositionObjectY(), StandarEditor->getPositionObjectZ());
@@ -397,9 +399,11 @@ int main() {
 							Interface->inputFileTexture2(filePathTex2);
 						}
 						StandarEditor->setPercentTexture();
+						 // this fonction set the value in the shader
 						if (Interface->confirmFilePath() == true) {
-							mesh.setTexture1(filePathTex1);
-							mesh.setTexture2(filePathTex2);
+							mesh.setTexture1(filePathTex1, 0);
+							mesh.setTexture1(filePathTex1, 1);
+							mesh.setPercentTexture(StandarEditor->getpercentTexture());
 						}
 					}
 				}
@@ -491,7 +495,7 @@ int main() {
 				// Start drawing nodes.
 				Interface->recevedNodeValueForSetNodeText();
 
-
+				
 
 				ed::End();
 				ImGui::End();
@@ -517,7 +521,6 @@ int main() {
 			}
 			// Get the size of the child (i.e. the whole draw size of the windows).
 			matrixAnimation->frameMatrix(mesh.getShaderObject());
-			rendering.drawElements(mesh, numberMesh);
 			
 			if (HOTreload == false) {
 				ImGui::End();

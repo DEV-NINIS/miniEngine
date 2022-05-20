@@ -6,13 +6,14 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_impl_opengl3.h"
-#include "imgui/imgui_internal.h"
-#include "UserInterface.h"
+#include "Editor/imgui/imgui.h"
+#include "Editor/imgui/imgui_impl_glfw.h"
+#include "Editor/imgui/imgui_impl_opengl3.h"
+#include "Editor/imgui/imgui_internal.h"
+#include "Editor/UserInterface.h"
 
-
+float angle = 20;
+int a = 0;
 std::vector<glm::vec3> CubeVertecices = {
 		glm::vec3(0.6, 1.0, 0.3),
 		glm::vec3(0.6, 1.0, 0.9),
@@ -67,6 +68,20 @@ void glmAnimation3D::setRotateLeft(float Radius, float& ValueX, float& ValueY, f
 	}
 	else {
 		transform = glm::rotate(transform, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	}
+}
+void glmAnimation3D::drawAnimation(GLuint shader, Render render, objectUser::Mesh mesh, glm::vec3 camPos, glm::vec3 camFront, glm::vec3 camUp) {
+	mesh.activeTexture();
+
+	for (int i(0); i < CubeVertecices.size(); i++) {
+		glm::mat4 view = glm::mat4(1.0f);
+		glm::mat4 model = glm::mat4(1.0f);
+		transform = glm::translate(transform, CubeVertecices[i]);
+		transform = glm::rotate(transform, glm::radians(angle * i), glm::vec3(1.0f, 0.3f, 0.5f));
+		this->frameMatrix(shader);
+		this->setLookAtMatrixCamera(camPos, camFront, camUp);
+
+		mesh.drawMesh(); // in this fonction they are the actives textures
 	}
 }
 void glmAnimation3D::initialiseMatrix() {

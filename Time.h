@@ -3,17 +3,17 @@
 #ifndef TIME
 #define TIME
 
-template <typename T> inline bool CheckIfEndTime(T& time, T& timeNow, T& TimeAfterWork);
-
-template <typename T>
-struct TimeValuesResultT {
-	T TimeAfterWork;
-	T TimeNow;
-	T TimeOfWork;
-};
-
-template <typename T> inline TimeValuesResultT<T> initTime(T& TimeWork);
-
+namespace Time {
+	template <typename T>
+	struct TimeValuesResultT {
+		T TimeAfterWork;
+		T TimeNow;
+		T TimeOfWork;
+	};
+	template <typename T> inline bool CheckIfEndTime(TimeValuesResultT<T>& timeValues);
+	template <typename T> inline TimeValuesResultT<T> initTimeAndStartTime(T& TimeWork);
+	
+}
 #include "Time.inl"
 
 

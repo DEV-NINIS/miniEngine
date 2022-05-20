@@ -1,20 +1,24 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <thread>
 
-template <typename T>
-inline bool CheckIfEndTime(T& time, T& timebasic, T& TimeAfterWork) {
-	if (timebasic >= TimeAfterWork) { return true; }
-	else							{ return false; }
-}
+namespace Time {
 
-template <typename T> 
-inline TimeValuesResultT<T> initTime(T& TimeWork) {
-	TimeValuesResultT<T> TimeValues;
-	TimeValues.TimeAfterWork = glfwGetTime() + TimeWork;
-	TimeValues.TimeNow = glfwGetTime();
-	TimeValues.TimeOfWork = TimeWork;
+	template <typename T>
+	inline bool CheckIfEndTime(TimeValuesResultT<T>& timeValues) {
+		if (timeValues.TimeNow >= timeValues.TimeAfterWork) { return true; }
+		else { return false; }
+	}
 
-	return TimeValues;
+	template <typename T>
+	inline TimeValuesResultT<T> initTimeAndStartTime(T& TimeWork) {
+		TimeValuesResultT<T> TimeValues;
+		TimeValues.TimeAfterWork = static_cast<T>(glfwGetTime()) + TimeWork;
+		TimeValues.TimeNow = static_cast<T>(glfwGetTime());
+		TimeValues.TimeOfWork = TimeWork;
+
+		return TimeValues;
+	}
 }
 
 

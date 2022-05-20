@@ -9,35 +9,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-namespace writing
-{
-	#ifndef DEF_SAVE
-	#define DEF_SAVE
 
-	class save
-	{
-	public:
-		save();
-		virtual ~save();
-		std::string setFilePath(GLFWwindow* window);
-		void setFileContent(const char* filetexture, float colorObjectR, float ColorObjectG,
-			float ColorObjectB, float ValuePositionObjectX,
-			float ValuePositionObjectY, float ValuePositionObjectZ, float ValueTransformX, 
-			float ValueTransformY, float ValueTransformZ,
-			float ValueColorFrameR, float ValueColorFrameG, float ValueColorFrameB, 
-			float ValueCameraSpeed, float ValueFOV, float LastedScaleXFile,
-			float LastedScaleYFile, float LastedScaleZFile, std::string filepath);
-		std::string getLastedFile();
-	protected:
-		const char* fileContent;
-		std::string lastedFile;
-	};
-	#endif 
-}
 namespace reading
 {
-	#ifndef DEF_READING
-	#define DEF_READING
+#ifndef DEF_READING
+#define DEF_READING
 
 
 	class read
@@ -104,5 +80,25 @@ namespace reading
 	};
 #endif 
 }
+namespace writing
+{
+	#ifndef DEF_SAVE
+	#define DEF_SAVE
+
+	class save : public reading::read
+	{
+	public:
+		save();
+		virtual ~save();
+		std::string setFilePath(GLFWwindow* window);
+		void setFileContent(std::string filepath);
+		std::string getLastedFile();
+	protected:
+		const char* fileContent;
+		std::string lastedFile;
+	};
+	#endif 
+}
+
 
 

@@ -4,9 +4,14 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include "UserInterface.h"
+#include "Editor/UserInterface.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include "Platform/OpenGL/OpenGLBuffer.h"
+
 // cube object
 
 namespace basicObject {
@@ -61,8 +66,9 @@ namespace objectUser {
 			void CompileShaderMesh();
 			void setBufferMesh();
 			float variableSize1(float variable);
-			void setTexture1(char* filePath);
+			void setTexture1(char* filePath, int NumberTexture);
 			void setTexture2(char* filePath);
+			void setPercentTexture(float PercentTexture);
 			void drawMesh();
 			void activeTexture();
 			unsigned int variableSize(unsigned int variable);
@@ -78,20 +84,23 @@ namespace objectUser {
 			static std::vector<unsigned int> indexObject;
 			static std::vector<float> verteciesObject;
 			static std::vector<unsigned int> normalIndices;
+			static GLuint index[];
+			static std::vector<GLfloat> Vertecies;
 			std::vector<glm::vec3> temp_vertices;
 			std::vector<glm::vec2> temp_uvs;
 			std::vector<glm::vec3> temp_normals;
 			std::vector<glm::vec3> out_vertices;
-			GLuint objectVAO;
-			GLuint objectVBO;
-			GLuint objectEBO;
-			GLuint shaderProgram;
-			GLuint shaderFrag;
-			GLuint shaderVertex;
-			GLuint texture1 = 0;
-			GLuint texture2 = 0;
+			GLuint* objectVAO;
+			GLuint* objectVBO;
+			GLuint* objectEBO;
+			GLuint* shaderProgram;
+			GLuint* shaderFrag;
+			GLuint* shaderVertex;
+			std::vector<GLuint*> TextureCube;
 			std::vector<int> LoaderTextureSUCCESS;
 			std::vector<const char*> pathTexture;
+			
+			
 	};
 #endif
 }

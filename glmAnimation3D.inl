@@ -1,7 +1,4 @@
 #include "glmAnimation3D.h"
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_impl_opengl3.h"
 
 #ifndef GLMANIMATION3D_INL
 #define GLMANIMATION3D_INL

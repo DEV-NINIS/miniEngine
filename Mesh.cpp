@@ -1,14 +1,10 @@
 #pragma warning(disable : 4996)
 #include "object.h"
-#include "UserInterface.h"
 #include <iostream>
 #include <fstream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "stbi_image.h"
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_impl_opengl3.h"
 #include <Windows.h>
 #include <commdlg.h>
 #include <shellapi.h>
@@ -26,20 +22,71 @@ std::vector<unsigned int> Mesh::indexObject = { 0 };
 std::vector<float> Mesh::verteciesObject = { 0 };
 std::vector<unsigned int> Mesh::normalIndices = { 0 };
 
+GLuint Mesh::index[] = { 0 };
+std::vector<GLfloat> Mesh::Vertecies { -0.5f, -0.5f, -0.5f,   0.2f, 0.6f, 0.9f, 0.0f, 0.0f,
+		0.5f, -0.5f, -0.5f,  0.9f, 0.6f, 0.2f, 1.0f, 0.0f,
+		0.5f,  0.5f, -0.5f,  0.5f, 0.6f, 0.9f,1.0f, 1.0f,
+		0.5f,  0.5f, -0.5f,  0.7f, 0.6f, 0.8f,1.0f, 1.0f,
+	   -0.5f,  0.5f, -0.5f,  0.1f, 0.6f, 0.9f,0.0f, 1.0f,
+	   -0.5f, -0.5f, -0.5f,  0.3f, 0.6f, 0.1f,0.0f, 0.0f,
+
+	   -0.5f, -0.5f,  0.5f,  0.2f, 0.1f, 0.9f,0.0f, 0.0f,
+		0.5f, -0.5f,  0.5f,  0.9f, 0.6f, 0.9f,1.0f, 0.0f,
+		0.5f,  0.5f,  0.5f,  0.2f, 0.2f, 0.9f,1.0f, 1.0f,
+		0.5f,  0.5f,  0.5f,  0.3f, 0.6f, 0.1f,1.0f, 1.0f,
+	   -0.5f,  0.5f,  0.5f,  0.2f, 0.3f, 0.9f,0.0f, 1.0f,
+	   -0.5f, -0.5f,  0.5f,  0.2f, 0.6f, 0.9f,0.0f, 0.0f,
+
+	   -0.5f,  0.5f,  0.5f,  0.9f, 0.1f, 0.2f,1.0f, 0.0f,
+	   -0.5f,  0.5f, -0.5f,  0.4f, 0.6f, 0.8f,1.0f, 1.0f,
+	   -0.5f, -0.5f, -0.5f,  0.0f, 0.5f, 0.4f,0.0f, 1.0f,
+	   -0.5f, -0.5f, -0.5f,  0.1f, 0.2f, 0.8f,0.0f, 1.0f,
+	   -0.5f, -0.5f,  0.5f,  0.6f, 0.6f, 0.9f,0.0f, 0.0f,
+	   -0.5f,  0.5f,  0.5f,  1.0f, 0.5f, 0.3f,1.0f, 0.0f,
+
+		0.5f,  0.5f,  0.5f, 0.3f, 0.9f, 0.9f, 1.0f, 0.0f,
+		0.5f,  0.5f, -0.5f, 0.9f, 0.4f, 0.3f, 1.0f, 1.0f,
+		0.5f, -0.5f, -0.5f, 0.1f, 0.6f, 0.9f, 0.0f, 1.0f,
+		0.5f, -0.5f, -0.5f, 0.7f, 0.1f, 0.5f, 0.0f, 1.0f,
+		0.5f, -0.5f,  0.5f, 0.2f, 0.4f, 0.1f, 0.0f, 0.0f,
+		0.5f,  0.5f,  0.5f, 0.7f, 0.9f, 0.0f, 1.0f, 0.0f,
+
+	   -0.5f, -0.5f, -0.5f, 0.7f, 0.6f, 0.8f, 0.0f, 1.0f,
+		0.5f, -0.5f, -0.5f, 0.5f, 0.4f, 0.1f, 1.0f, 1.0f,
+		0.5f, -0.5f,  0.5f, 0.6f, 0.6f, 0.5f, 1.0f, 0.0f,
+		0.5f, -0.5f,  0.5f, 0.9f, 0.3f, 0.2f, 1.0f, 0.0f,
+	   -0.5f, -0.5f,  0.5f, 0.1f, 0.9f, 0.7f, 0.0f, 0.0f,
+	   -0.5f, -0.5f, -0.5f, 0.2f, 0.1f, 0.9f, 0.0f, 1.0f,
+
+	   -0.5f,  0.5f, -0.5f, 0.8f, 0.8f, 0.8f, 0.0f, 1.0f,
+		0.5f,  0.5f, -0.5f, 0.4f, 0.7f, 0.5f, 1.0f, 1.0f,
+		0.5f,  0.5f,  0.5f, 0.2f, 0.4f, 0.6f, 1.0f, 0.0f,
+		0.5f,  0.5f,  0.5f, 0.3f, 0.3f, 0.6f, 1.0f, 0.0f,
+	   -0.5f,  0.5f,  0.5f, 0.9f, 0.9f, 0.1f, 0.0f, 0.0f,
+	   -0.5f,  0.5f, -0.5f, 0.1f, 0.1f, 0.4f, 0.0f, 1.0f
+ };
+
 Mesh::Mesh(GLFWwindow* window) {
 	// textures
 	LoaderTextureSUCCESS.push_back(0);
 	LoaderTextureSUCCESS.push_back(0);
-	texture1; texture2;
+	TextureCube.push_back(new GLuint);
+	TextureCube.push_back(new GLuint);
 	pathTexture.push_back(new char);
 	pathTexture.push_back(new char);
 
-	temp_vertices; temp_uvs; temp_normals;  out_vertices;
+	temp_vertices; temp_uvs; temp_normals;  out_vertices; index;
 
 	// buffers
-	objectVAO; objectVBO; objectEBO;
+	objectVAO = new GLuint; 
+	objectVBO = new GLuint; 
+	objectEBO = new GLuint;
 	// shaders
-	shaderProgram; shaderFrag; shaderVertex;
+	shaderProgram = new GLuint; 
+	shaderFrag = new GLuint; 
+	shaderVertex = new GLuint;
+
+
 	vertexShaderCODE = "#version 460 core\n"
 		"layout (location = 0) in vec3 position;\n"
 		"layout (location = 1) in vec3 color;\n"
@@ -86,11 +133,12 @@ Mesh::Mesh(GLFWwindow* window) {
 		"Frag_color = mix(texture(Texture1, TexcoordsFrag), texture(Texture2, TexcoordsFrag), PercentTexture) * vec4(ColorR, ColorG, ColorB, 1.0f);\n"
 		"}\n"
 		"}\n\0";
+	
 }
 Mesh::~Mesh() {
-	glDeleteVertexArrays(1, &objectVAO);
-	glDeleteBuffers(1, &objectVBO);
-	glDeleteBuffers(1, &objectEBO);
+	glDeleteVertexArrays(1, &*objectVAO);
+	glDeleteBuffers(1, &*objectVBO);
+	glDeleteBuffers(1, &*objectEBO);
 }
 float Mesh::variableSize1(float variable) {
 	float a = sizeof(variable) / sizeof(float);
@@ -101,103 +149,104 @@ unsigned int Mesh::variableSize(unsigned int variable) {
 	return a;
 }
 void Mesh::activeTexture() {
+	glUseProgram(*shaderProgram);
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture1);
+		glBindTexture(GL_TEXTURE_2D, *TextureCube[0]);
 		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, texture2);
+		glBindTexture(GL_TEXTURE_2D, *TextureCube[1]);
 }
 void Mesh::drawMesh() {
 	this->activeTexture();
-	glBindVertexArray(objectVAO);
+	glBindVertexArray(*objectVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 }
 void Mesh::CompileShaderMesh() {
 	int succesCompileShaders;
-	shaderVertex = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(shaderVertex, 1, (const GLchar**)&vertexShaderCODE, NULL);
-	glCompileShader(shaderVertex);
-	glGetShaderiv(shaderVertex, GL_COMPILE_STATUS, &succesCompileShaders);
+	*shaderVertex = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(*shaderVertex, 1, (const GLchar**)&vertexShaderCODE, NULL);
+	glCompileShader(*shaderVertex);
+	glGetShaderiv(*shaderVertex, GL_COMPILE_STATUS, &succesCompileShaders);
 	if (succesCompileShaders == NULL) {
 		MessageBoxA(0, static_cast<const char*>("error compilation shaders"), "ERROR", 0);
 		exit(EXIT_FAILURE);
 		// l'erreur vient des shader !!!!!!!!
 	}
 
-	shaderFrag = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(shaderFrag, 1, (const GLchar**)&fragmentShaderCODE, NULL);
-	glCompileShader(shaderFrag);
-	glGetShaderiv(shaderFrag, GL_COMPILE_STATUS, &succesCompileShaders);
+	*shaderFrag = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(*shaderFrag, 1, (const GLchar**)&fragmentShaderCODE, NULL);
+	glCompileShader(*shaderFrag);
+	glGetShaderiv(*shaderFrag, GL_COMPILE_STATUS, &succesCompileShaders);
 	if (succesCompileShaders == NULL) {
 		MessageBoxA(0, static_cast<const char*>("error compilation shaders"), "ERROR", 0);
 		exit(EXIT_FAILURE);
 		// l'erreur vient des shader !!!!!!!!
 	}
 
-	shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, shaderVertex);
-	glAttachShader(shaderProgram, shaderFrag);
-	glLinkProgram(shaderProgram);
+	*shaderProgram = glCreateProgram();
+	glAttachShader(*shaderProgram, *shaderVertex);
+	glAttachShader(*shaderProgram, *shaderFrag);
+	glLinkProgram(*shaderProgram);
 }
-void Mesh::setTexture1(char* filePath) {
-	glGenTextures(1, &texture1);
-	glBindTexture(GL_TEXTURE_2D, texture1);
+void Mesh::setTexture1(char* filePath, int NumberTexture) {
+	glGenTextures(1, &*TextureCube[NumberTexture]);
+	glBindTexture(GL_TEXTURE_2D, *TextureCube[NumberTexture]);
+
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	stbi_set_flip_vertically_on_load(true);
 	int width, height, nrChanels;
-	unsigned char* data = 0;
-	pathTexture[0] = static_cast<const char*>(filePath);
-	data = stbi_load(pathTexture[0], &width, &height, &nrChanels, 0);
+	stbi_set_flip_vertically_on_load(true);
+	
+	pathTexture[NumberTexture] = static_cast<const char*>(filePath);
+	unsigned char* data = stbi_load(pathTexture[NumberTexture], &width, &height, &nrChanels, 0);
 	if (data) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
-		stbi_image_free(data);
-		LoaderTextureSUCCESS[0] = LOADER_TEXTURE_SUCCESS;
+		LoaderTextureSUCCESS[NumberTexture] = LOADER_TEXTURE_SUCCESS;
 	}
 	else {
-		LoaderTextureSUCCESS[0] = LOADER_TEXTURE_NOT_SUCCESS;
+		LoaderTextureSUCCESS[NumberTexture] = LOADER_TEXTURE_NOT_SUCCESS;
 	}
-	glUseProgram(shaderProgram);
-	glUniform1i(glGetAttribLocation(shaderProgram, "texture1"), 0);
+	stbi_image_free(data);
+	glUseProgram(*shaderProgram);
+	if (NumberTexture == 0) { glUniform1i(glGetAttribLocation(*shaderProgram, "Texture1"), NumberTexture); }
+	if (NumberTexture == 1) { glUniform1i(glGetAttribLocation(*shaderProgram, "Texture2"), NumberTexture); }
+}
+void Mesh::setPercentTexture(float PercentTexture) {
+	glUseProgram(*shaderProgram);
+	glUniform1f(glGetAttribLocation(*shaderProgram, "PercentTexture"), PercentTexture);
 }
 void Mesh::setTexture2(char* filePath) {
-	glGenTextures(1, &texture2);
-	glBindTexture(GL_TEXTURE_2D, texture2);
+	glGenTextures(1, &*TextureCube[1]);
+	glBindTexture(GL_TEXTURE_2D, *TextureCube[1]);
+
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	stbi_set_flip_vertically_on_load(true);
 	int width, height, nrChanels;
-	unsigned char* data2 = 0;
+	stbi_set_flip_vertically_on_load(true);
+
 	pathTexture[1] = static_cast<const char*>(filePath);
-	data2 = stbi_load(pathTexture[1], &width, &height, &nrChanels, 0);
-	if (data2) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data2);
+	unsigned char* data = stbi_load(pathTexture[1], &width, &height, &nrChanels, 0);
+	if (data) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
-		stbi_image_free(data2);
 		LoaderTextureSUCCESS[1] = LOADER_TEXTURE_SUCCESS;
 	}
 	else {
 		LoaderTextureSUCCESS[1] = LOADER_TEXTURE_NOT_SUCCESS;
 	}
-	glUseProgram(shaderProgram);
-	glUniform1i(glGetAttribLocation(shaderProgram, "texture2"), 1);
+	stbi_image_free(data);
+	glUseProgram(*shaderProgram);
+	glUniform1i(glGetAttribLocation(*shaderProgram, "Texture2"), 1);
 }
 void Mesh::setBufferMesh() {
-	glGenVertexArrays(1, &objectVAO);
-	glBindVertexArray(objectVAO);
-
-	glGenBuffers(1, &objectVBO);
-	glBindBuffer(GL_ARRAY_BUFFER, objectVBO);
-	glBufferData(GL_ARRAY_BUFFER, verteciesObject.size() * sizeof(glm::vec3), &verteciesObject[0], GL_STATIC_DRAW);
-
-	glGenBuffers(1, &objectEBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, objectEBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 0, 0, GL_STATIC_DRAW);
+	MotionNinis::VertexArrayObject VAO;
+	MotionNinis::VertexBufferObject buffer(Vertecies);
+	MotionNinis::ElementArrayBuffer EBO(std::vector<GLfloat>(0));
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -274,9 +323,9 @@ bool Mesh::OpenMeshObjFile(std::string filePath) {
 		}
 }
 
-void Mesh::useShaderObject() { glUseProgram(shaderProgram); }
+void Mesh::useShaderObject() { glUseProgram(*shaderProgram); }
 // getting
 std::vector<const char*> Mesh::getPathTexture() { return pathTexture; }
-GLuint& Mesh::getShaderObject() { return shaderProgram; }
-GLuint Mesh::getVertexArray() const { return shaderVertex; }
+GLuint& Mesh::getShaderObject() { return *shaderProgram; }
+GLuint Mesh::getVertexArray() const { return *shaderVertex; }
 

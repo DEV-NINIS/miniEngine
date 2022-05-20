@@ -9,7 +9,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "object.h"
 #include <glm/gtc/type_ptr.hpp>
-#include "UserInterface.h"
+#include "Editor/UserInterface.h"
 #include "Camera.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -116,7 +116,7 @@ private:
 			virtual ~RotateAxes();
 			void setCHANGE_X(int ValueIndicator);
 			void setCHANGE_Y(int ValueIndicator);
-			void setCHANGE_Z(int ValueIndicator);
+			void setCHANGE_Z(int ValueIndicator); 
 		private:
 
 		};
@@ -144,7 +144,8 @@ private:
 
 			
 			
-
+#include "Render.h"
+#include "object.h"
 class glmAnimation3D
 {
 public:
@@ -152,6 +153,7 @@ public:
 	glmAnimation3D(GLFWwindow* window);
 	virtual ~glmAnimation3D();
 	void initialiseMatrix();
+	void drawAnimation(GLuint shader, Render render, objectUser::Mesh mesh, glm::vec3 camPos, glm::vec3 camFront, glm::vec3 camUp);
 	void setModelProjection(float& ValueRotate);
 	void setViewProjection();
 	void setMatrixPerspectiveProjection(float& FOV, float& width, float& height, Camera camera);
