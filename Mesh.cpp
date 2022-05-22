@@ -11,11 +11,21 @@
 #include <fileapi.h>
 #include <commdlg.h>
 #include <filesystem> // C++17 standard header file name
+#include "Platform/OpenGL/OpenGLBuffer.h"
+#include "Platform/OpenGL/OpenGLtexture.h"
 
 
 #define LOADER_TEXTURE_SUCCESS 0
 #define LOADER_TEXTURE_NOT_SUCCESS 1
 using namespace objectUser;
+
+
+
+Textures::Textures(GLint Param_Wrap, GLint Param_Filter, char* filePath, GLuint* shader) : 
+	texture1(new MotionNinis::Texture2D(Param_Wrap, Param_Filter, filePath, shader, 1)), 
+	texture2(new MotionNinis::Texture2D(Param_Wrap, Param_Filter, filePath, shader, 2)){
+
+}
 
 
 std::vector<unsigned int> Mesh::indexObject = { 0 };
@@ -85,6 +95,7 @@ Mesh::Mesh(GLFWwindow* window) {
 	shaderProgram = new GLuint; 
 	shaderFrag = new GLuint; 
 	shaderVertex = new GLuint;
+	textures;
 
 
 	vertexShaderCODE = "#version 460 core\n"
@@ -149,11 +160,7 @@ unsigned int Mesh::variableSize(unsigned int variable) {
 	return a;
 }
 void Mesh::activeTexture() {
-	glUseProgram(*shaderProgram);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, *TextureCube[0]);
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, *TextureCube[1]);
+	
 }
 void Mesh::drawMesh() {
 	this->activeTexture();
@@ -189,71 +196,19 @@ void Mesh::CompileShaderMesh() {
 	glLinkProgram(*shaderProgram);
 }
 void Mesh::setTexture1(char* filePath, int NumberTexture) {
-	glGenTextures(1, &*TextureCube[NumberTexture]);
-	glBindTexture(GL_TEXTURE_2D, *TextureCube[NumberTexture]);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	int width, height, nrChanels;
-	stbi_set_flip_vertically_on_load(true);
-	
-	pathTexture[NumberTexture] = static_cast<const char*>(filePath);
-	unsigned char* data = stbi_load(pathTexture[NumberTexture], &width, &height, &nrChanels, 0);
-	if (data) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-		LoaderTextureSUCCESS[NumberTexture] = LOADER_TEXTURE_SUCCESS;
-	}
-	else {
-		LoaderTextureSUCCESS[NumberTexture] = LOADER_TEXTURE_NOT_SUCCESS;
-	}
-	stbi_image_free(data);
-	glUseProgram(*shaderProgram);
-	if (NumberTexture == 0) { glUniform1i(glGetAttribLocation(*shaderProgram, "Texture1"), NumberTexture); }
-	if (NumberTexture == 1) { glUniform1i(glGetAttribLocation(*shaderProgram, "Texture2"), NumberTexture); }
-}
-void Mesh::setPercentTexture(float PercentTexture) {
-	glUseProgram(*shaderProgram);
-	glUniform1f(glGetAttribLocation(*shaderProgram, "PercentTexture"), PercentTexture);
+	textures.push_back(new Textures(GL_REPEAT, GL_LINEAR, filePath, shaderProgram));
 }
 void Mesh::setTexture2(char* filePath) {
-	glGenTextures(1, &*TextureCube[1]);
-	glBindTexture(GL_TEXTURE_2D, *TextureCube[1]);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	int width, height, nrChanels;
-	stbi_set_flip_vertically_on_load(true);
-
-	pathTexture[1] = static_cast<const char*>(filePath);
-	unsigned char* data = stbi_load(pathTexture[1], &width, &height, &nrChanels, 0);
-	if (data) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-		LoaderTextureSUCCESS[1] = LOADER_TEXTURE_SUCCESS;
-	}
-	else {
-		LoaderTextureSUCCESS[1] = LOADER_TEXTURE_NOT_SUCCESS;
-	}
-	stbi_image_free(data);
-	glUseProgram(*shaderProgram);
-	glUniform1i(glGetAttribLocation(*shaderProgram, "Texture2"), 1);
+	MotionNinis::Texture2D texture(GL_REPEAT, GL_LINEAR, filePath, shaderProgram, 2);
 }
 void Mesh::setBufferMesh() {
 	MotionNinis::VertexArrayObject VAO;
 	MotionNinis::VertexBufferObject buffer(Vertecies);
 	MotionNinis::ElementArrayBuffer EBO(std::vector<GLfloat>(0));
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	glEnableVertexAttribArray(2);
+	buffer.GLattribPointer(0, 3, 8 * sizeof(float), (void*)0);
+	buffer.GLattribPointer(1, 3, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	buffer.GLattribPointer(2, 2, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 }
 void Mesh::OpenShader(std::string filePathVertex, std::string filePathFragment) {
 	std::string FileContent;
